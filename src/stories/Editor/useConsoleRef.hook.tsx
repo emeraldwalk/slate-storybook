@@ -5,12 +5,11 @@ import React from 'react'
  * Uses refs + native DOM api so that a React render isn't required
  * for updating the console.
  *
- * @returns a ref to be attached to the target console element and a function
- *  for logging to it.
+ * @returns a Console component + some functions to manipulate it.
  */
-export function useConsoleRef<T extends HTMLElement = HTMLPreElement>() {
+export function useConsoleRef() {
   const linesRef = React.useRef<string[]>([])
-  const consoleRef = React.useRef<T>(null)
+  const consoleRef = React.useRef<HTMLPreElement>(null)
 
   const flushDebounceRef = React.useRef<NodeJS.Timeout>()
   const flush = React.useCallback(() => {
@@ -49,9 +48,25 @@ export function useConsoleRef<T extends HTMLElement = HTMLPreElement>() {
     flush()
   }, [flush])
 
+  const Console = React.useMemo(
+    () => () => (
+      <div>
+        <header className="header">
+          <span>Console</span>
+          <button className="clear-console" onClick={clearConsole}>
+            Clear
+          </button>
+        </header>
+
+        <pre ref={consoleRef}></pre>
+      </div>
+    ),
+    [clearConsole]
+  )
+
   return {
-    consoleRef,
     clearConsole,
     logToConsole,
+    Console,
   }
 }

@@ -4,6 +4,7 @@ import { css, jsx } from '@emotion/core'
 import React from 'react'
 import { createEditor, Node, NodeEntry, Range } from 'slate'
 import { Editable, Slate, withReact } from 'slate-react'
+import SourceLink from '../SourceLink'
 import { useConsoleRef } from './useConsoleRef.hook'
 
 const componentCss = css`
@@ -36,7 +37,7 @@ const EditorWithDecorations: React.FC<EditorWithDecorationsProps> = ({
   initialValue,
 }) => {
   /** Setup logging */
-  const { consoleRef, logToConsole, clearConsole } = useConsoleRef()
+  const { logToConsole, clearConsole, Console } = useConsoleRef()
   logToConsole('render')
 
   /** If we change the initialValue in Storybook controls, reset things */
@@ -72,16 +73,10 @@ const EditorWithDecorations: React.FC<EditorWithDecorationsProps> = ({
     <div css={componentCss}>
       <Slate editor={editor} value={value} onChange={onChange}>
         <Editable decorate={decorate} spellCheck={false} />
-
-        <header className="header">
-          <span>Console</span>
-          <button className="clear-console" onClick={clearConsole}>
-            Clear
-          </button>
-        </header>
-
-        <pre ref={consoleRef}></pre>
       </Slate>
+
+      <Console />
+      <SourceLink path={'src/stories/Editor/EditorWithDecorations.tsx#L36'} />
     </div>
   )
 }
