@@ -35,16 +35,17 @@ export interface EditorWithDecorationsProps {
 const EditorWithDecorations: React.FC<EditorWithDecorationsProps> = ({
   initialValue,
 }) => {
+  /** Setup logging */
   const { consoleRef, logToConsole, clearConsole } = useConsoleRef()
   logToConsole('render')
-
-  const editor = React.useMemo(() => withReact(createEditor()), [])
-  const [value, setValue] = React.useState<Node[]>(initialValue)
 
   /** If we change the initialValue in Storybook controls, reset things */
   React.useEffect(() => {
     setValue(initialValue)
   }, [clearConsole, initialValue])
+
+  const editor = React.useMemo(() => withReact(createEditor()), [])
+  const [value, setValue] = React.useState<Node[]>(initialValue)
 
   /** Track when decorate is called by logging node paths */
   const decorate = React.useCallback(

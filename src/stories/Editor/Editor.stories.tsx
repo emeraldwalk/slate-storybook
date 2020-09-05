@@ -1,6 +1,5 @@
 import React from 'react'
 import { Story, Meta } from '@storybook/react'
-import { Editor } from '../../components'
 // import { EditorProps } from '../../components/Editor/Editor'
 // import EditorWithSpellcheck, {
 //   EditorWithSpellcheckProps,
@@ -11,7 +10,7 @@ import EditorWithDecorations, {
 
 const meta: Meta = {
   title: 'Example/Editor',
-  component: Editor,
+  component: EditorWithDecorations,
   argTypes: {
     initialValue: { control: 'object' },
   },
