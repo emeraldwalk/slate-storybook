@@ -7,12 +7,25 @@ import { Editable, Slate, withReact, RenderLeafProps } from 'slate-react'
 import {
   Leaf,
   mockWords,
+  SpellcheckResult,
   useSpellcheckDecorate,
+  withSpellcheck,
 } from '../../plugins/spellcheckPlugin'
 
 const componentCss = css`
   border: 1px solid #ccc;
 `
+
+/** Mocking a spellcheck service */
+async function mockCheckWords(words: string[]): Promise<SpellcheckResult[]> {
+  return Promise.resolve(
+    words.map((word) => ({
+      word,
+      isMisspelled: !mockWords[word],
+      suggestions: [],
+    }))
+  )
+}
 
 export interface EditorWithSpellcheckProps {
   initialValue: Node[]
@@ -21,27 +34,24 @@ export interface EditorWithSpellcheckProps {
 const EditorWithSpellcheck: React.FC<EditorWithSpellcheckProps> = ({
   initialValue,
 }) => {
-  const editor = React.useMemo(() => withReact(createEditor()), [])
-  let [value, setValue] = React.useState<Node[]>(initialValue)
-
-  const checkWords = React.useCallback(async (words: string[]) => {
-    console.log('check words:', words)
-
-    return Promise.resolve(
-      words.map((word) => ({
-        word,
-        isMisspelled: !mockWords[word],
-        suggestions: [],
-      }))
-    )
-  }, [])
-
-  const decorate = useSpellcheckDecorate(editor, checkWords)
-
+  const resultsCache = React.useRef<Record<string, SpellcheckResult>>({})
+  const decorate = useSpellcheckDecorate(resultsCache.current)
   const renderLeaf = React.useCallback(
     (props: RenderLeafProps) => <Leaf {...props} />,
     []
   )
+
+  const editor = React.useMemo(
+    () =>
+      withSpellcheck(
+        withReact(createEditor()),
+        resultsCache.current,
+        mockCheckWords
+      ),
+    []
+  )
+
+  const [value, setValue] = React.useState<Node[]>(initialValue)
 
   return (
     <div css={componentCss}>

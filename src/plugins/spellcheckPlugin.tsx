@@ -1,5 +1,13 @@
 import React from 'react'
-import { Editor, Node, NodeEntry, Range, Text, Transforms } from 'slate'
+import {
+  Editor,
+  Node,
+  NodeEntry,
+  Operation,
+  Range,
+  Text,
+  Transforms,
+} from 'slate'
 import { RenderLeafProps } from 'slate-react'
 
 export interface SpellcheckResult {
@@ -8,61 +16,105 @@ export interface SpellcheckResult {
   suggestions: string[]
 }
 
-export function useSpellcheckDecorate(
-  editor: Editor,
+export function withSpellcheck<TEditor extends Editor>(
+  editor: TEditor,
+  cache: Record<string, SpellcheckResult>,
   checkWords: (words: string[]) => Promise<SpellcheckResult[]>
-) {
-  const nodeCache = React.useRef<Record<string, Node>>({})
-  const resultsCache = React.useRef<Record<string, SpellcheckResult>>({})
-  const timeout = React.useRef<NodeJS.Timeout>()
+): TEditor {
+  const { apply } = editor
 
+  let blockCache: Record<number, boolean> = {}
+  let debounceTimeout: NodeJS.Timeout
+
+  editor.apply = function (operation: Operation) {
+    let shouldCheck = false
+
+    // console.log('operation:', operation)
+
+    // For any operations that represent potential changes to content, cache the
+    // top-level block indices for later spellcheck
+    switch (operation.type) {
+      case 'insert_text':
+      case 'remove_text':
+        shouldCheck = blockCache[operation.path[0]] = true
+        break
+
+      case 'split_node':
+        blockCache[operation.path[0]] = true
+        shouldCheck = blockCache[operation.path[0] + 1] = true
+        break
+
+      case 'merge_node':
+        if (operation.path.length === 1) {
+          delete blockCache[operation.path[0]]
+        }
+        break
+    }
+
+    if (shouldCheck) {
+      clearTimeout(debounceTimeout)
+      debounceTimeout = setTimeout(async () => {
+        const blockIndices = Object.keys(blockCache)
+        blockCache = {}
+
+        // get top level block nodes + paths of any blocks we want to spellcheck
+        const entries = blockIndices.map((blockIndex) =>
+          Editor.node(editor, [Number(blockIndex)])
+        )
+
+        const distinctWords = entries
+          .map(([node]) =>
+            Node.string(node)
+              .split(' ')
+              .filter((w) => w.length)
+          )
+          .flatMap((a) => a)
+          .filter((word, i, arr) => arr.indexOf(word) === i)
+
+        // spellcheck our words
+        const results = await checkWords(distinctWords)
+
+        // add results to cache
+        for (const result of results) {
+          cache[result.word] = result
+        }
+
+        for (const [, path] of entries) {
+          Transforms.setNodes(
+            editor,
+            // Setting an arbitrary prop on the node to a new object will cause
+            // it to re-render. Transform check for === equality on each prop,
+            // so it has to be a new object for the operation to be applied.
+            { _forceRefresh: {} },
+            {
+              at: path,
+            }
+          )
+        }
+      }, 500)
+    }
+
+    return apply(operation)
+  }
+
+  return editor
+}
+
+/**
+ * Create a decorate function that will decorate misspelled words based
+ * on data in a given cache.
+ */
+export function useSpellcheckDecorate(cache: Record<string, SpellcheckResult>) {
   return React.useCallback(
     ([node, path]: NodeEntry): Range[] => {
       const ranges: Range[] = []
-      console.log('path:', path)
 
       if (Text.isText(node)) {
-        const cacheKey = path.join(',')
-
-        if (node.text.length) {
-          nodeCache.current[cacheKey] = node
-        }
-
-        clearTimeout(timeout.current!)
-        timeout.current = setTimeout(async () => {
-          const nodes = Object.values(nodeCache.current)
-          nodeCache.current = {}
-
-          if (nodes.length) {
-            const words = nodes
-              .map((node) => Node.string(node).split(' '))
-              .flatMap((a) => a)
-
-            const results = await checkWords(words)
-            for (const result of results) {
-              resultsCache.current[result.word] = result
-            }
-
-            for (const [node, path] of Editor.nodes(editor, {
-              at: [],
-              match: (node) => nodes.includes(node),
-            })) {
-              console.log(node, path)
-              Transforms.setNodes(
-                editor,
-                { ...node, x: '4' },
-                {
-                  at: path,
-                }
-              )
-            }
-          }
-        }, 500)
-
         const words = node.text.split(' ')
         let offset = 0
         for (const word of words) {
-          if (word.length && resultsCache.current[word]?.isMisspelled) {
+          // if word is marked as misspelled in the cache, add a decoration
+          if (word.length && cache[word]?.isMisspelled) {
             ranges.push({
               anchor: { path, offset },
               focus: { path, offset: offset + word.length },
@@ -76,7 +128,7 @@ export function useSpellcheckDecorate(
 
       return ranges
     },
-    [checkWords, editor, nodeCache, resultsCache]
+    [cache]
   )
 }
 
