@@ -1,9 +1,9 @@
 import React from 'react'
 import { Story, Meta } from '@storybook/react'
 // import { EditorProps } from '../../components/Editor/Editor'
-// import EditorWithSpellcheck, {
-//   EditorWithSpellcheckProps,
-// } from './EditorWithSpellcheck'
+import EditorWithSpellcheck, {
+  EditorWithSpellcheckProps,
+} from './EditorWithSpellcheck'
 import EditorWithDecorations, {
   EditorWithDecorationsProps,
 } from './EditorWithDecorations'
@@ -19,9 +19,9 @@ const meta: Meta = {
 export default meta
 
 // const Template: Story<EditorProps> = (args) => <Editor {...args} />
-// const SpellcheckTemplate: Story<EditorWithSpellcheckProps> = (args) => (
-//   <EditorWithSpellcheck {...args} />
-// )
+const SpellcheckTemplate: Story<EditorWithSpellcheckProps> = (args) => (
+  <EditorWithSpellcheck {...args} />
+)
 const DecorationsTemplate: Story<EditorWithDecorationsProps> = (args) => (
   <EditorWithDecorations {...args} />
 )
@@ -42,7 +42,7 @@ Decorations.args = {
   initialValue: emptyValue(),
 }
 
-// export const Spellcheck = SpellcheckTemplate.bind({})
-// Spellcheck.args = {
-//   initialValue: emptyValue(),
-// }
+export const Spellcheck = SpellcheckTemplate.bind({})
+Spellcheck.args = {
+  initialValue: emptyValue(),
+}

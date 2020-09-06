@@ -23,29 +23,20 @@ const EditorWithSpellcheck: React.FC<EditorWithSpellcheckProps> = ({
 }) => {
   const editor = React.useMemo(() => withReact(createEditor()), [])
   let [value, setValue] = React.useState<Node[]>(initialValue)
-  const resultsCache = React.useMemo(() => ({}), [])
-  const [render, setRender] = React.useState(0)
-  console.log(render)
-  const forceRender = React.useCallback(() => {
-    setRender((i) => i + 1)
-    // setValue([{ ...value[0] }])
-    // Editor.addMark(editor, 'forceRender', true)
-  }, [])
-  const decorate = useSpellcheckDecorate(
-    resultsCache,
-    (words) => {
-      console.log('check words:', words)
 
-      return Promise.resolve(
-        words.map((word) => ({
-          word,
-          isMisspelled: !mockWords[word],
-          suggestions: [],
-        }))
-      )
-    },
-    forceRender
-  )
+  const checkWords = React.useCallback(async (words: string[]) => {
+    console.log('check words:', words)
+
+    return Promise.resolve(
+      words.map((word) => ({
+        word,
+        isMisspelled: !mockWords[word],
+        suggestions: [],
+      }))
+    )
+  }, [])
+
+  const decorate = useSpellcheckDecorate(editor, checkWords)
 
   const renderLeaf = React.useCallback(
     (props: RenderLeafProps) => <Leaf {...props} />,

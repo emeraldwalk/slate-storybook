@@ -1,5 +1,5 @@
 import React from 'react'
-import { Editor, NodeEntry, Range, Text } from 'slate'
+import { Editor, Node, NodeEntry, Range, Text, Transforms } from 'slate'
 import { RenderLeafProps } from 'slate-react'
 
 export interface SpellcheckResult {
@@ -8,73 +8,61 @@ export interface SpellcheckResult {
   suggestions: string[]
 }
 
-export function useSpellcheckDecorate2(
-  resultsCache: Record<string, SpellcheckResult>,
+export function useSpellcheckDecorate(
+  editor: Editor,
   checkWords: (words: string[]) => Promise<SpellcheckResult[]>
 ) {
-  const debounceTimeout = React.useRef<NodeJS.Timeout>()
-
-  return React.useCallback(
-    ([node, path]: NodeEntry): Range[] => {
-      const ranges: Range[] = []
-
-      if (Editor.isEditor(node)) {
-        const words = Editor.string(node, []).split(' ')
-
-        clearTimeout(debounceTimeout.current!)
-        debounceTimeout.current = setTimeout(() => {}, 500)
-
-        let offset = 0
-        for (const word of words) {
-          if (resultsCache[word].isMisspelled) {
-            ranges.push({
-              anchor: { path, offset },
-              focus: { path, offset: offset + word.length },
-              misspelled: true,
-            })
-          }
-
-          offset += word.length + 1
-        }
-      }
-
-      return ranges
-    },
-    [resultsCache]
-  )
-}
-
-export function useSpellcheckDecorate(
-  resultsCache: Record<string, SpellcheckResult>,
-  checkWords: (words: string[]) => Promise<SpellcheckResult[]>,
-  forceRender: () => void
-) {
+  const nodeCache = React.useRef<Record<string, Node>>({})
+  const resultsCache = React.useRef<Record<string, SpellcheckResult>>({})
   const timeout = React.useRef<NodeJS.Timeout>()
 
   return React.useCallback(
     ([node, path]: NodeEntry): Range[] => {
       const ranges: Range[] = []
+      console.log('path:', path)
 
       if (Text.isText(node)) {
-        const words = node.text.split(' ')
+        const cacheKey = path.join(',')
+
+        if (node.text.length) {
+          nodeCache.current[cacheKey] = node
+        }
 
         clearTimeout(timeout.current!)
         timeout.current = setTimeout(async () => {
-          const wordsToCheck = words.filter(
-            (word) => word.length && !resultsCache[word]
-          )
-          if (wordsToCheck.length) {
-            const results = await checkWords(wordsToCheck)
+          const nodes = Object.values(nodeCache.current)
+          nodeCache.current = {}
+
+          if (nodes.length) {
+            const words = nodes
+              .map((node) => Node.string(node).split(' '))
+              .flatMap((a) => a)
+
+            const results = await checkWords(words)
             for (const result of results) {
-              resultsCache[result.word] = result
+              resultsCache.current[result.word] = result
             }
-            forceRender()
+
+            for (const [node, path] of Editor.nodes(editor, {
+              at: [],
+              match: (node) => nodes.includes(node),
+            })) {
+              console.log(node, path)
+              Transforms.setNodes(
+                editor,
+                { ...node, x: '4' },
+                {
+                  at: path,
+                }
+              )
+            }
           }
         }, 500)
 
+        const words = node.text.split(' ')
         let offset = 0
         for (const word of words) {
-          if (word.length && resultsCache[word]?.isMisspelled) {
+          if (word.length && resultsCache.current[word]?.isMisspelled) {
             ranges.push({
               anchor: { path, offset },
               focus: { path, offset: offset + word.length },
@@ -88,7 +76,7 @@ export function useSpellcheckDecorate(
 
       return ranges
     },
-    [checkWords, forceRender, resultsCache]
+    [checkWords, editor, nodeCache, resultsCache]
   )
 }
 
