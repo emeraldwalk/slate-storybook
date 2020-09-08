@@ -80,16 +80,14 @@ export function withSpellcheck<TEditor extends Editor>(
         }
 
         for (const [, path] of entries) {
-          Transforms.setNodes(
-            editor,
-            // Setting an arbitrary prop on the node to a new object will cause
-            // it to re-render. Transform check for === equality on each prop,
-            // so it has to be a new object for the operation to be applied.
-            { _forceRefresh: {} },
-            {
-              at: path,
-            }
-          )
+          // Setting an arbitrary prop on the node to a new object will cause
+          // it to re-render. Transform check for === equality on each prop,
+          // so it has to be a new object for the operation to be applied.
+          // Setting to a new object then undefined to avoid having to strip
+          // the property later on.
+          for (const _forceRefresh of [{}, undefined]) {
+            Transforms.setNodes(editor, { _forceRefresh }, { at: path })
+          }
         }
       }, 500)
     }
