@@ -7,9 +7,12 @@ import EditorWithSpellcheck, {
 import EditorWithDecorations, {
   EditorWithDecorationsProps,
 } from './EditorWithDecorations'
+import EditorVirtualScrolling, {
+  EditorVirtualScrollingProps,
+} from './EditorVirtualScrolling'
 
 const meta: Meta = {
-  title: 'Example/Editor',
+  title: 'Editor',
   component: EditorWithDecorations,
   argTypes: {
     initialValue: { control: 'object' },
@@ -18,12 +21,16 @@ const meta: Meta = {
 
 export default meta
 
-// const Template: Story<EditorProps> = (args) => <Editor {...args} />
+/** Templates */
+
 const SpellcheckTemplate: Story<EditorWithSpellcheckProps> = (args) => (
   <EditorWithSpellcheck {...args} />
 )
 const DecorationsTemplate: Story<EditorWithDecorationsProps> = (args) => (
   <EditorWithDecorations {...args} />
+)
+const VirtualScrollingTemplate: Story<EditorVirtualScrollingProps> = (args) => (
+  <EditorVirtualScrolling {...args} />
 )
 
 const emptyValue = () => [
@@ -32,17 +39,17 @@ const emptyValue = () => [
   },
 ]
 
-// export const Empty = Template.bind({})
-// Empty.args = {
-//   initialValue: emptyValue(),
-// }
-
 export const Decorations = DecorationsTemplate.bind({})
 Decorations.args = {
   initialValue: emptyValue(),
 }
 
-export const Spellcheck = SpellcheckTemplate.bind({})
-Spellcheck.args = {
+export const CustomSpellcheck = SpellcheckTemplate.bind({})
+CustomSpellcheck.args = {
+  initialValue: emptyValue(),
+}
+
+export const VirtualScrolling = VirtualScrollingTemplate.bind({})
+VirtualScrolling.args = {
   initialValue: emptyValue(),
 }
