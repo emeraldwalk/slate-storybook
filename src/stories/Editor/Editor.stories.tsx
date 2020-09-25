@@ -7,9 +7,6 @@ import EditorWithSpellcheck, {
 import EditorWithDecorations, {
   EditorWithDecorationsProps,
 } from './EditorWithDecorations'
-import EditorVirtualScrolling, {
-  EditorVirtualScrollingProps,
-} from './EditorVirtualScrolling'
 
 const meta: Meta = {
   title: 'Editor',
@@ -29,9 +26,6 @@ const SpellcheckTemplate: Story<EditorWithSpellcheckProps> = (args) => (
 const DecorationsTemplate: Story<EditorWithDecorationsProps> = (args) => (
   <EditorWithDecorations {...args} />
 )
-const VirtualScrollingTemplate: Story<EditorVirtualScrollingProps> = (args) => (
-  <EditorVirtualScrolling {...args} />
-)
 
 const emptyValue = () => [
   {
@@ -43,13 +37,21 @@ export const Decorations = DecorationsTemplate.bind({})
 Decorations.args = {
   initialValue: emptyValue(),
 }
+Decorations.parameters = {
+  actions: {
+    disable: true,
+  },
+  // docs: {
+  //   page: null,
+  // },
+  previewTabs: {
+    'storybook/docs/panel': {
+      hidden: true,
+    },
+  },
+}
 
 export const CustomSpellcheck = SpellcheckTemplate.bind({})
 CustomSpellcheck.args = {
-  initialValue: emptyValue(),
-}
-
-export const VirtualScrolling = VirtualScrollingTemplate.bind({})
-VirtualScrolling.args = {
   initialValue: emptyValue(),
 }

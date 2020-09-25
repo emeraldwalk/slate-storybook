@@ -72,7 +72,11 @@ const EditorWithDecorations: React.FC<EditorWithDecorationsProps> = ({
   return (
     <div css={componentCss}>
       <Slate editor={editor} value={value} onChange={onChange}>
-        <Editable decorate={decorate} spellCheck={false} />
+        <Editable
+          decorate={decorate}
+          spellCheck={false}
+          placeholder="Type to see when decorate function is called..."
+        />
       </Slate>
 
       <Console />
