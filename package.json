@@ -38,7 +38,8 @@
     "@storybook/react": "^6.0.21",
     "@storybook/storybook-deployer": "^2.8.6",
     "babel-loader": "^8.1.0",
-    "react-is": "^16.13.1"
+    "react-is": "^16.13.1",
+    "react-syntax-highlighter": "^14.0.0"
   },
   "eslintConfig": {
     "extends": "react-app"

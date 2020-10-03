@@ -1,4 +1,4 @@
-const cache = require('./sourceCodeCache')
+const cache = require('./cache')
 
 class SourceCodePlugin {
   /** @param compiler {import('webpack').Compiler} */

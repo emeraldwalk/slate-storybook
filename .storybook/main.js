@@ -1,5 +1,5 @@
 const path = require('path')
-const SourceCodePlugin = require('./sourceCodePlugin')
+const SourceCodePlugin = require('./sourceCodeAddon/webpackPlugin')
 
 module.exports = {
   stories: ['../src/**/*.stories.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
@@ -15,7 +15,11 @@ module.exports = {
       test: /\.tsx?$/,
       use: [
         {
-          loader: path.resolve(__dirname, 'sourceCodeLoader.js'),
+          loader: path.resolve(
+            __dirname,
+            'sourceCodeAddon',
+            'webpackLoader.js'
+          ),
           options: {
             sourceRoot: path.resolve(__dirname, '..', 'src'),
           },

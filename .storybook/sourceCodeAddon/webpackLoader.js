@@ -1,4 +1,4 @@
-const cache = require('./sourceCodeCache')
+const cache = require('./cache')
 
 /**
  * @this {import('webpack').loader.LoaderContext}
@@ -8,7 +8,7 @@ module.exports = function sourceCodeLoader(source) {
   // root of source code
   const { sourceRoot } = this.query || { sourceRoot: '' }
   const path = this.resourcePath
-  console.log('\npath:', path)
+
   // cache source code by relative path
   if (path.startsWith(sourceRoot)) {
     const key = path.substr(sourceRoot.length)
