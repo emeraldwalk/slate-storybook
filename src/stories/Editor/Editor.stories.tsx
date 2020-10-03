@@ -1,6 +1,5 @@
 import React from 'react'
 import { Story, Meta } from '@storybook/react'
-// import { EditorProps } from '../../components/Editor/Editor'
 import EditorWithSpellcheck, {
   EditorWithSpellcheckProps,
 } from './EditorWithSpellcheck'
@@ -48,6 +47,9 @@ Decorations.parameters = {
     'storybook/docs/panel': {
       hidden: true,
     },
+  },
+  sourceCodeAddon: {
+    sourcePath: '/stories/Editor/EditorWithDecorations.tsx',
   },
 }
 
