@@ -4,7 +4,7 @@ import { addons, types } from '@storybook/addons'
 import { AddonPanel } from '@storybook/components'
 import { Channel } from '@storybook/channels'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { dark } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import { prism as style } from 'react-syntax-highlighter/dist/esm/styles/prism'
 
 export interface SourceCodePanelProps {
   addOnId: string
@@ -23,7 +23,11 @@ const SourceCodePanel: React.FC<SourceCodePanelProps> = ({
   })
 
   return (
-    <SyntaxHighlighter language="tsx" style={dark}>
+    <SyntaxHighlighter
+      customStyle={{ fontSize: 16 }}
+      language="tsx"
+      style={style}
+    >
       {sourceCode[param.sourcePath] ?? ''}
     </SyntaxHighlighter>
   )
