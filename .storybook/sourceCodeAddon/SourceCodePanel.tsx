@@ -23,11 +23,7 @@ const SourceCodePanel: React.FC<SourceCodePanelProps> = ({
   })
 
   return (
-    <SyntaxHighlighter
-      customStyle={{ fontSize: 16 }}
-      language="tsx"
-      style={style}
-    >
+    <SyntaxHighlighter language="tsx" style={style}>
       {sourceCode[param.sourcePath] ?? ''}
     </SyntaxHighlighter>
   )
@@ -35,15 +31,18 @@ const SourceCodePanel: React.FC<SourceCodePanelProps> = ({
 
 export default SourceCodePanel
 
-export function registerPanel(addOnId: string) {
-  const panelId = `${addOnId}/panel`
+async function fetchSourceCode(channel: Channel) {
+  const response = await fetch('./sourceCode.json')
+  const data = await response.json()
+  channel.emit('sourceCode', data)
+}
 
+export function registerPanel(addOnId: string) {
   return () => {
+    const panelId = `${addOnId}/panel`
     const channel = addons.getChannel()
 
-    fetch('./sourceCode.json')
-      .then((response) => response.json())
-      .then((data) => channel.emit('sourceCode', data))
+    fetchSourceCode(channel)
 
     addons.add(panelId, {
       type: types.PANEL,
@@ -53,6 +52,23 @@ export function registerPanel(addOnId: string) {
           <SourceCodePanel addOnId={addOnId} channel={channel} />
         </AddonPanel>
       ),
+    })
+  }
+}
+
+export function registerTab(addOnId: string) {
+  return () => {
+    const panelId = `${addOnId}/panel`
+    const channel = addons.getChannel()
+
+    fetchSourceCode(channel)
+
+    addons.add(panelId, {
+      type: types.TAB,
+      title: 'Source',
+      route: ({ storyId }) => `/sourceCode/${storyId}`,
+      match: ({ viewMode }) => viewMode === 'sourceCode',
+      render: () => <SourceCodePanel addOnId={addOnId} channel={channel} />,
     })
   }
 }

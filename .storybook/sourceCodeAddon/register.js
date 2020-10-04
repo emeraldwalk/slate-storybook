@@ -1,6 +1,6 @@
 import { addons } from '@storybook/addons'
-import { registerPanel } from './SourceCodePanel'
+import { registerTab } from './SourceCodePanel'
 
 export const addonId = 'sourceCodeAddon'
 
-addons.register(addonId, registerPanel(addonId))
+addons.register(addonId, registerTab(addonId))
