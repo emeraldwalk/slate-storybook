@@ -2,7 +2,7 @@ import React from 'react'
 import { Story, Meta } from '@storybook/react'
 import { Node } from 'slate'
 import { Above, AboveProps } from './EditorAbove'
-import { SlateContext } from '../util'
+import { NodeSpec, SlateContext } from '../util'
 
 export default {
   title: 'Interfaces/Editor',
@@ -11,6 +11,7 @@ export default {
     (Story) => (
       <SlateContext initialValue={emptyValue}>
         <Story />
+        <NodeSpec />
       </SlateContext>
     ),
   ],
@@ -31,6 +32,23 @@ above.argTypes = {
 
 const emptyValue = (): Node[] => [
   {
-    children: [{ text: '' }],
+    type: 'paragraph',
+    children: [{ text: 'Aaa aaa aaa.' }],
+  },
+  {
+    type: 'paragraph',
+    children: [{ text: 'Bbb bbb bbb.' }],
+  },
+  {
+    type: 'paragraph',
+    children: [{ text: 'Ccc ccc ccc.' }],
+  },
+  {
+    type: 'paragraph',
+    children: [{ text: 'Ddd ddd ddd.' }],
+  },
+  {
+    type: 'paragraph',
+    children: [{ text: 'Eee eee eee.' }],
   },
 ]

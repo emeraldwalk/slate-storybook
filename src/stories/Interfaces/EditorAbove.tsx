@@ -1,5 +1,5 @@
 import React from 'react'
-import { Editor, Path, Point, Range } from 'slate'
+import { Editor, Path, Point, Range, Transforms } from 'slate'
 import { Editable, useEditor } from 'slate-react'
 
 const docs = `/**
@@ -32,7 +32,7 @@ export const Above: React.FC<AboveProps> = () => {
     <div>
       <Editable />
       <button onClick={onClick}>Above</button>
-      <pre>{docs}</pre>
+      {/* <pre>{docs}</pre> */}
     </div>
   )
 }
