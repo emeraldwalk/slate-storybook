@@ -4,10 +4,29 @@ import { css, jsx } from '@emotion/core'
 import React from 'react'
 import { Editor, Element, Node, Path, Point, Range, Text } from 'slate'
 import { useSlate } from 'slate-react'
+import { useNodeSpecContext } from './NodeSpecContext'
 
 const componentCss = css`
-  th {
-    text-align: left;
+  display: flex;
+  flex-direction: column;
+  padding: 0 10px;
+
+  header {
+    border-bottom: 1px solid #333;
+  }
+  main {
+    overflow-y: auto;
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  header > span:nth-of-type(1) {
+    margin-right: 20px;
+  }
+  li > span:nth-of-type(1) {
+    margin-right: 40px;
   }
   .anchor {
     border-right: 1px solid green;
@@ -17,46 +36,58 @@ const componentCss = css`
   }
 `
 
-export interface NodeSpecProps {}
+const selectedNodeCss = css`
+  background-color: #ccc;
+`
 
-const NodeSpec: React.FC<NodeSpecProps> = () => {
+export interface NodeSpecProps {
+  className?: string
+}
+
+const NodeSpec: React.FC<NodeSpecProps> = ({ className }) => {
   const editor = useSlate()
   const nodes = [...Editor.nodes(editor, { at: [] })]
+  const { selectedNodeEntries } = useNodeSpecContext()
 
   return (
-    <div css={componentCss}>
-      <table>
-        <thead>
-          <tr>
-            <th>Path</th>
-            <th>Node</th>
-          </tr>
-        </thead>
-        <tbody>
+    <div css={componentCss} className={className}>
+      <header>
+        <span>Path</span>
+        <span>Node</span>
+      </header>
+      <main>
+        <ul>
           {nodes.map(([node, path]) => (
-            <tr key={JSON.stringify(path)}>
-              <td>{JSON.stringify(path)}</td>
-              <td>
+            <li
+              css={
+                selectedNodeEntries.find(([n]) => n === node)
+                  ? selectedNodeCss
+                  : undefined
+              }
+              key={JSON.stringify(path)}
+            >
+              <span>{JSON.stringify(path)}</span>
+              <span>
                 {pathToSpace(path, 4)}
-                {nodeType(editor, node)}
-              </td>
-            </tr>
+                {nodeSpec(editor, node)}
+              </span>
+            </li>
           ))}
-        </tbody>
-      </table>
+        </ul>
+      </main>
     </div>
   )
 }
 
 export default NodeSpec
 
-function nodeType(editor: Editor, node: Node): React.ReactNode {
+function nodeSpec(editor: Editor, node: Node): React.ReactNode {
   if (Editor.isEditor(node)) {
     return 'editor'
   }
 
   if (Element.isElement(node)) {
-    return ['element:', node.type ?? '']
+    return ['type:', node.type ?? '']
   }
 
   if (Text.isText(node)) {
@@ -99,18 +130,18 @@ function nodeType(editor: Editor, node: Node): React.ReactNode {
       })
     }
 
-    if (i < node.text.length - 1) {
+    if (i < node.text.length) {
       tokens.push(node.text.substr(i))
     }
 
     return (
       <React.Fragment>
-        <span>text:</span>
-        {tokens.map((token) =>
+        {/* <span>text:</span> */}
+        {tokens.map((token, i) =>
           typeof token === 'string' ? (
-            <span>{token}</span>
+            <span key={i}>{token}</span>
           ) : (
-            <span className={token.type}></span>
+            <span key={i} className={token.type}></span>
           )
         )}
       </React.Fragment>

@@ -1,32 +1,38 @@
 import React from 'react'
-import { Editor, Path, Point, Range, Transforms } from 'slate'
+import { Editor, Path, Point, Range } from 'slate'
 import { Editable, useEditor } from 'slate-react'
+import { useNodeSpecContext } from '../util/NodeSpecContext'
 
-const docs = `/**
- * Get the ancestor above a location in the document.
- *
- * @param options
- */
-above<T extends Ancestor>(
-  editor: Editor,
-  options?: {
-    at?: Range | Path | Point | undefined;
-    match?: ((node: Node) => boolean) | ((node: Node) => node is T) | undefined;
-    mode?: "highest" | "lowest" | undefined;
-    voids?: boolean | undefined;
-  }
-): NodeEntry<T> | undefined;`
+// const docs = `/**
+//  * Get the ancestor above a location in the document.
+//  *
+//  * @param options
+//  */
+// above<T extends Ancestor>(
+//   editor: Editor,
+//   options?: {
+//     at?: Range | Path | Point | undefined;
+//     match?: ((node: Node) => boolean) | ((node: Node) => node is T) | undefined;
+//     mode?: "highest" | "lowest" | undefined;
+//     voids?: boolean | undefined;
+//   }
+// ): NodeEntry<T> | undefined;`
 
 export interface AboveProps {
   at?: Range | Path | Point
 }
 
-export const Above: React.FC<AboveProps> = () => {
+const Above: React.FC<AboveProps> = () => {
   const editor = useEditor()
+  const { setSelectedNodeEntries } = useNodeSpecContext()
 
   const onClick = React.useCallback(() => {
-    console.log(Editor.above(editor))
-  }, [editor])
+    const result = Editor.above(editor)
+    console.log(result)
+    if (result) {
+      setSelectedNodeEntries([result])
+    }
+  }, [editor, setSelectedNodeEntries])
 
   return (
     <div>
@@ -36,3 +42,5 @@ export const Above: React.FC<AboveProps> = () => {
     </div>
   )
 }
+
+export default Above

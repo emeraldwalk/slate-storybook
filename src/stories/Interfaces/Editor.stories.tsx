@@ -1,25 +1,21 @@
 import React from 'react'
 import { Story, Meta } from '@storybook/react'
-import { Node } from 'slate'
-import { Above, AboveProps } from './EditorAbove'
-import { NodeSpec, SlateContext } from '../util'
+import Above, { AboveProps } from './EditorAbove'
+import EditorNodes, { EditorNodesProps } from './EditorNodes'
+import { RenderElementProps } from 'slate-react'
+import StoryContextDecorator from '../util/StoryContextDecorator'
 
 export default {
   title: 'Interfaces/Editor',
   component: Above,
-  decorators: [
-    (Story) => (
-      <SlateContext initialValue={emptyValue}>
-        <Story />
-        <NodeSpec />
-      </SlateContext>
-    ),
-  ],
+  decorators: [(Story) => <StoryContextDecorator story={Story} />],
 } as Meta
 
-const Template: Story<AboveProps> = (args) => <Above {...args} />
+/** Editor.above */
 
-export const above = Template.bind({})
+const AboveTemplate: Story<AboveProps> = (args) => <Above {...args} />
+
+export const above = AboveTemplate.bind({})
 above.storyName = 'above()'
 above.argTypes = {
   at: {
@@ -30,25 +26,38 @@ above.argTypes = {
   },
 }
 
-const emptyValue = (): Node[] => [
-  {
-    type: 'paragraph',
-    children: [{ text: 'Aaa aaa aaa.' }],
+/** Editor.nodes */
+
+const NodesTemplate: Story<EditorNodesProps> = (args) => (
+  <EditorNodes {...args} />
+)
+
+export const nodes = NodesTemplate.bind({})
+nodes.storyName = 'nodes()'
+nodes.args = {
+  renderElement,
+}
+nodes.parameters = {
+  actions: {
+    disable: true,
   },
-  {
-    type: 'paragraph',
-    children: [{ text: 'Bbb bbb bbb.' }],
+  controls: {
+    disable: true,
   },
-  {
-    type: 'paragraph',
-    children: [{ text: 'Ccc ccc ccc.' }],
-  },
-  {
-    type: 'paragraph',
-    children: [{ text: 'Ddd ddd ddd.' }],
-  },
-  {
-    type: 'paragraph',
-    children: [{ text: 'Eee eee eee.' }],
-  },
-]
+}
+
+function renderElement({ element, attributes, children }: RenderElementProps) {
+  let E = 'p'
+
+  switch (element.type) {
+    case 'unordered-list':
+      E = 'ul'
+      break
+
+    case 'list-item':
+      E = 'li'
+      break
+  }
+
+  return <E {...attributes}>{children}</E>
+}
