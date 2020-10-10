@@ -2,9 +2,16 @@
 import { css, jsx } from '@emotion/core'
 
 import React from 'react'
-import { Editor, Element, Node, Path, Point, Range, Text } from 'slate'
-import { useSlate } from 'slate-react'
-import { useNodeSpecContext } from './NodeSpecContext'
+import {
+  Editor,
+  Element,
+  Node,
+  NodeEntry,
+  Path,
+  Point,
+  Range,
+  Text,
+} from 'slate'
 
 const componentCss = css`
   display: flex;
@@ -42,13 +49,17 @@ const selectedNodeCss = css`
 
 export interface NodeSpecProps {
   className?: string
+  editor: Editor
+  nodeEntries: NodeEntry<Node>[]
+  selectedNodeEntries: NodeEntry<Node>[]
 }
 
-const NodeSpec: React.FC<NodeSpecProps> = ({ className }) => {
-  const editor = useSlate()
-  const nodes = [...Editor.nodes(editor, { at: [] })]
-  const { selectedNodeEntries } = useNodeSpecContext()
-
+const NodeSpec: React.FC<NodeSpecProps> = ({
+  className,
+  editor,
+  nodeEntries,
+  selectedNodeEntries,
+}) => {
   return (
     <div css={componentCss} className={className}>
       <header>
@@ -57,7 +68,7 @@ const NodeSpec: React.FC<NodeSpecProps> = ({ className }) => {
       </header>
       <main>
         <ul>
-          {nodes.map(([node, path]) => (
+          {nodeEntries.map(([node, path]) => (
             <li
               css={
                 selectedNodeEntries.find(([n]) => n === node)

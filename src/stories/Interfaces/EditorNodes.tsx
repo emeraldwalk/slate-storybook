@@ -4,7 +4,7 @@ import { css, jsx } from '@emotion/core'
 import React from 'react'
 import { Editor, Element, Text, Node } from 'slate'
 import { Editable, RenderElementProps, useEditor } from 'slate-react'
-import { NodeSpec } from '../../components'
+import { NodeSpecContainer } from '../../components'
 import { useNodeSpecContext } from '../../components/NodeSpec'
 import { useOnValueChangeCallback } from '../../util/useOnValueChangeCallback.hook'
 
@@ -119,7 +119,7 @@ const EditorNodes: React.FC<EditorNodesProps> = ({ renderElement }) => {
 
           <button onClick={onClick}>Go</button>
         </div>
-        <NodeSpec css={nodeSpecCss} />
+        <NodeSpecContainer css={nodeSpecCss} />
       </div>
     </div>
   )
