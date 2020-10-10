@@ -4,9 +4,9 @@ import { css, jsx } from '@emotion/core'
 import React from 'react'
 import { Editor, Element, Text, Node } from 'slate'
 import { Editable, RenderElementProps, useEditor } from 'slate-react'
-import { NodeSpec } from '../util'
-import { useNodeSpecContext } from '../util/NodeSpecContext'
-import { useOnValueChangeCallback } from '../util/useOnValueChangeCallback'
+import { NodeSpec } from '../../components'
+import { useNodeSpecContext } from '../../components/NodeSpec'
+import { useOnValueChangeCallback } from '../../util/useOnValueChangeCallback.hook'
 
 const componentCss = css`
   flex-grow: 1;

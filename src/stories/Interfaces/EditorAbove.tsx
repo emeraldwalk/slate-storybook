@@ -1,7 +1,7 @@
 import React from 'react'
 import { Editor, Path, Point, Range } from 'slate'
 import { Editable, useEditor } from 'slate-react'
-import { useNodeSpecContext } from '../util/NodeSpecContext'
+import { useNodeSpecContext } from '../../components'
 
 // const docs = `/**
 //  * Get the ancestor above a location in the document.

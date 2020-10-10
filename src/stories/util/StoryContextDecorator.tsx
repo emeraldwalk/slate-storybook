@@ -2,7 +2,7 @@ import React from 'react'
 import { Story } from '@storybook/react'
 import { Node, NodeEntry } from 'slate'
 import { SlateContext } from '../util'
-import { NodeSpecContextProvider } from '../util/NodeSpecContext'
+import { NodeSpecContextProvider } from '../../components'
 import { mockParagraphsAndList } from './mockData'
 
 interface StoryContextDecoratorProps {
