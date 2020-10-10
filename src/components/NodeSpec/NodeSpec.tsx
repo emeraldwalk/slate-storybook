@@ -12,6 +12,7 @@ import {
   Range,
   Text,
 } from 'slate'
+import { useSlate } from 'slate-react'
 
 const componentCss = css`
   display: flex;
@@ -49,17 +50,16 @@ const selectedNodeCss = css`
 
 export interface NodeSpecProps {
   className?: string
-  editor: Editor
-  nodeEntries: NodeEntry<Node>[]
   selectedNodeEntries: NodeEntry<Node>[]
 }
 
 const NodeSpec: React.FC<NodeSpecProps> = ({
   className,
-  editor,
-  nodeEntries,
   selectedNodeEntries,
 }) => {
+  const editor = useSlate()
+  const nodeEntries = [...Editor.nodes(editor, { at: [] })]
+
   return (
     <div css={componentCss} className={className}>
       <header>

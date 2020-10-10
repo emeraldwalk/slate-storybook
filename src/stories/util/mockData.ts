@@ -1,5 +1,13 @@
 import { Node } from 'slate'
 
+export const emptySlateValue = (): Node[] => {
+  return [
+    {
+      children: [{ text: '' }],
+    },
+  ]
+}
+
 export const mockParagraphsAndList = (): Node[] => [
   {
     type: 'paragraph',

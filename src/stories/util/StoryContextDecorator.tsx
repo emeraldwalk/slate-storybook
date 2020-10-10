@@ -3,21 +3,34 @@ import { Story } from '@storybook/react'
 import { Node, NodeEntry } from 'slate'
 import { SlateContext } from '../util'
 import { NodeSpecContextProvider } from '../../components'
-import { mockParagraphsAndList } from './mockData'
+import { emptySlateValue } from './mockData'
 
-interface StoryContextDecoratorProps {
+export interface StoryDecoratorProps {
   story: Story
+  initialSlateValue?: () => Node[]
 }
 
-const StoryContextDecorator: React.FC<StoryContextDecoratorProps> = ({
+export const SlateContextDecorator: React.FC<StoryDecoratorProps> = ({
   story: Story,
+  initialSlateValue,
+}) => {
+  return (
+    <SlateContext initialValue={initialSlateValue ?? emptySlateValue}>
+      <Story />
+    </SlateContext>
+  )
+}
+
+export const NodeSpecContextDecorator: React.FC<StoryDecoratorProps> = ({
+  story: Story,
+  initialSlateValue,
 }) => {
   const [selectedNodeEntries, setSelectedNodeEntries] = React.useState<
     NodeEntry<Node>[]
   >([])
 
   return (
-    <SlateContext initialValue={mockParagraphsAndList}>
+    <SlateContext initialValue={initialSlateValue ?? emptySlateValue}>
       <NodeSpecContextProvider
         value={{ selectedNodeEntries, setSelectedNodeEntries }}
       >
@@ -26,5 +39,3 @@ const StoryContextDecorator: React.FC<StoryContextDecoratorProps> = ({
     </SlateContext>
   )
 }
-
-export default StoryContextDecorator
