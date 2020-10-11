@@ -51,14 +51,44 @@ const selectedNodeCss = css`
 export interface NodeSpecProps {
   className?: string
   selectedNodeEntries: NodeEntry<Node>[]
+  onClickPoint?: (point: Point) => void
+  selection?: Range
 }
 
 const NodeSpec: React.FC<NodeSpecProps> = ({
   className,
-  selectedNodeEntries,
+  selectedNodeEntries = [],
+  onClickPoint,
+  selection,
 }) => {
   const editor = useSlate()
   const nodeEntries = [...Editor.nodes(editor, { at: [] })]
+
+  const onClickNode = React.useCallback(
+    ([node, path]: NodeEntry<Node>) => {
+      const { anchorNode, anchorOffset } = document.getSelection() ?? {}
+      let offset = 0
+
+      if (Text.isText(node) && anchorNode) {
+        const spanElement = anchorNode.parentElement
+
+        if (spanElement?.className === 'text-token') {
+          const nodeText = anchorNode.textContent
+          const containerText = spanElement?.parentElement?.textContent
+
+          if (nodeText && containerText) {
+            offset = containerText.lastIndexOf(nodeText) + anchorOffset!
+          }
+        }
+      }
+
+      onClickPoint?.({
+        path,
+        offset,
+      })
+    },
+    [onClickPoint]
+  )
 
   return (
     <div css={componentCss} className={className}>
@@ -76,11 +106,12 @@ const NodeSpec: React.FC<NodeSpecProps> = ({
                   : undefined
               }
               key={JSON.stringify(path)}
+              onClick={() => onClickNode([node, path])}
             >
               <span>{JSON.stringify(path)}</span>
               <span>
                 {pathToSpace(path, 4)}
-                {nodeSpec(editor, node)}
+                {nodeSpec(editor, node, selection)}
               </span>
             </li>
           ))}
@@ -92,31 +123,35 @@ const NodeSpec: React.FC<NodeSpecProps> = ({
 
 export default NodeSpec
 
-function nodeSpec(editor: Editor, node: Node): React.ReactNode {
+function nodeSpec(
+  editor: Editor,
+  node: Node,
+  selection = editor.selection
+): React.ReactNode {
   if (Editor.isEditor(node)) {
     return 'editor'
   }
 
   if (Element.isElement(node)) {
-    return ['type:', node.type ?? '']
+    return `type:${node.type ?? ''}`
   }
 
   if (Text.isText(node)) {
     let points: (Point & { type: 'anchor' | 'focus' })[] = []
 
     // build up a list of anchor and / or focus points
-    if (editor.selection) {
+    if (selection) {
       const [[, path]] = Editor.nodes(editor, {
         at: [],
         match: (n) => n === node,
       })
 
-      const order: ('anchor' | 'focus')[] = Range.isForward(editor.selection)
+      const order: ('anchor' | 'focus')[] = Range.isForward(selection)
         ? ['anchor', 'focus']
         : ['focus', 'anchor']
 
       // start and / or end point
-      points = Range.edges(editor.selection)
+      points = Range.edges(selection)
         .map((point, i) => ({
           type: order[i],
           ...point,
@@ -146,16 +181,17 @@ function nodeSpec(editor: Editor, node: Node): React.ReactNode {
     }
 
     return (
-      <React.Fragment>
-        {/* <span>text:</span> */}
+      <span className="text-node-content">
         {tokens.map((token, i) =>
           typeof token === 'string' ? (
-            <span key={i}>{token}</span>
+            <span className="text-token" key={i}>
+              {token}
+            </span>
           ) : (
             <span key={i} className={token.type}></span>
           )
         )}
-      </React.Fragment>
+      </span>
     )
   }
 

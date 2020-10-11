@@ -1,12 +1,12 @@
 import React from 'react'
 import { Story, Meta } from '@storybook/react'
-import { PathSelector, PathSelectorProps } from '../../components'
+import { NodeSpec, NodeSpecProps } from '../../components'
 import { SlateContextDecorator } from '../util'
 import { mockParagraphsAndList } from '../util/mockData'
 
 export default {
-  title: 'Components/PathSelector',
-  component: PathSelector,
+  title: 'Components/NodeSpec',
+  component: NodeSpec,
   decorators: [
     (Story, context) => {
       return (
@@ -19,12 +19,21 @@ export default {
   ],
 } as Meta
 
-const Template: Story<PathSelectorProps> = (args) => <PathSelector {...args} />
+const Template: Story<NodeSpecProps> = (args) => <NodeSpec {...args} />
 
-export const PathSelectorDefault = Template.bind({})
-PathSelectorDefault.args = {
-  path: [1],
+export const NodeSpecDefault = Template.bind({})
+NodeSpecDefault.args = {
+  selection: {
+    anchor: {
+      path: [0, 0],
+      offset: 5,
+    },
+    focus: {
+      path: [3, 2, 0],
+      offset: 2,
+    },
+  },
 }
-PathSelectorDefault.parameters = {
+NodeSpecDefault.parameters = {
   initialSlateValue: mockParagraphsAndList,
 }
