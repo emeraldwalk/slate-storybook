@@ -24,13 +24,9 @@ const PathSelector: React.FC<PathSelectorProps> = ({ path, onChangePath }) => {
     return path ? [Editor.node(editor, path)] : []
   })
 
-  const onClickInput = React.useCallback(
-    (event: React.MouseEvent<HTMLInputElement>) => {
-      event.stopPropagation()
-      setIsOpen((isOpen) => !isOpen)
-    },
-    []
-  )
+  const onClickInput = React.useCallback(() => {
+    setIsOpen((isOpen) => !isOpen)
+  }, [])
 
   useOffClickCallback(
     inputEl,
