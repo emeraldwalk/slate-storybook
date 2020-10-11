@@ -48,17 +48,26 @@ const selectedNodeCss = css`
   background-color: #ccc;
 `
 
+const hoverCss = css`
+  :hover {
+    background-color: #1fa8fd;
+    cursor: pointer;
+  }
+`
+
 export interface NodeSpecProps {
   className?: string
+  mode: 'path' | 'point'
   selectedNodeEntries: NodeEntry<Node>[]
-  onClickPoint?: (point: Point) => void
+  onSelect?: (pointOrPoint: Path | Point) => void
   selection?: Range
 }
 
 const NodeSpec: React.FC<NodeSpecProps> = ({
   className,
+  mode,
   selectedNodeEntries = [],
-  onClickPoint,
+  onSelect,
   selection,
 }) => {
   const editor = useSlate()
@@ -66,6 +75,11 @@ const NodeSpec: React.FC<NodeSpecProps> = ({
 
   const onClickNode = React.useCallback(
     ([node, path]: NodeEntry<Node>) => {
+      if (mode === 'path') {
+        onSelect?.(path)
+        return
+      }
+
       const { anchorNode, anchorOffset } = document.getSelection() ?? {}
       let offset = 0
 
@@ -82,12 +96,12 @@ const NodeSpec: React.FC<NodeSpecProps> = ({
         }
       }
 
-      onClickPoint?.({
+      onSelect?.({
         path,
         offset,
       })
     },
-    [onClickPoint]
+    [mode, onSelect]
   )
 
   return (
@@ -100,18 +114,19 @@ const NodeSpec: React.FC<NodeSpecProps> = ({
         <ul>
           {nodeEntries.map(([node, path]) => (
             <li
-              css={
-                selectedNodeEntries.find(([n]) => n === node)
+              css={css`
+                ${mode === 'path' && hoverCss}
+                ${selectedNodeEntries.find(([n]) => n === node)
                   ? selectedNodeCss
-                  : undefined
-              }
+                  : undefined}
+              `}
               key={JSON.stringify(path)}
               onClick={() => onClickNode([node, path])}
             >
               <span>{JSON.stringify(path)}</span>
               <span>
                 {pathToSpace(path, 4)}
-                {nodeSpec(editor, node, selection)}
+                {nodeSpec(editor, mode, node, selection)}
               </span>
             </li>
           ))}
@@ -125,6 +140,7 @@ export default NodeSpec
 
 function nodeSpec(
   editor: Editor,
+  mode: 'path' | 'point',
   node: Node,
   selection = editor.selection
 ): React.ReactNode {
@@ -181,10 +197,29 @@ function nodeSpec(
     }
 
     return (
-      <span className="text-node-content">
+      <span
+        css={
+          mode === 'point' &&
+          css`
+            :hover {
+              background-color: #1fa8fd;
+            }
+          `
+        }
+        className="text-node-content"
+      >
         {tokens.map((token, i) =>
           typeof token === 'string' ? (
-            <span className="text-token" key={i}>
+            <span
+              css={
+                mode === 'point' &&
+                css`
+                  cursor: text;
+                `
+              }
+              className="text-token"
+              key={i}
+            >
               {token}
             </span>
           ) : (

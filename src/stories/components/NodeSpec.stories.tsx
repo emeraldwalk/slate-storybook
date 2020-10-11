@@ -17,12 +17,16 @@ export default {
       )
     },
   ],
+  parameters: {
+    initialSlateValue: mockParagraphsAndList,
+  },
 } as Meta
 
 const Template: Story<NodeSpecProps> = (args) => <NodeSpec {...args} />
 
-export const NodeSpecDefault = Template.bind({})
-NodeSpecDefault.args = {
+export const NodeSpecPath = Template.bind({})
+NodeSpecPath.args = {
+  mode: 'path',
   selection: {
     anchor: {
       path: [0, 0],
@@ -34,6 +38,8 @@ NodeSpecDefault.args = {
     },
   },
 }
-NodeSpecDefault.parameters = {
-  initialSlateValue: mockParagraphsAndList,
+
+export const NodeSpecPoint = Template.bind({})
+NodeSpecPoint.args = {
+  mode: 'point',
 }

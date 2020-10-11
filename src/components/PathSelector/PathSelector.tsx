@@ -12,15 +12,27 @@ export interface PathSelectorProps {
   path?: Path
 }
 
-const PathSelector: React.FC<PathSelectorProps> = ({ path }) => {
+const PathSelector: React.FC<PathSelectorProps> = ({ path: initialPath }) => {
   const editor = useSlate()
+
+  const [path, setPath] = React.useState(initialPath)
+
   const [selectedNodeEntries] = React.useState<NodeEntry<Node>[]>(() => {
     return path ? [Editor.node(editor, path)] : []
   })
 
   return (
     <div css={componentCss}>
-      <NodeSpec selectedNodeEntries={selectedNodeEntries} />
+      <input type="text" readOnly={true} value={JSON.stringify(path)} />
+      <NodeSpec
+        mode="path"
+        selectedNodeEntries={selectedNodeEntries}
+        onSelect={(pathOrPoint) =>
+          Path.isPath(pathOrPoint)
+            ? setPath(pathOrPoint)
+            : setPath(pathOrPoint.path)
+        }
+      />
     </div>
   )
 }
