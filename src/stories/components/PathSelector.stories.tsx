@@ -3,6 +3,7 @@ import { Story, Meta } from '@storybook/react'
 import { PathSelector, PathSelectorProps } from '../../components'
 import { SlateContextDecorator } from '../util'
 import { mockParagraphsAndList } from '../util/mockData'
+import { Path } from 'slate'
 
 export default {
   title: 'Components/PathSelector',
@@ -19,12 +20,12 @@ export default {
   ],
 } as Meta
 
-const Template: Story<PathSelectorProps> = (args) => <PathSelector {...args} />
+const Template: Story<PathSelectorProps> = (args) => {
+  const [path, setPath] = React.useState<Path | undefined>(undefined)
+  return <PathSelector {...args} path={path} onChangePath={setPath} />
+}
 
 export const PathSelectorDefault = Template.bind({})
-PathSelectorDefault.args = {
-  path: [1],
-}
 PathSelectorDefault.parameters = {
   initialSlateValue: mockParagraphsAndList,
 }

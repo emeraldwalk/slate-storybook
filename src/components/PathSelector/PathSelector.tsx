@@ -2,37 +2,78 @@
 import { css, jsx } from '@emotion/core'
 
 import React from 'react'
-import { Editor, Node, NodeEntry, Path } from 'slate'
+import { Editor, Node, NodeEntry, Path, Point } from 'slate'
 import { useSlate } from 'slate-react'
-import { NodeSpec } from '..'
+import { Modal, NodeSpec } from '..'
+import { useOffClickCallback } from '../../util/useOffClick.hook'
 
 const componentCss = css``
 
 export interface PathSelectorProps {
   path?: Path
+  onChangePath: (path: Path) => void
 }
 
-const PathSelector: React.FC<PathSelectorProps> = ({ path: initialPath }) => {
+const PathSelector: React.FC<PathSelectorProps> = ({ path, onChangePath }) => {
   const editor = useSlate()
-
-  const [path, setPath] = React.useState(initialPath)
+  const [isOpen, setIsOpen] = React.useState(false)
+  const pathValue = React.useMemo(() => JSON.stringify(path) ?? '', [path])
+  const [inputEl, setInputEl] = React.useState<HTMLInputElement | null>(null)
 
   const [selectedNodeEntries] = React.useState<NodeEntry<Node>[]>(() => {
     return path ? [Editor.node(editor, path)] : []
   })
 
+  const onClickInput = React.useCallback(
+    (event: React.MouseEvent<HTMLInputElement>) => {
+      event.stopPropagation()
+      setIsOpen((isOpen) => !isOpen)
+    },
+    []
+  )
+
+  useOffClickCallback(
+    inputEl,
+    React.useCallback(() => {
+      setIsOpen(false)
+    }, [])
+  )
+
+  const onSelect = React.useCallback(
+    (pathOrPoint: Path | Point) => {
+      Path.isPath(pathOrPoint)
+        ? onChangePath(pathOrPoint)
+        : onChangePath(pathOrPoint.path)
+
+      setIsOpen(false)
+    },
+    [onChangePath]
+  )
+
   return (
     <div css={componentCss}>
-      <input type="text" readOnly={true} value={JSON.stringify(path)} />
-      <NodeSpec
-        mode="path"
-        selectedNodeEntries={selectedNodeEntries}
-        onSelect={(pathOrPoint) =>
-          Path.isPath(pathOrPoint)
-            ? setPath(pathOrPoint)
-            : setPath(pathOrPoint.path)
-        }
+      <input
+        ref={setInputEl}
+        css={css`
+          cursor: pointer;
+        `}
+        type="text"
+        readOnly={true}
+        value={pathValue}
+        onClick={onClickInput}
       />
+      {isOpen && inputEl && (
+        <Modal targetElement={inputEl}>
+          <NodeSpec
+            css={css`
+              height: 250px;
+            `}
+            mode="path"
+            selectedNodeEntries={selectedNodeEntries}
+            onSelect={onSelect}
+          />
+        </Modal>
+      )}
     </div>
   )
 }
