@@ -57,6 +57,7 @@ const PathSelector: React.FC<PathSelectorProps> = ({ path, onChangePath }) => {
         css={css`
           cursor: pointer;
         `}
+        placeholder="Select Path..."
         type="text"
         readOnly={true}
         value={pathValue}
