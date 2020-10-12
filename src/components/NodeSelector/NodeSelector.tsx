@@ -9,19 +9,24 @@ import { useOffClickCallback } from '../../util/useOffClick.hook'
 
 const componentCss = css``
 
-export interface PathSelectorProps {
-  path?: Path
-  onChangePath: (path: Path) => void
+export type NodeSelectorProps<TMode extends 'path' | 'point'> = {
+  mode: TMode
+  value?: TMode extends 'path' ? Path : Point
+  onChange: (value: TMode extends 'path' ? Path : Point) => void
 }
 
-const PathSelector: React.FC<PathSelectorProps> = ({ path, onChangePath }) => {
+const NodeSelector = <TMode extends 'path' | 'point'>({
+  mode,
+  value,
+  onChange,
+}: NodeSelectorProps<TMode>) => {
   const editor = useSlate()
   const [isOpen, setIsOpen] = React.useState(false)
-  const pathValue = React.useMemo(() => JSON.stringify(path) ?? '', [path])
+  const valueStr = React.useMemo(() => JSON.stringify(value) ?? '', [value])
   const [inputEl, setInputEl] = React.useState<HTMLInputElement | null>(null)
 
   const [selectedNodeEntries] = React.useState<NodeEntry<Node>[]>(() => {
-    return path ? [Editor.node(editor, path)] : []
+    return value ? [Editor.node(editor, value)] : []
   })
 
   const onClickInput = React.useCallback(() => {
@@ -36,14 +41,11 @@ const PathSelector: React.FC<PathSelectorProps> = ({ path, onChangePath }) => {
   )
 
   const onSelect = React.useCallback(
-    (pathOrPoint: Path | Point) => {
-      Path.isPath(pathOrPoint)
-        ? onChangePath(pathOrPoint)
-        : onChangePath(pathOrPoint.path)
-
+    (pathOrPoint: TMode extends 'path' ? Path : Point) => {
+      onChange(pathOrPoint)
       setIsOpen(false)
     },
-    [onChangePath]
+    [onChange]
   )
 
   return (
@@ -56,7 +58,7 @@ const PathSelector: React.FC<PathSelectorProps> = ({ path, onChangePath }) => {
         placeholder="Select Path..."
         type="text"
         readOnly={true}
-        value={pathValue}
+        value={valueStr}
         onClick={onClickInput}
       />
       {isOpen && inputEl && (
@@ -65,9 +67,9 @@ const PathSelector: React.FC<PathSelectorProps> = ({ path, onChangePath }) => {
             css={css`
               height: 250px;
             `}
-            mode="path"
+            mode={mode}
             selectedNodeEntries={selectedNodeEntries}
-            onSelect={onSelect}
+            onSelect={onSelect as any}
           />
         </Modal>
       )}
@@ -75,4 +77,4 @@ const PathSelector: React.FC<PathSelectorProps> = ({ path, onChangePath }) => {
   )
 }
 
-export default PathSelector
+export default NodeSelector
