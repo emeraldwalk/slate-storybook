@@ -62,6 +62,7 @@ const hoverCss = css`
 
 export interface NodeSpecProps {
   className?: string
+  rootNode?: Node
   mode: 'path' | 'point'
   onSelect?: (pointOrPoint: Path | Point) => void
   highlightLocations?: Location[]
@@ -69,12 +70,13 @@ export interface NodeSpecProps {
 
 const NodeSpec: React.FC<NodeSpecProps> = ({
   className,
+  rootNode,
   mode,
   highlightLocations = [],
   onSelect,
 }) => {
   const editor = useSlate()
-  const nodeEntries = [...Editor.nodes(editor, { at: [] })]
+  const nodeEntries = [...Node.nodes(rootNode ?? editor)]
 
   const {
     paths: highlightPaths,
@@ -150,7 +152,7 @@ const NodeSpec: React.FC<NodeSpecProps> = ({
                 `}
               >
                 {pathToSpace(path, 4)}
-                {nodeSpec(editor, mode, [node, path], labeledPoints)}
+                {nodeSpec(mode, [node, path], labeledPoints)}
               </span>
             </li>
           ))}
@@ -232,7 +234,6 @@ function toLabeledRange(
 }
 
 function nodeSpec(
-  editor: Editor,
   mode: 'path' | 'point',
   [node, path]: NodeEntry<Node>,
   labeledPoints: { label: string; point: Point }[] = []
