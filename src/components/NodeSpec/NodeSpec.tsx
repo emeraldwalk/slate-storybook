@@ -64,7 +64,6 @@ export interface NodeSpecProps {
   className?: string
   mode: 'path' | 'point'
   onSelect?: (pointOrPoint: Path | Point) => void
-  selection?: Range
   highlightLocations?: Location[]
 }
 
@@ -73,14 +72,25 @@ const NodeSpec: React.FC<NodeSpecProps> = ({
   mode,
   highlightLocations = [],
   onSelect,
-  selection,
 }) => {
   const editor = useSlate()
   const nodeEntries = [...Editor.nodes(editor, { at: [] })]
 
-  const highlightPaths = React.useMemo(
-    () => highlightLocations.filter(Path.isPath),
-    [highlightLocations]
+  const {
+    paths: highlightPaths,
+    points: highlightPoints,
+    ranges: highlightRanges,
+  } = React.useMemo(() => siftLocations(highlightLocations), [
+    highlightLocations,
+  ])
+
+  const labeledPoints = React.useMemo(
+    () =>
+      highlightRanges
+        .map(toLabeledRange)
+        .flat()
+        .concat(highlightPoints.map((point) => ({ label: 'point', point }))),
+    [highlightRanges, highlightPoints]
   )
 
   const onClickNode = React.useCallback(
@@ -140,7 +150,7 @@ const NodeSpec: React.FC<NodeSpecProps> = ({
                 `}
               >
                 {pathToSpace(path, 4)}
-                {nodeSpec(editor, mode, node, selection)}
+                {nodeSpec(editor, mode, [node, path], labeledPoints)}
               </span>
             </li>
           ))}
@@ -152,11 +162,80 @@ const NodeSpec: React.FC<NodeSpecProps> = ({
 
 export default NodeSpec
 
+function siftLocations(
+  locations: Location[]
+): { paths: Path[]; points: Point[]; ranges: Range[] } {
+  const paths: Path[] = []
+  const points: Point[] = []
+  const ranges: Range[] = []
+
+  for (const location of locations) {
+    if (Path.isPath(location)) {
+      paths.push(location)
+    } else if (Point.isPoint(location)) {
+      points.push(location)
+    } else if (Range.isRange(location)) {
+      ranges.push(location)
+    }
+  }
+
+  return {
+    paths,
+    points,
+    ranges,
+  }
+}
+
+function nodeTokens(
+  [node, path]: NodeEntry<Node>,
+  points: { label: string; point: Point }[]
+): (string | { label: string })[] {
+  const nodeText = Node.string(node)
+  const tokens: (string | { label: string })[] = []
+
+  // filter down to only points in current path
+  const pointsInPath = points.filter(({ point }) =>
+    Path.equals(point.path, path)
+  )
+
+  let i = 0
+
+  // tokenize text using any points that apply
+  for (const { label, point } of pointsInPath) {
+    const { offset } = point
+
+    if (offset > i) {
+      tokens.push(nodeText.substr(i, offset - i))
+      i = offset
+    }
+
+    tokens.push({
+      label,
+    })
+  }
+
+  if (i < nodeText.length) {
+    tokens.push(nodeText.substr(i))
+  }
+
+  return tokens
+}
+
+/** Return a ordered, labeled range */
+function toLabeledRange(
+  range: Range
+): [{ label: string; point: Point }, { label: string; point: Point }] {
+  const anchor = { label: 'anchor', point: range.anchor }
+  const focus = { label: 'focus', point: range.focus }
+
+  return Range.isForward(range) ? [anchor, focus] : [focus, anchor]
+}
+
 function nodeSpec(
   editor: Editor,
   mode: 'path' | 'point',
-  node: Node,
-  selection = editor.selection
+  [node, path]: NodeEntry<Node>,
+  labeledPoints: { label: string; point: Point }[] = []
 ): React.ReactNode {
   if (Editor.isEditor(node)) {
     return 'editor'
@@ -167,48 +246,7 @@ function nodeSpec(
   }
 
   if (Text.isText(node)) {
-    let points: (Point & { type: 'anchor' | 'focus' })[] = []
-
-    // build up a list of anchor and / or focus points
-    if (selection) {
-      const [[, path]] = Editor.nodes(editor, {
-        at: [],
-        match: (n) => n === node,
-      })
-
-      const order: ('anchor' | 'focus')[] = Range.isForward(selection)
-        ? ['anchor', 'focus']
-        : ['focus', 'anchor']
-
-      // start and / or end point
-      points = Range.edges(selection)
-        .map((point, i) => ({
-          type: order[i],
-          ...point,
-        }))
-        .filter((point) => Path.equals(point.path, path))
-    }
-
-    // build a list of tokens to render
-    const tokens: (string | { type: 'anchor' | 'focus' })[] = []
-    let i = 0
-
-    for (const point of points) {
-      const { offset } = point
-
-      if (offset > i) {
-        tokens.push(node.text.substr(i, offset - i))
-        i = offset
-      }
-
-      tokens.push({
-        type: point.type,
-      })
-    }
-
-    if (i < node.text.length) {
-      tokens.push(node.text.substr(i))
-    }
+    const tokens = nodeTokens([node, path], labeledPoints)
 
     return (
       <span
@@ -237,7 +275,7 @@ function nodeSpec(
               {token}
             </span>
           ) : (
-            <span key={i} className={token.type}></span>
+            <span key={i} className={token.label}></span>
           )
         )}
       </span>

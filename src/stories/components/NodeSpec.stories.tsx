@@ -27,17 +27,20 @@ const Template: Story<NodeSpecProps> = (args) => <NodeSpec {...args} />
 export const NodeSpecPath = Template.bind({})
 NodeSpecPath.args = {
   mode: 'path',
-  selection: {
-    anchor: {
-      path: [0, 0],
-      offset: 5,
+  highlightLocations: [
+    {
+      anchor: {
+        path: [0, 0],
+        offset: 5,
+      },
+      focus: {
+        path: [3, 2, 0],
+        offset: 2,
+      },
     },
-    focus: {
-      path: [3, 2, 0],
-      offset: 2,
-    },
-  },
-  highlightLocations: [[1, 0], [5]],
+    [1, 0],
+    [5],
+  ],
 }
 
 export const NodeSpecPoint = Template.bind({})

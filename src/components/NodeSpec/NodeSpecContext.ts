@@ -1,7 +1,7 @@
 import React from 'react'
 import { Node, NodeEntry } from 'slate'
 
-interface NodeSpecContext {
+interface NodeSpecContextValue {
   selectedNodeEntries: NodeEntry<Node>[]
   setSelectedNodeEntries: (
     nodeEntries:
@@ -10,8 +10,8 @@ interface NodeSpecContext {
   ) => void
 }
 
-const NodeSpecContext = React.createContext<NodeSpecContext>(
-  (null as unknown) as NodeSpecContext
+const NodeSpecContext = React.createContext<NodeSpecContextValue>(
+  (null as unknown) as NodeSpecContextValue
 )
 
 export const NodeSpecContextProvider = NodeSpecContext.Provider
