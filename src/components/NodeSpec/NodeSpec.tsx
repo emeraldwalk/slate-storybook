@@ -5,6 +5,7 @@ import React from 'react'
 import {
   Editor,
   Element,
+  Location,
   Node,
   NodeEntry,
   Path,
@@ -37,10 +38,14 @@ const componentCss = css`
     margin-right: 40px;
   }
   .anchor {
-    border-right: 1px solid green;
+    border-right: 2px solid green;
+    position: absolute;
+    height: 100%;
   }
   .focus {
-    border-right: 1px solid red;
+    border-right: 2px solid red;
+    position: absolute;
+    height: 100%;
   }
 `
 
@@ -58,20 +63,25 @@ const hoverCss = css`
 export interface NodeSpecProps {
   className?: string
   mode: 'path' | 'point'
-  selectedNodeEntries: NodeEntry<Node>[]
   onSelect?: (pointOrPoint: Path | Point) => void
   selection?: Range
+  highlightLocations?: Location[]
 }
 
 const NodeSpec: React.FC<NodeSpecProps> = ({
   className,
   mode,
-  selectedNodeEntries = [],
+  highlightLocations = [],
   onSelect,
   selection,
 }) => {
   const editor = useSlate()
   const nodeEntries = [...Editor.nodes(editor, { at: [] })]
+
+  const highlightPaths = React.useMemo(
+    () => highlightLocations.filter(Path.isPath),
+    [highlightLocations]
+  )
 
   const onClickNode = React.useCallback(
     ([node, path]: NodeEntry<Node>) => {
@@ -86,7 +96,7 @@ const NodeSpec: React.FC<NodeSpecProps> = ({
       if (Text.isText(node) && anchorNode) {
         const spanElement = anchorNode.parentElement
 
-        if (spanElement?.className === 'text-token') {
+        if (spanElement?.classList.contains('text-token')) {
           const nodeText = anchorNode.textContent
           const containerText = spanElement?.parentElement?.textContent
 
@@ -116,7 +126,7 @@ const NodeSpec: React.FC<NodeSpecProps> = ({
             <li
               css={css`
                 ${mode === 'path' && hoverCss}
-                ${selectedNodeEntries.find(([n]) => n === node)
+                ${highlightPaths.find((p) => Path.equals(p, path))
                   ? selectedNodeCss
                   : undefined}
               `}
@@ -124,7 +134,11 @@ const NodeSpec: React.FC<NodeSpecProps> = ({
               onClick={() => onClickNode([node, path])}
             >
               <span>{JSON.stringify(path)}</span>
-              <span>
+              <span
+                css={css`
+                  position: relative;
+                `}
+              >
                 {pathToSpace(path, 4)}
                 {nodeSpec(editor, mode, node, selection)}
               </span>

@@ -37,6 +37,7 @@ NodeSpecPath.args = {
       offset: 2,
     },
   },
+  highlightLocations: [[1, 0], [5]],
 }
 
 export const NodeSpecPoint = Template.bind({})

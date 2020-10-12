@@ -2,8 +2,7 @@
 import { css, jsx } from '@emotion/core'
 
 import React from 'react'
-import { Editor, Node, NodeEntry, Path, Point } from 'slate'
-import { useSlate } from 'slate-react'
+import { Location, Path, Point } from 'slate'
 import { Modal, NodeSpec } from '..'
 import { useOffClickCallback } from '../../util/useOffClick.hook'
 
@@ -20,13 +19,12 @@ const NodeSelector = <TMode extends 'path' | 'point'>({
   value,
   onChange,
 }: NodeSelectorProps<TMode>) => {
-  const editor = useSlate()
   const [isOpen, setIsOpen] = React.useState(false)
   const valueStr = React.useMemo(() => JSON.stringify(value) ?? '', [value])
   const [inputEl, setInputEl] = React.useState<HTMLInputElement | null>(null)
 
-  const [selectedNodeEntries] = React.useState<NodeEntry<Node>[]>(() => {
-    return value ? [Editor.node(editor, value)] : []
+  const [highlightedLocations] = React.useState<Location[]>(() => {
+    return value ? [value] : []
   })
 
   const onClickInput = React.useCallback(() => {
@@ -68,7 +66,7 @@ const NodeSelector = <TMode extends 'path' | 'point'>({
               height: 250px;
             `}
             mode={mode}
-            selectedNodeEntries={selectedNodeEntries}
+            highlightLocations={highlightedLocations}
             onSelect={onSelect as any}
           />
         </Modal>
