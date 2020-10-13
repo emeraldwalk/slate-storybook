@@ -11,7 +11,7 @@ const componentCss = css``
 export type NodeSelectorProps<TMode extends 'path' | 'point'> = {
   mode: TMode
   value?: TMode extends 'path' ? Path : Point
-  onChange: (value: TMode extends 'path' ? Path : Point) => void
+  onChange: (value?: TMode extends 'path' ? Path : Point) => void
 }
 
 const NodeSelector = <TMode extends 'path' | 'point'>({
@@ -46,19 +46,40 @@ const NodeSelector = <TMode extends 'path' | 'point'>({
     [onChange]
   )
 
+  const onClear = React.useCallback(() => onChange(undefined), [onChange])
+
   return (
     <div css={componentCss}>
-      <input
-        ref={setInputEl}
+      <span
         css={css`
-          cursor: pointer;
+          align-items: center;
+          display: flex;
+          position: relative;
         `}
-        placeholder={`Select ${mode === 'path' ? 'Path' : 'Point'}...`}
-        type="text"
-        readOnly={true}
-        value={valueStr}
-        onClick={onClickInput}
-      />
+      >
+        <input
+          ref={setInputEl}
+          css={css`
+            cursor: pointer;
+          `}
+          placeholder={`Select ${mode === 'path' ? 'Path' : 'Point'}...`}
+          type="text"
+          readOnly={true}
+          value={valueStr}
+          onClick={onClickInput}
+        />
+        {value && (
+          <span
+            css={css`
+              position: absolute;
+              right: 0;
+            `}
+            onClick={onClear}
+          >
+            <i className="mdi mdi-close"></i>
+          </span>
+        )}
+      </span>
       {isOpen && inputEl && (
         <Modal targetElement={inputEl}>
           <NodeSpec
