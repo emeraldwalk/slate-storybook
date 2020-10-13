@@ -53,7 +53,7 @@ const NodeSelector = <TMode extends 'path' | 'point'>({
         css={css`
           cursor: pointer;
         `}
-        placeholder="Select Path..."
+        placeholder={`Select ${mode === 'path' ? 'Path' : 'Point'}...`}
         type="text"
         readOnly={true}
         value={valueStr}

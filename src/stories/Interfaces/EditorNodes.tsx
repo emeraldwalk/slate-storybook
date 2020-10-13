@@ -4,7 +4,7 @@ import { css, jsx } from '@emotion/core'
 import React from 'react'
 import { Editor, Element, Text, Node } from 'slate'
 import { Editable, RenderElementProps, useEditor } from 'slate-react'
-import { NodeSpecContainer } from '../../components'
+import { NodeSpecContainer, Selector } from '../../components'
 import { useNodeSpecContext } from '../../components/NodeSpec'
 import { useOnValueChangeCallback } from '../../util/useOnValueChangeCallback.hook'
 
@@ -16,13 +16,14 @@ const componentCss = css`
 `
 const nodeSpecCss = css``
 
-type Mode = 'highest' | 'lowest' | 'all' | undefined
+type Mode = 'highest' | 'lowest' | 'all'
 const matches = {
   '(n) => !Editor.isEditor(n)': (n: Node) => !Editor.isEditor(n),
   'Editor.isEditor(n)': Editor.isEditor,
   'Element.isElement': Element.isElement,
   'Text.isText': Text.isText,
 } as const
+type Match = keyof typeof matches
 
 export interface EditorNodesProps {
   renderElement: (props: RenderElementProps) => JSX.Element
@@ -30,13 +31,11 @@ export interface EditorNodesProps {
 
 const EditorNodes: React.FC<EditorNodesProps> = ({ renderElement }) => {
   const editor = useEditor()
-  const { setSelectedNodeEntries } = useNodeSpecContext()
+  const { setHighlightLocations } = useNodeSpecContext()
 
   const [at, setAt] = React.useState('')
-  const [match, setMatch] = React.useState<keyof typeof matches | undefined>(
-    undefined
-  )
-  const [mode, setMode] = React.useState<Mode>(undefined)
+  const [match, setMatch] = React.useState<Match | undefined>(undefined)
+  const [mode, setMode] = React.useState<Mode | undefined>(undefined)
 
   console.log('at:', at, 'mode:', mode ? mode : undefined, 'match:', match)
 
@@ -44,37 +43,20 @@ const EditorNodes: React.FC<EditorNodesProps> = ({ renderElement }) => {
     (event: React.MouseEvent) => {
       event.preventDefault()
 
-      const nodes = [
+      const paths = [
         ...Editor.nodes(editor, {
           at: at ? JSON.parse(at) : undefined,
           match: matches[match!],
           mode: mode ? mode : undefined,
         }),
-      ]
+      ].map(([, path]) => path)
 
-      setSelectedNodeEntries(nodes)
+      setHighlightLocations(paths)
     },
-    [at, editor, match, mode, setSelectedNodeEntries]
+    [at, editor, match, mode, setHighlightLocations]
   )
 
   const onAtChange = useOnValueChangeCallback(setAt)
-
-  const onMatchChange = React.useCallback(
-    ({ currentTarget }: React.ChangeEvent<HTMLSelectElement>) => {
-      setMatch(currentTarget.value as keyof typeof matches | undefined)
-    },
-    []
-  )
-
-  const onModeChange = React.useCallback(
-    ({ currentTarget }: React.ChangeEvent<HTMLSelectElement>) => {
-      const mode = (currentTarget.value
-        ? currentTarget.value
-        : undefined) as Mode
-      setMode(mode)
-    },
-    []
-  )
 
   return (
     <div css={componentCss}>
@@ -99,23 +81,19 @@ const EditorNodes: React.FC<EditorNodesProps> = ({ renderElement }) => {
             onChange={onAtChange}
           />
 
-          <select onChange={onMatchChange} value={match}>
-            <option value={undefined}>- match -</option>
-            {Object.keys(matches).map((mode) => (
-              <option key={mode} value={mode}>
-                {mode}
-              </option>
-            ))}
-          </select>
+          <Selector
+            label="match"
+            options={Object.keys(matches) as Match[]}
+            value={match}
+            onChange={setMatch}
+          />
 
-          <select onChange={onModeChange} value={mode}>
-            <option value={undefined}>- mode -</option>
-            {['all', 'highest', 'lowest'].map((mode) => (
-              <option key={mode} value={mode}>
-                {mode}
-              </option>
-            ))}
-          </select>
+          <Selector
+            label="mode"
+            options={['all', 'highest', 'lowest']}
+            value={mode}
+            onChange={setMode}
+          />
 
           <button onClick={onClick}>Go</button>
         </div>

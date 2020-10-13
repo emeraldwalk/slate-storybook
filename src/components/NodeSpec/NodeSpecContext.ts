@@ -1,12 +1,10 @@
 import React from 'react'
-import { Node, NodeEntry } from 'slate'
+import { Location } from 'slate'
 
 interface NodeSpecContextValue {
-  selectedNodeEntries: NodeEntry<Node>[]
-  setSelectedNodeEntries: (
-    nodeEntries:
-      | NodeEntry<Node>[]
-      | ((nodeEntries: NodeEntry<Node>[]) => NodeEntry<Node>[])
+  highlightLocations: Location[]
+  setHighlightLocations: (
+    locations: Location[] | ((locations: Location[]) => Location[])
   ) => void
 }
 

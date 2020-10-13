@@ -8,3 +8,6 @@ export type { ModalProps } from './Modal/Modal'
 
 export { default as NodeSelector } from './NodeSelector/NodeSelector'
 export type { NodeSelectorProps } from './NodeSelector/NodeSelector'
+
+export { default as Selector } from './Selector/Selector'
+export type { SelectorProps } from './Selector/Selector'

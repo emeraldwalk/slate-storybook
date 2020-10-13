@@ -24,15 +24,15 @@ export interface AboveProps {
 
 const Above: React.FC<AboveProps> = () => {
   const editor = useEditor()
-  const { setSelectedNodeEntries } = useNodeSpecContext()
+  const { setHighlightLocations } = useNodeSpecContext()
 
   const onClick = React.useCallback(() => {
     const result = Editor.above(editor)
     console.log(result)
     if (result) {
-      setSelectedNodeEntries([result])
+      setHighlightLocations([result[1]])
     }
-  }, [editor, setSelectedNodeEntries])
+  }, [editor, setHighlightLocations])
 
   return (
     <div>

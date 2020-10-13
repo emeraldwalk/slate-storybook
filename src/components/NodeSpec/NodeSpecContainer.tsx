@@ -6,10 +6,14 @@ export interface NodeSpecContainerProps {
 }
 
 const NodeSpecContainer: React.FC<NodeSpecContainerProps> = ({ className }) => {
-  const { selectedNodeEntries } = useNodeSpecContext()
+  const { highlightLocations } = useNodeSpecContext()
 
   return (
-    <NodeSpec className={className} selectedNodeEntries={selectedNodeEntries} />
+    <NodeSpec
+      className={className}
+      mode="path"
+      highlightLocations={highlightLocations}
+    />
   )
 }
 

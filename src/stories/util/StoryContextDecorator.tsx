@@ -1,6 +1,6 @@
 import React from 'react'
 import { Story } from '@storybook/react'
-import { Node, NodeEntry } from 'slate'
+import { Location, Node } from 'slate'
 import { SlateContext } from '../util'
 import { NodeSpecContextProvider } from '../../components'
 import { emptySlateValue } from './mockData'
@@ -25,14 +25,14 @@ export const NodeSpecContextDecorator: React.FC<StoryDecoratorProps> = ({
   story: Story,
   initialSlateValue,
 }) => {
-  const [selectedNodeEntries, setSelectedNodeEntries] = React.useState<
-    NodeEntry<Node>[]
+  const [highlightLocations, setHighlightLocations] = React.useState<
+    Location[]
   >([])
 
   return (
     <SlateContext initialValue={initialSlateValue ?? emptySlateValue}>
       <NodeSpecContextProvider
-        value={{ selectedNodeEntries, setSelectedNodeEntries }}
+        value={{ highlightLocations, setHighlightLocations }}
       >
         <Story />
       </NodeSpecContextProvider>
