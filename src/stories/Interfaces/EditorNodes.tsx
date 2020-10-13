@@ -2,10 +2,11 @@
 import { css, jsx } from '@emotion/core'
 
 import React from 'react'
-import { Editor, Element, Text, Node, Path } from 'slate'
+import { Editor, Element, Text, Path } from 'slate'
 import { Editable, RenderElementProps, useEditor } from 'slate-react'
 import { NodeSelector, NodeSpecContainer, Selector } from '../../components'
 import { useNodeSpecContext } from '../../components/NodeSpec'
+import { not } from '../../util/callbacks'
 
 const componentCss = css`
   flex-grow: 1;
@@ -17,8 +18,8 @@ const nodeSpecCss = css``
 
 type Mode = 'highest' | 'lowest' | 'all'
 const matches = {
-  '(n) => !Editor.isEditor(n)': (n: Node) => !Editor.isEditor(n),
-  'Editor.isEditor(n)': Editor.isEditor,
+  'not(Editor.isEditor)': not(Editor.isEditor),
+  'Editor.isEditor': Editor.isEditor,
   'Element.isElement': Element.isElement,
   'Text.isText': Text.isText,
 } as const
@@ -36,7 +37,7 @@ const EditorNodes: React.FC<EditorNodesProps> = ({ renderElement }) => {
   const [match, setMatch] = React.useState<Match | undefined>(undefined)
   const [mode, setMode] = React.useState<Mode | undefined>(undefined)
 
-  console.log('at:', at, 'mode:', mode ? mode : undefined, 'match:', match)
+  // console.log('at:', at, 'mode:', mode ? mode : undefined, 'match:', match)
 
   const onClick = React.useCallback(
     (event: React.MouseEvent) => {
