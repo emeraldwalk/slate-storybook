@@ -51,7 +51,14 @@ const EditorNodes: React.FC<EditorNodesProps> = ({ renderElement }) => {
         }),
       ].map(([, path]) => path)
 
-      setHighlightLocations(paths)
+      let i = 0
+      let interval = setInterval(() => {
+        if (++i <= paths.length) {
+          setHighlightLocations(paths.slice(0, i))
+        } else {
+          clearInterval(interval)
+        }
+      }, 500)
     },
     [at, editor, match, mode, setHighlightLocations]
   )
