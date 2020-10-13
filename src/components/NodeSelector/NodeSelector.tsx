@@ -63,6 +63,7 @@ const NodeSelector = <TMode extends 'path' | 'point'>({
         <Modal targetElement={inputEl}>
           <NodeSpec
             css={css`
+              background-color: #fff;
               height: 250px;
             `}
             mode={mode}

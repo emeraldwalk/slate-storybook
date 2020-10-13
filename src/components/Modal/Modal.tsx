@@ -9,8 +9,8 @@ export interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ children, targetElement }) => {
-  const bottom = React.useMemo(
-    () => targetElement.getBoundingClientRect().bottom,
+  const { bottom, left } = React.useMemo(
+    () => targetElement.getBoundingClientRect(),
     [targetElement]
   )
 
@@ -19,6 +19,7 @@ const Modal: React.FC<ModalProps> = ({ children, targetElement }) => {
       css={css`
         position: absolute;
         top: ${bottom}px;
+        left: ${left}px;
       `}
     >
       {children}

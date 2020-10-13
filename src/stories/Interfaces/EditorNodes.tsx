@@ -2,11 +2,10 @@
 import { css, jsx } from '@emotion/core'
 
 import React from 'react'
-import { Editor, Element, Text, Node } from 'slate'
+import { Editor, Element, Text, Node, Path } from 'slate'
 import { Editable, RenderElementProps, useEditor } from 'slate-react'
-import { NodeSpecContainer, Selector } from '../../components'
+import { NodeSelector, NodeSpecContainer, Selector } from '../../components'
 import { useNodeSpecContext } from '../../components/NodeSpec'
-import { useOnValueChangeCallback } from '../../util/useOnValueChangeCallback.hook'
 
 const componentCss = css`
   flex-grow: 1;
@@ -33,7 +32,7 @@ const EditorNodes: React.FC<EditorNodesProps> = ({ renderElement }) => {
   const editor = useEditor()
   const { setHighlightLocations } = useNodeSpecContext()
 
-  const [at, setAt] = React.useState('')
+  const [at, setAt] = React.useState<Path | undefined>(undefined)
   const [match, setMatch] = React.useState<Match | undefined>(undefined)
   const [mode, setMode] = React.useState<Mode | undefined>(undefined)
 
@@ -45,7 +44,7 @@ const EditorNodes: React.FC<EditorNodesProps> = ({ renderElement }) => {
 
       const paths = [
         ...Editor.nodes(editor, {
-          at: at ? JSON.parse(at) : undefined,
+          at,
           match: matches[match!],
           mode: mode ? mode : undefined,
         }),
@@ -55,8 +54,6 @@ const EditorNodes: React.FC<EditorNodesProps> = ({ renderElement }) => {
     },
     [at, editor, match, mode, setHighlightLocations]
   )
-
-  const onAtChange = useOnValueChangeCallback(setAt)
 
   return (
     <div css={componentCss}>
@@ -74,12 +71,7 @@ const EditorNodes: React.FC<EditorNodesProps> = ({ renderElement }) => {
             flex-direction: column;
           `}
         >
-          <input
-            type="text"
-            placeholder="- at - (defaults to selection)"
-            value={at}
-            onChange={onAtChange}
-          />
+          <NodeSelector mode="path" value={at} onChange={setAt} />
 
           <Selector
             label="match"
