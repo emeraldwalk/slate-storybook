@@ -8,6 +8,7 @@ module.exports = {
     '@storybook/addon-essentials',
     '@storybook/preset-create-react-app',
     './sourceCodeAddon/register.js',
+    //'./slateControlsAddon/register.js',
   ],
   /** @param config {import('webpack').Configuration} */
   webpackFinal: async (config, { configType }) => {
