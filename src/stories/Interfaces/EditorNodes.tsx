@@ -30,6 +30,26 @@ export interface EditorNodesProps {
 }
 
 const EditorNodes: React.FC<EditorNodesProps> = ({ renderElement }) => {
+  return (
+    <div css={componentCss}>
+      <div
+        css={css`
+          display: flex;
+          justify-content: space-evenly;
+          height: 280px;
+        `}
+      >
+        <Editable css={componentCss} renderElement={renderElement} />
+        <EditorNodesControls />
+        <NodeSpecContainer css={nodeSpecCss} />
+      </div>
+    </div>
+  )
+}
+
+export default EditorNodes
+
+export const EditorNodesControls: React.FC<{}> = () => {
   const editor = useEditor()
   const { setHighlightLocations } = useNodeSpecContext()
 
@@ -64,43 +84,29 @@ const EditorNodes: React.FC<EditorNodesProps> = ({ renderElement }) => {
   )
 
   return (
-    <div css={componentCss}>
-      <div
-        css={css`
-          display: flex;
-          justify-content: space-evenly;
-          height: 280px;
-        `}
-      >
-        <Editable css={componentCss} renderElement={renderElement} />
-        <div
-          css={css`
-            display: flex;
-            flex-direction: column;
-          `}
-        >
-          <NodeSelector mode="path" value={at} onChange={setAt} />
+    <div
+      css={css`
+        display: flex;
+        flex-direction: column;
+      `}
+    >
+      <NodeSelector mode="path" value={at} onChange={setAt} />
 
-          <Selector
-            label="match"
-            options={Object.keys(matches) as Match[]}
-            value={match}
-            onChange={setMatch}
-          />
+      <Selector
+        label="match"
+        options={Object.keys(matches) as Match[]}
+        value={match}
+        onChange={setMatch}
+      />
 
-          <Selector
-            label="mode"
-            options={['all', 'highest', 'lowest']}
-            value={mode}
-            onChange={setMode}
-          />
+      <Selector
+        label="mode"
+        options={['all', 'highest', 'lowest']}
+        value={mode}
+        onChange={setMode}
+      />
 
-          <button onClick={onClick}>Go</button>
-        </div>
-        <NodeSpecContainer css={nodeSpecCss} />
-      </div>
+      <button onClick={onClick}>Go</button>
     </div>
   )
 }
-
-export default EditorNodes
