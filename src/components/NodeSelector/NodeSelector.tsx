@@ -61,6 +61,7 @@ const NodeSelector = <TMode extends 'path' | 'point'>({
           ref={setInputEl}
           css={css`
             cursor: pointer;
+            width: 100%;
           `}
           placeholder={`Select ${mode === 'path' ? 'Path' : 'Point'}...`}
           type="text"

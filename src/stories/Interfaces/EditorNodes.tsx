@@ -9,7 +9,13 @@ import { useNodeSpecContext } from '../../components/NodeSpec'
 import { not } from '../../util/callbacks'
 
 const componentCss = css`
-  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+
+  > :nth-of-type(1) {
+    height: 250px;
+  }
+
   [contenteditable='true'] {
     overflow-y: auto;
   }
@@ -32,14 +38,15 @@ export interface EditorNodesProps {
 const EditorNodes: React.FC<EditorNodesProps> = ({ renderElement }) => {
   return (
     <div css={componentCss}>
+      <Editable css={componentCss} renderElement={renderElement} />
       <div
         css={css`
           display: flex;
-          justify-content: space-evenly;
-          height: 280px;
+          > * {
+            flex-grow: 1;
+          }
         `}
       >
-        <Editable css={componentCss} renderElement={renderElement} />
         <EditorNodesControls />
         <NodeSpecContainer css={nodeSpecCss} />
       </div>
