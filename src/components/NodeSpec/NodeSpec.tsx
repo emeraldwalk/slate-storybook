@@ -14,48 +14,54 @@ import {
   Text,
 } from 'slate'
 import { useSlate } from 'slate-react'
+import { Theme } from '../../theme'
 
-const componentCss = css`
-  display: flex;
-  flex-direction: column;
-  padding: 0 10px;
+const componentCss = (theme: Theme) => {
+  console.log({ theme })
+  return css`
+    display: flex;
+    flex-direction: column;
+    padding: 0 10px;
 
-  header {
-    border-bottom: 1px solid #333;
-  }
-  main {
-    overflow-y: auto;
-  }
-  ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  header > span:nth-of-type(1) {
-    margin-right: 20px;
-  }
-  li > span:nth-of-type(1) {
-    margin-right: 40px;
-  }
-  .anchor {
-    border-right: 2px solid green;
-    position: absolute;
-    height: 100%;
-  }
-  .focus {
-    border-right: 2px solid red;
-    position: absolute;
-    height: 100%;
-  }
+    header {
+      border-bottom: 1px solid #333;
+    }
+    main {
+      overflow-y: auto;
+    }
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    header > span:nth-of-type(1) {
+      margin-right: 20px;
+    }
+    li > span:nth-of-type(1) {
+      margin-right: 40px;
+    }
+    .anchor {
+      border-right: 2px solid green;
+      position: absolute;
+      height: 100%;
+    }
+    .focus {
+      border-right: 2px solid red;
+      position: absolute;
+      height: 100%;
+    }
+  `
+}
+
+const selectedNodeCss = (theme: Theme) => css`
+  background-color: ${theme.barSelectedColor};
+  color: ${theme.textInverseColor};
 `
 
-const selectedNodeCss = css`
-  background-color: #ccc;
-`
-
-const hoverCss = css`
-  :hover {
-    background-color: #1fa8fd;
+const hoverCss = (theme: Theme) => css`
+  :hover:not(.selected) {
+    background-color: rgb(0, 0, 0, 0.05);
+    color: ${theme.textColor};
     cursor: pointer;
   }
 `
@@ -134,28 +140,30 @@ const NodeSpec: React.FC<NodeSpecProps> = ({
       </header>
       <main>
         <ul>
-          {nodeEntries.map(([node, path]) => (
-            <li
-              css={css`
-                ${mode === 'path' && hoverCss}
-                ${highlightPaths.find((p) => Path.equals(p, path))
-                  ? selectedNodeCss
-                  : undefined}
-              `}
-              key={JSON.stringify(path)}
-              onClick={() => onClickNode([node, path])}
-            >
-              <span>{JSON.stringify(path)}</span>
-              <span
-                css={css`
-                  position: relative;
+          {nodeEntries.map(([node, path]) => {
+            const isSelected = highlightPaths.find((p) => Path.equals(p, path))
+            return (
+              <li
+                css={(theme: Theme) => css`
+                  ${mode === 'path' && hoverCss(theme)}
+                  ${isSelected ? selectedNodeCss(theme) : undefined}
                 `}
+                className={isSelected ? 'selected' : undefined}
+                key={JSON.stringify(path)}
+                onClick={() => onClickNode([node, path])}
               >
-                {pathToSpace(path, 4)}
-                {nodeSpec(mode, [node, path], labeledPoints)}
-              </span>
-            </li>
-          ))}
+                <span>{JSON.stringify(path)}</span>
+                <span
+                  css={css`
+                    position: relative;
+                  `}
+                >
+                  {pathToSpace(path, 4)}
+                  {nodeSpec(mode, [node, path], labeledPoints)}
+                </span>
+              </li>
+            )
+          })}
         </ul>
       </main>
     </div>
