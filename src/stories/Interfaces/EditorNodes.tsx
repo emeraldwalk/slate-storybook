@@ -64,6 +64,8 @@ export const EditorNodesControls: React.FC<{}> = () => {
   const [match, setMatch] = React.useState<Match | undefined>(undefined)
   const [mode, setMode] = React.useState<Mode | undefined>(undefined)
 
+  const intervalRef = React.useRef<number>()
+
   // console.log('at:', at, 'mode:', mode ? mode : undefined, 'match:', match)
 
   const onClick = React.useCallback(
@@ -78,12 +80,15 @@ export const EditorNodesControls: React.FC<{}> = () => {
         }),
       ].map(([, path]) => path)
 
+      setHighlightLocations([])
+      window.clearInterval(intervalRef.current)
+
       let i = 0
-      let interval = setInterval(() => {
+      intervalRef.current = window.setInterval(() => {
         if (++i <= paths.length) {
           setHighlightLocations(paths.slice(0, i))
         } else {
-          clearInterval(interval)
+          window.clearInterval(intervalRef.current)
         }
       }, 500)
     },
