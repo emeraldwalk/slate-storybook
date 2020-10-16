@@ -24,7 +24,6 @@ const nodeSpecCss = css``
 
 type Mode = 'highest' | 'lowest' | 'all'
 const matches = {
-  'not(Editor.isEditor)': not(Editor.isEditor),
   'Editor.isEditor': Editor.isEditor,
   'Element.isElement': Element.isElement,
   'Text.isText': Text.isText,
@@ -103,23 +102,61 @@ export const EditorNodesControls: React.FC<{}> = () => {
       css={css`
         display: flex;
         flex-direction: column;
+        > span {
+          display: flex;
+          > * {
+            flex: 1 0;
+          }
+        }
       `}
     >
-      <NodeSelector mode="path" value={at} onChange={setAt} />
+      <h2>Editor.nodes&lt;T extends Node&gt;(editor, options)</h2>
 
-      <Selector
-        label="match"
-        options={Object.keys(matches) as Match[]}
-        value={match}
-        onChange={setMatch}
-      />
+      <span>
+        <label>at?: </label>
+        <span>Location | Span</span>
+        <NodeSelector mode="path" value={at} onChange={setAt} />
+      </span>
 
-      <Selector
-        label="mode"
-        options={['all', 'highest', 'lowest']}
-        value={mode}
-        onChange={setMode}
-      />
+      <span>
+        <label>match?:</label>
+        <span>NodeMatch&lt;T&gt;</span>
+        <Selector
+          label="match"
+          options={Object.keys(matches) as Match[]}
+          value={match}
+          onChange={setMatch}
+        />
+      </span>
+
+      <span>
+        <label>mode?:</label>
+        <span>'all' | 'highest' | 'lowest'</span>
+        <Selector
+          label="mode"
+          options={['all', 'highest', 'lowest']}
+          value={mode}
+          onChange={setMode}
+        />
+      </span>
+
+      <span>
+        <label>universal?:</label>
+        <span>boolean</span>
+        <span>true | false</span>
+      </span>
+
+      <span>
+        <label>reverse?:</label>
+        <span>boolean</span>
+        <span>true | false</span>
+      </span>
+
+      <span>
+        <label>voids?:</label>
+        <span>boolean</span>
+        <span>true | false</span>
+      </span>
 
       <button onClick={onClick}>Go</button>
     </div>
