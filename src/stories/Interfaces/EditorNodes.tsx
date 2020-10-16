@@ -28,6 +28,9 @@ const matches = {
   'Editor.isEditor': Editor.isEditor,
   'Element.isElement': Element.isElement,
   'Text.isText': Text.isText,
+  'not(Editor.isEditor)': not(Editor.isEditor),
+  'not(Element.isElement)': not(Element.isElement),
+  'not(Text.isText)': not(Text.isText),
 } as const
 type Match = keyof typeof matches
 
