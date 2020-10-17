@@ -16,43 +16,40 @@ import {
 import { useSlate } from 'slate-react'
 import { Theme } from '../../theme'
 
-const componentCss = (theme: Theme) => {
-  console.log({ theme })
-  return css`
-    display: flex;
-    flex-direction: column;
+const componentCss = css`
+  display: flex;
+  flex-direction: column;
 
-    header {
-      border-bottom: 1px solid #333;
-      padding: 0 10px;
-    }
-    main {
-      overflow-y: auto;
-      padding: 0 10px;
-    }
-    ul {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-    header > span:nth-of-type(1) {
-      margin-right: 20px;
-    }
-    li > span:nth-of-type(1) {
-      margin-right: 40px;
-    }
-    .anchor {
-      border-right: 2px solid green;
-      position: absolute;
-      height: 100%;
-    }
-    .focus {
-      border-right: 2px solid red;
-      position: absolute;
-      height: 100%;
-    }
-  `
-}
+  header {
+    border-bottom: 1px solid #333;
+    padding: 0 10px;
+  }
+  main {
+    overflow-y: auto;
+    padding: 0 10px;
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  header > span:nth-of-type(1) {
+    margin-right: 20px;
+  }
+  li > span:nth-of-type(1) {
+    margin-right: 40px;
+  }
+  .anchor {
+    border-right: 2px solid green;
+    position: absolute;
+    height: 100%;
+  }
+  .focus {
+    border-right: 2px solid red;
+    position: absolute;
+    height: 100%;
+  }
+`
 
 const selectedNodeCss = (theme: Theme) => css`
   background-color: ${theme.barSelectedColor};

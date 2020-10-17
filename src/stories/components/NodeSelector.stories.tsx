@@ -33,9 +33,9 @@ PathSelector.parameters = {
   initialSlateValue: mockParagraphsAndList,
 }
 
-export const PointSelector = () => {
-  const [value, setValue] = React.useState<Point | undefined>(undefined)
-  return <NodeSelector mode="point" value={value} onChange={setValue} />
+export const PointSelector = Template.bind({})
+PointSelector.args = {
+  mode: 'point',
 }
 PointSelector.parameters = {
   initialSlateValue: mockParagraphsAndList,

@@ -142,6 +142,9 @@ export const EditorNodesControls: React.FC<{}> = () => {
         select.is-empty {
           color: ${theme.placeholderColor};
         }
+        button {
+          margin-top: 10px;
+        }
       `}
     >
       <h2>Editor.nodes&lt;T extends Node&gt;(editor, options)</h2>

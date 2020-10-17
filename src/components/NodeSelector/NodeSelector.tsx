@@ -32,9 +32,9 @@ const NodeSelector = <TMode extends 'path' | 'point'>({
   const valueStr = React.useMemo(() => JSON.stringify(value) ?? '', [value])
   const [triggerEl, setTriggerEl] = React.useState<HTMLSpanElement | null>(null)
 
-  const [highlightedLocations] = React.useState<Location[]>(() => {
+  const highlightedLocations = React.useMemo<Location[]>(() => {
     return value ? [value] : []
-  })
+  }, [value])
 
   const onClickInput = React.useCallback(() => {
     setIsOpen((isOpen) => !isOpen)
@@ -105,6 +105,7 @@ const NodeSelector = <TMode extends 'path' | 'point'>({
             css={(theme: Theme) => css`
               background-color: #fff;
               border: 1px solid ${theme.placeholderColor};
+              border-radius: 4px;
               height: 250px;
             `}
             mode={mode}
