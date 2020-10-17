@@ -3,7 +3,12 @@ import { css, jsx } from '@emotion/core'
 
 import React from 'react'
 import { Editor, Element, Text, Path } from 'slate'
-import { Editable, RenderElementProps, useEditor } from 'slate-react'
+import {
+  Editable,
+  RenderElementProps,
+  RenderLeafProps,
+  useEditor,
+} from 'slate-react'
 import { NodeSelector, NodeSpecContainer, Selector } from '../../components'
 import { useNodeSpecContext } from '../../components/NodeSpec'
 import { Theme } from '../../theme'
@@ -42,12 +47,15 @@ type Match = keyof typeof matches
 
 export interface EditorNodesProps {
   renderElement: (props: RenderElementProps) => JSX.Element
+  renderLeaf: (props: RenderLeafProps) => JSX.Element
 }
 
-const EditorNodes: React.FC<EditorNodesProps> = ({ renderElement }) => {
+const EditorNodes: React.FC<EditorNodesProps> = ({
+  renderElement,
+  renderLeaf,
+}) => {
   return (
     <div css={componentCss}>
-      <EditorNodesControls />
       <div
         css={css`
           display: flex;
@@ -63,14 +71,20 @@ const EditorNodes: React.FC<EditorNodesProps> = ({ renderElement }) => {
         `}
       >
         <div>
-          <h3>Editor</h3>
-          <Editable css={componentCss} renderElement={renderElement} />
+          <h2>Editor</h2>
+          <Editable
+            css={componentCss}
+            renderElement={renderElement}
+            renderLeaf={renderLeaf}
+          />
         </div>
         <div>
-          <h3>Result</h3>
+          <h2>Data Model</h2>
           <NodeSpecContainer css={nodeSpecCss} />
         </div>
       </div>
+      <h2>API</h2>
+      <EditorNodesControls />
     </div>
   )
 }
@@ -97,7 +111,7 @@ export const EditorNodesControls: React.FC<{}> = () => {
   const onClick = React.useCallback(
     (event: React.MouseEvent) => {
       event.preventDefault()
-
+      console.log(reverse)
       const paths = [
         ...Editor.nodes(editor, {
           at,
@@ -129,10 +143,15 @@ export const EditorNodesControls: React.FC<{}> = () => {
       css={(theme: Theme) => css`
         display: flex;
         flex-direction: column;
-        > span {
+        > pre > span {
           display: flex;
-          > * {
-            flex: 1 0;
+          align-items: center;
+          label {
+            margin: 0 1em 0 2em;
+          }
+          input,
+          select {
+            width: 100px;
           }
         }
         input,
@@ -147,73 +166,84 @@ export const EditorNodesControls: React.FC<{}> = () => {
         }
       `}
     >
-      <h2>Editor.nodes&lt;T extends Node&gt;(editor, options)</h2>
+      <header>Editor.nodes</header>
+      {/* {`*nodes<T extends Node>(
+    editor: Editor,
+    options: {
+      at?: Location | Span
+      match?: NodeMatch<T>
+      mode?: 'all' | 'highest' | 'lowest'
+      universal?: boolean
+      reverse?: boolean
+      voids?: boolean
+    } = {}
+  ): Generator<NodeEntry<T>, void, undefined>`} */}
+      <pre>
+        {`*nodes<T extends Node>(
+  editor: Editor,
+  options: {`}
+        <span>
+          <label>at?: Location | Span</label>
+          <NodeSelector
+            mode="path"
+            placeholder="- at -"
+            value={at}
+            onChange={setAt}
+          />
+        </span>
 
-      <span>
-        <label>at?: </label>
-        <span className="no-mobile">Location | Span</span>
-        <NodeSelector
-          mode="path"
-          placeholder="- at -"
-          value={at}
-          onChange={setAt}
-        />
-      </span>
+        <span>
+          <label>match?: NodeMatch&lt;T&gt;</label>
+          <Selector
+            label="match"
+            options={Object.keys(matches) as Match[]}
+            value={match}
+            onChange={setMatch}
+          />
+        </span>
 
-      <span>
-        <label>match?:</label>
-        <span className="no-mobile">NodeMatch&lt;T&gt;</span>
-        <Selector
-          label="match"
-          options={Object.keys(matches) as Match[]}
-          value={match}
-          onChange={setMatch}
-        />
-      </span>
+        <span>
+          <label>mode?: 'all' | 'highest' | 'lowest'</label>
+          <Selector
+            label="mode"
+            options={['all', 'highest', 'lowest']}
+            value={mode}
+            onChange={setMode}
+          />
+        </span>
 
-      <span>
-        <label>mode?:</label>
-        <span className="no-mobile">'all' | 'highest' | 'lowest'</span>
-        <Selector
-          label="mode"
-          options={['all', 'highest', 'lowest']}
-          value={mode}
-          onChange={setMode}
-        />
-      </span>
+        <span>
+          <label>universal?: boolean</label>
+          <Selector
+            label="universal"
+            options={[true, false]}
+            value={universal}
+            onChange={setUniversal}
+          />
+        </span>
 
-      <span>
-        <label>universal?:</label>
-        <span className="no-mobile">boolean</span>
-        <Selector
-          label="universal"
-          options={[true, false]}
-          value={universal}
-          onChange={setUniversal}
-        />
-      </span>
+        <span>
+          <label>reverse?: boolean</label>
+          <Selector
+            label="reverse"
+            options={[true, false]}
+            value={reverse}
+            onChange={setReverse}
+          />
+        </span>
 
-      <span>
-        <label>reverse?:</label>
-        <span className="no-mobile">boolean</span>
-        <Selector
-          label="reverse"
-          options={[true, false]}
-          value={reverse}
-          onChange={setReverse}
-        />
-      </span>
-
-      <span>
-        <label>voids?:</label>
-        <span className="no-mobile">boolean</span>
-        <Selector
-          label="voids"
-          options={[true, false]}
-          value={voids}
-          onChange={setVoids}
-        />
-      </span>
+        <span>
+          <label>voids?: boolean</label>
+          <Selector
+            label="voids"
+            options={[true, false]}
+            value={voids}
+            onChange={setVoids}
+          />
+        </span>
+        {`  } = {}
+): Generator<NodeEntry<T>, void, undefined>`}
+      </pre>
 
       <button onClick={onClick}>Go</button>
     </div>

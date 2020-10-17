@@ -39,7 +39,7 @@ const Selector = <TValue extends string | boolean>({
       <option value="">- {label} -</option>
       {options.map((option) => (
         <option key={String(option)} value={String(option)}>
-          {option}
+          {String(option)}
         </option>
       ))}
     </select>

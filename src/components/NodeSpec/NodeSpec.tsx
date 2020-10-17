@@ -39,15 +39,21 @@ const componentCss = css`
   li > span:nth-of-type(1) {
     margin-right: 40px;
   }
-  .anchor {
-    border-right: 2px solid green;
+  .anchor,
+  .focus,
+  .point {
+    border-right: 2px solid;
     position: absolute;
-    height: 100%;
+    height: 1.4em;
+  }
+  .anchor {
+    border-color: green;
   }
   .focus {
-    border-right: 2px solid red;
-    position: absolute;
-    height: 100%;
+    border-color: red;
+  }
+  .point {
+    border-color: blue;
   }
 `
 
@@ -143,20 +149,23 @@ const NodeSpec: React.FC<NodeSpecProps> = ({
             return (
               <li
                 css={(theme: Theme) => css`
-                  ${mode === 'path' && hoverCss(theme)}
+                  display: flex;
+                  ${mode === 'path' && onSelect && hoverCss(theme)}
                   ${isSelected ? selectedNodeCss(theme) : undefined}
                 `}
                 className={isSelected ? 'selected' : undefined}
                 key={JSON.stringify(path)}
                 onClick={() => onClickNode([node, path])}
               >
-                <span>{JSON.stringify(path)}</span>
+                <span>
+                  {JSON.stringify(path)}
+                  {pathToSpace(path, 4)}
+                </span>
                 <span
                   css={css`
                     position: relative;
                   `}
                 >
-                  {pathToSpace(path, 4)}
                   {nodeSpec(mode, [node, path], labeledPoints)}
                 </span>
               </li>
