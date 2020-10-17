@@ -18,8 +18,8 @@ const Modal: React.FC<ModalProps> = ({ children, targetElement }) => {
     <div
       css={css`
         position: absolute;
-        top: ${bottom}px;
-        left: ${left}px;
+        top: ${bottom + window.scrollY}px;
+        left: ${left + window.scrollX}px;
       `}
     >
       {children}

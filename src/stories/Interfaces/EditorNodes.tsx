@@ -6,6 +6,7 @@ import { Editor, Element, Text, Path } from 'slate'
 import { Editable, RenderElementProps, useEditor } from 'slate-react'
 import { NodeSelector, NodeSpecContainer, Selector } from '../../components'
 import { useNodeSpecContext } from '../../components/NodeSpec'
+import { Theme } from '../../theme'
 import { not } from '../../util/callbacks'
 
 const componentCss = css`
@@ -13,11 +14,17 @@ const componentCss = css`
   flex-direction: column;
 
   > :nth-of-type(1) {
-    height: 250px;
+    /* height: 250px; */
   }
 
   [contenteditable='true'] {
     overflow-y: auto;
+  }
+
+  @media (max-width: 768px) {
+    .no-mobile {
+      display: none;
+    }
   }
 `
 const nodeSpecCss = css``
@@ -40,17 +47,29 @@ export interface EditorNodesProps {
 const EditorNodes: React.FC<EditorNodesProps> = ({ renderElement }) => {
   return (
     <div css={componentCss}>
-      <Editable css={componentCss} renderElement={renderElement} />
+      <EditorNodesControls />
       <div
         css={css`
           display: flex;
           > * {
             flex-grow: 1;
           }
+          @media (max-width: 768px) {
+            flex-direction: column;
+            .no-mobile {
+              display: none;
+            }
+          }
         `}
       >
-        <EditorNodesControls />
-        <NodeSpecContainer css={nodeSpecCss} />
+        <div>
+          <h3>Editor</h3>
+          <Editable css={componentCss} renderElement={renderElement} />
+        </div>
+        <div>
+          <h3>Result</h3>
+          <NodeSpecContainer css={nodeSpecCss} />
+        </div>
       </div>
     </div>
   )
@@ -65,6 +84,11 @@ export const EditorNodesControls: React.FC<{}> = () => {
   const [at, setAt] = React.useState<Path | undefined>(undefined)
   const [match, setMatch] = React.useState<Match | undefined>(undefined)
   const [mode, setMode] = React.useState<Mode | undefined>(undefined)
+  const [universal, setUniversal] = React.useState<boolean | undefined>(
+    undefined
+  )
+  const [reverse, setReverse] = React.useState<boolean | undefined>(undefined)
+  const [voids, setVoids] = React.useState<boolean | undefined>(undefined)
 
   const intervalRef = React.useRef<number>()
 
@@ -79,6 +103,9 @@ export const EditorNodesControls: React.FC<{}> = () => {
           at,
           match: matches[match!],
           mode: mode ? mode : undefined,
+          universal,
+          reverse,
+          voids,
         }),
       ].map(([, path]) => path)
 
@@ -94,12 +121,12 @@ export const EditorNodesControls: React.FC<{}> = () => {
         }
       }, 500)
     },
-    [at, editor, match, mode, setHighlightLocations]
+    [at, editor, match, mode, universal, reverse, voids, setHighlightLocations]
   )
 
   return (
     <div
-      css={css`
+      css={(theme: Theme) => css`
         display: flex;
         flex-direction: column;
         > span {
@@ -108,19 +135,31 @@ export const EditorNodesControls: React.FC<{}> = () => {
             flex: 1 0;
           }
         }
+        input,
+        select {
+          height: 22px;
+        }
+        select.is-empty {
+          color: ${theme.placeholderColor};
+        }
       `}
     >
       <h2>Editor.nodes&lt;T extends Node&gt;(editor, options)</h2>
 
       <span>
         <label>at?: </label>
-        <span>Location | Span</span>
-        <NodeSelector mode="path" value={at} onChange={setAt} />
+        <span className="no-mobile">Location | Span</span>
+        <NodeSelector
+          mode="path"
+          placeholder="- at -"
+          value={at}
+          onChange={setAt}
+        />
       </span>
 
       <span>
         <label>match?:</label>
-        <span>NodeMatch&lt;T&gt;</span>
+        <span className="no-mobile">NodeMatch&lt;T&gt;</span>
         <Selector
           label="match"
           options={Object.keys(matches) as Match[]}
@@ -131,7 +170,7 @@ export const EditorNodesControls: React.FC<{}> = () => {
 
       <span>
         <label>mode?:</label>
-        <span>'all' | 'highest' | 'lowest'</span>
+        <span className="no-mobile">'all' | 'highest' | 'lowest'</span>
         <Selector
           label="mode"
           options={['all', 'highest', 'lowest']}
@@ -142,20 +181,35 @@ export const EditorNodesControls: React.FC<{}> = () => {
 
       <span>
         <label>universal?:</label>
-        <span>boolean</span>
-        <span>true | false</span>
+        <span className="no-mobile">boolean</span>
+        <Selector
+          label="universal"
+          options={[true, false]}
+          value={universal}
+          onChange={setUniversal}
+        />
       </span>
 
       <span>
         <label>reverse?:</label>
-        <span>boolean</span>
-        <span>true | false</span>
+        <span className="no-mobile">boolean</span>
+        <Selector
+          label="reverse"
+          options={[true, false]}
+          value={reverse}
+          onChange={setReverse}
+        />
       </span>
 
       <span>
         <label>voids?:</label>
-        <span>boolean</span>
-        <span>true | false</span>
+        <span className="no-mobile">boolean</span>
+        <Selector
+          label="voids"
+          options={[true, false]}
+          value={voids}
+          onChange={setVoids}
+        />
       </span>
 
       <button onClick={onClick}>Go</button>

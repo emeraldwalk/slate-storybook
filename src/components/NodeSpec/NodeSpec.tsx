@@ -21,13 +21,14 @@ const componentCss = (theme: Theme) => {
   return css`
     display: flex;
     flex-direction: column;
-    padding: 0 10px;
 
     header {
       border-bottom: 1px solid #333;
+      padding: 0 10px;
     }
     main {
       overflow-y: auto;
+      padding: 0 10px;
     }
     ul {
       list-style: none;

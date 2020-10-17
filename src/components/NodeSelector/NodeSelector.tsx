@@ -4,24 +4,33 @@ import { css, jsx } from '@emotion/core'
 import React from 'react'
 import { Location, Path, Point } from 'slate'
 import { Modal, NodeSpec } from '..'
+import { Theme } from '../../theme'
 import { useOffClickCallback } from '../../util/useOffClick.hook'
 
-const componentCss = css``
+const componentCss = (theme: Theme) => css`
+  .mdi.mdi-chevron-down {
+    color: ${theme.placeholderColor};
+    font-size: 19px;
+    margin-right: -1px;
+  }
+`
 
 export type NodeSelectorProps<TMode extends 'path' | 'point'> = {
   mode: TMode
+  placeholder?: string
   value?: TMode extends 'path' ? Path : Point
   onChange: (value?: TMode extends 'path' ? Path : Point) => void
 }
 
 const NodeSelector = <TMode extends 'path' | 'point'>({
   mode,
+  placeholder,
   value,
   onChange,
 }: NodeSelectorProps<TMode>) => {
   const [isOpen, setIsOpen] = React.useState(false)
   const valueStr = React.useMemo(() => JSON.stringify(value) ?? '', [value])
-  const [inputEl, setInputEl] = React.useState<HTMLInputElement | null>(null)
+  const [triggerEl, setTriggerEl] = React.useState<HTMLSpanElement | null>(null)
 
   const [highlightedLocations] = React.useState<Location[]>(() => {
     return value ? [value] : []
@@ -31,8 +40,13 @@ const NodeSelector = <TMode extends 'path' | 'point'>({
     setIsOpen((isOpen) => !isOpen)
   }, [])
 
+  const onClear = React.useCallback(() => {
+    setIsOpen(false)
+    onChange(undefined)
+  }, [onChange])
+
   useOffClickCallback(
-    inputEl,
+    triggerEl,
     React.useCallback(() => {
       setIsOpen(false)
     }, [])
@@ -46,11 +60,10 @@ const NodeSelector = <TMode extends 'path' | 'point'>({
     [onChange]
   )
 
-  const onClear = React.useCallback(() => onChange(undefined), [onChange])
-
   return (
     <div css={componentCss}>
       <span
+        ref={setTriggerEl}
         css={css`
           align-items: center;
           display: flex;
@@ -58,34 +71,40 @@ const NodeSelector = <TMode extends 'path' | 'point'>({
         `}
       >
         <input
-          ref={setInputEl}
-          css={css`
+          css={(theme: Theme) => css`
             cursor: pointer;
             width: 100%;
+            ::placeholder {
+              color: ${theme.placeholderColor};
+            }
           `}
-          placeholder={`Select ${mode === 'path' ? 'Path' : 'Point'}...`}
+          placeholder={
+            placeholder ?? `Select ${mode === 'path' ? 'Path' : 'Point'}...`
+          }
           type="text"
           readOnly={true}
           value={valueStr}
           onClick={onClickInput}
         />
-        {value && (
-          <span
-            css={css`
-              position: absolute;
-              right: 0;
-            `}
-            onClick={onClear}
-          >
-            <i className="mdi mdi-close"></i>
-          </span>
-        )}
+
+        <span
+          css={css`
+            position: absolute;
+            right: 0;
+          `}
+        >
+          <i
+            className={`mdi mdi-${value ? 'close' : 'chevron-down'}`}
+            onClick={value ? onClear : onClickInput}
+          ></i>
+        </span>
       </span>
-      {isOpen && inputEl && (
-        <Modal targetElement={inputEl}>
+      {isOpen && triggerEl && (
+        <Modal targetElement={triggerEl}>
           <NodeSpec
-            css={css`
+            css={(theme: Theme) => css`
               background-color: #fff;
+              border: 1px solid ${theme.placeholderColor};
               height: 250px;
             `}
             mode={mode}
