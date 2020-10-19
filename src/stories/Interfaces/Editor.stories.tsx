@@ -1,13 +1,11 @@
 import React from 'react'
 import { Story, Meta } from '@storybook/react'
-// import Above, { AboveProps } from './EditorAbove'
 import EditorNodes, { EditorNodesProps } from './EditorNodes'
-import { RenderElementProps, RenderLeafProps } from 'slate-react'
 import { NodeSpecContextDecorator } from '../util'
+import { renderElement, renderLeaf } from './render'
 
 export default {
   title: 'Interfaces/Editor',
-  // component: Above,
   decorators: [
     (Story, context) => {
       return (
@@ -117,31 +115,4 @@ nodes.parameters = {
       ],
     },
   ],
-}
-
-function renderElement({ element, attributes, children }: RenderElementProps) {
-  let E = 'p'
-
-  switch (element.type) {
-    case 'unordered-list':
-      E = 'ul'
-      break
-
-    case 'ordered-list':
-      E = 'ol'
-      break
-
-    case 'list-item':
-      E = 'li'
-      break
-  }
-
-  return <E {...attributes}>{children}</E>
-}
-
-function renderLeaf({ leaf, attributes, children }: RenderLeafProps) {
-  if (leaf.bold) {
-    children = <strong>{children}</strong>
-  }
-  return <span {...attributes}>{children}</span>
 }

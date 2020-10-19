@@ -44,16 +44,19 @@ const componentCss = css`
   .point {
     border-right: 2px solid;
     position: absolute;
-    height: 1.4em;
+    height: 1.2em;
   }
   .anchor {
     border-color: green;
+    background-color: green;
   }
   .focus {
     border-color: red;
+    background-color: red;
   }
   .point {
     border-color: blue;
+    background-color: blue;
   }
 `
 
@@ -291,7 +294,24 @@ function nodeSpec(
               {token}
             </span>
           ) : (
-            <span key={i} className={token.label}></span>
+            <span
+              title={token.label}
+              css={(theme: Theme) => css`
+                position: relative;
+                span {
+                  background-color: inherit;
+                  color: ${theme.textInverseColor};
+                  position: absolute;
+                  top: -8px;
+                  font-size: 10px;
+                  padding: 0 4px;
+                }
+              `}
+              key={i}
+              className={token.label}
+            >
+              <span>{token.label.substr(0, 1)}</span>
+            </span>
           )
         )}
       </span>

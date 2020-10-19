@@ -56,6 +56,8 @@ const EditorNodes: React.FC<EditorNodesProps> = ({
 }) => {
   return (
     <div css={componentCss}>
+      <h2>API</h2>
+      <EditorNodesControls />
       <div
         css={css`
           display: flex;
@@ -83,8 +85,6 @@ const EditorNodes: React.FC<EditorNodesProps> = ({
           <NodeSpecContainer css={nodeSpecCss} />
         </div>
       </div>
-      <h2>API</h2>
-      <EditorNodesControls />
     </div>
   )
 }
@@ -166,24 +166,40 @@ export const EditorNodesControls: React.FC<{}> = () => {
         }
       `}
     >
-      <header>Editor.nodes</header>
-      {/* {`*nodes<T extends Node>(
-    editor: Editor,
-    options: {
-      at?: Location | Span
-      match?: NodeMatch<T>
-      mode?: 'all' | 'highest' | 'lowest'
-      universal?: boolean
-      reverse?: boolean
-      voids?: boolean
-    } = {}
-  ): Generator<NodeEntry<T>, void, undefined>`} */}
+      <header>
+        <select>
+          <option>Editor.nodes</option>
+        </select>
+      </header>
       <pre>
+        <span
+          css={css`
+            color: #6a9955;
+          `}
+        >
+          {`/**
+ * Iterate through all of the nodes in the Editor.
+ *
+ * @param editor Editor containing the nodes to iterate
+ * @param options.at Location to constrain the list of nodes to. Defaults to editor.selection
+ * @param options.match Predicate function to filter the list of yielded nodes
+ * @param options.mode Determines which nodes TODO:
+ */`}
+        </span>
         {`*nodes<T extends Node>(
   editor: Editor,
   options: {`}
         <span>
-          <label>at?: Location | Span</label>
+          <label>
+            <span
+              css={css`
+                color: #9cdcfe;
+              `}
+            >
+              at
+            </span>
+            ?: Location | Span
+          </label>
           <NodeSelector
             mode="path"
             placeholder="- at -"
@@ -244,8 +260,7 @@ export const EditorNodesControls: React.FC<{}> = () => {
         {`  } = {}
 ): Generator<NodeEntry<T>, void, undefined>`}
       </pre>
-
-      <button onClick={onClick}>Go</button>
+      <button onClick={onClick}>Run</button>
     </div>
   )
 }
