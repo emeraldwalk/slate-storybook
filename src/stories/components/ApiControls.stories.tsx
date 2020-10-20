@@ -3,15 +3,30 @@ import { Story, Meta } from '@storybook/react'
 import { Editor, Element, Text } from 'slate'
 import { ApiControls, ApiControlsProps } from '../../components'
 import { not } from '../../util/callbacks'
+import { NodeSpecContextDecorator } from '../util'
+import { mockParagraphsAndList } from '../util/mockData'
 
 export default {
   title: 'Components/ApiControls',
   component: ApiControls,
+  decorators: [
+    (Story, context) => {
+      return (
+        <NodeSpecContextDecorator
+          story={Story}
+          initialSlateValue={context.parameters.initialSlateValue}
+        />
+      )
+    },
+  ],
 } as Meta
 
 const Template: Story<ApiControlsProps> = (args) => <ApiControls {...args} />
 
 export const ApiControlsDefault = Template.bind({})
+ApiControlsDefault.parameters = {
+  initialSlateValue: mockParagraphsAndList,
+}
 ApiControlsDefault.args = {
   args: [
     {
@@ -49,6 +64,20 @@ ApiControlsDefault.args = {
         {
           argType: 'boolean',
           name: 'universal',
+          type: 'boolean',
+          isOptional: true,
+          options: [true, false],
+        },
+        {
+          argType: 'boolean',
+          name: 'reverse',
+          type: 'boolean',
+          isOptional: true,
+          options: [true, false],
+        },
+        {
+          argType: 'boolean',
+          name: 'voids',
           type: 'boolean',
           isOptional: true,
           options: [true, false],

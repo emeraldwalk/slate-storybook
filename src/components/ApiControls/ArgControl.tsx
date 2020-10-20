@@ -2,7 +2,9 @@
 import { css, jsx } from '@emotion/core'
 
 import React from 'react'
+import { Path } from 'slate'
 import { Selector } from '..'
+import NodeSelector from '../NodeSelector/NodeSelector'
 import {
   Arg,
   ArgValue,
@@ -36,7 +38,19 @@ const ArgControl = <TArg extends Arg>({
   let children: React.ReactNode = 'N/A'
 
   if (isPathArg(arg)) {
-    children = <div>Path</div>
+    children = (
+      <React.Fragment>
+        <label>
+          <span>{arg.name}</span>
+          <span>{arg.isOptional ? '?' : ''}:</span> <span>{arg.type}</span>
+        </label>
+        <NodeSelector
+          mode="path"
+          value={arg.value}
+          onChange={onChangeInternal as (value?: Path) => void}
+        />
+      </React.Fragment>
+    )
   } else if (isStringArg(arg) || isBooleanArg(arg) || isFunctionArg(arg)) {
     children = (
       <React.Fragment>
@@ -50,7 +64,7 @@ const ArgControl = <TArg extends Arg>({
           value={arg.value}
           onChange={
             onChangeInternal as (
-              value?: string | boolean | [string, Function] | undefined
+              value?: string | boolean | [string, Function]
             ) => void
           }
         />
