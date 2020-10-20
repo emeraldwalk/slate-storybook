@@ -2,14 +2,14 @@
 import { css, jsx } from '@emotion/core'
 
 import React from 'react'
-import { Editor, Node, Path, Point, Range, Text } from 'slate'
+import { Editor, Node, Point, Text } from 'slate'
 import {
   Editable,
   RenderElementProps,
   RenderLeafProps,
   useSlate,
 } from 'slate-react'
-import { NodeSpecContainer, useNodeSpecContext } from '../../components'
+import { NodeSpecContainer } from '../../components'
 
 const componentCss = css``
 
@@ -20,7 +20,7 @@ export interface SandboxProps {
 
 const Sandbox: React.FC<SandboxProps> = ({ renderElement, renderLeaf }) => {
   const editor = useSlate()
-  const { setHighlightLocations } = useNodeSpecContext()
+  // const { setHighlightLocations } = useNodeSpecContext()
 
   const test = editorRange
   const [result, setResult] = React.useState<
@@ -31,7 +31,7 @@ const Sandbox: React.FC<SandboxProps> = ({ renderElement, renderLeaf }) => {
     const result = test(editor)
     setResult(result)
     // setHighlightLocations(result)
-  }, [editor, test, setHighlightLocations])
+  }, [editor, test])
 
   return (
     <div css={componentCss}>
