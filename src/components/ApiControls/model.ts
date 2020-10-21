@@ -1,4 +1,10 @@
-import { Path } from 'slate'
+import { Editor, Path } from 'slate'
+
+export interface EditorArg {
+  argType: 'editor'
+  name: string
+  isOptional?: boolean
+}
 
 export interface PathArg {
   argType: 'path'
@@ -45,6 +51,7 @@ export type ObjectArg = {
 export type Arg = PathArg | StringArg | BooleanArg | FunctionArg
 
 export type ArgValue<TArg extends Arg> = {
+  editor: Editor
   path: Path
   string: string
   boolean: boolean

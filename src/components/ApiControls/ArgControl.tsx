@@ -4,6 +4,7 @@ import { css, jsx } from '@emotion/core'
 import React from 'react'
 import { Path } from 'slate'
 import { Selector } from '..'
+import { Theme } from '../../theme'
 import NodeSelector from '../NodeSelector/NodeSelector'
 import {
   Arg,
@@ -14,7 +15,18 @@ import {
   isStringArg,
 } from './model'
 
-const componentCss = css``
+const componentCss = ({ code }: Theme) =>
+  css`
+    .argToken {
+      color: ${code.argColor};
+    }
+    .separatorToken {
+      color: ${code.separatorColor};
+    }
+    .typeToken {
+      color: ${code.typeColor};
+    }
+  `
 
 export interface ArgControlProps<TArg extends Arg> {
   arg: TArg
@@ -39,25 +51,41 @@ const ArgControl = <TArg extends Arg>({
 
   if (isPathArg(arg)) {
     children = (
-      <React.Fragment>
+      <div
+        css={css`
+          display: flex;
+        `}
+      >
         <label>
-          <span>{arg.name}</span>
-          <span>{arg.isOptional ? '?' : ''}:</span> <span>{arg.type}</span>
+          <span className="argToken">{arg.name}</span>
+          <span className="separatorToken">
+            {arg.isOptional ? '?' : ''}:&nbsp;
+          </span>
+          <span className="typeToken">{arg.type}</span>
         </label>
+        &nbsp;
         <NodeSelector
           mode="path"
           value={arg.value}
           onChange={onChangeInternal as (value?: Path) => void}
         />
-      </React.Fragment>
+      </div>
     )
   } else if (isStringArg(arg) || isBooleanArg(arg) || isFunctionArg(arg)) {
     children = (
-      <React.Fragment>
+      <div
+        css={css`
+          display: flex;
+        `}
+      >
         <label>
-          <span>{arg.name}</span>
-          <span>{arg.isOptional ? '?' : ''}:</span> <span>{arg.type}</span>
+          <span className="argToken">{arg.name}</span>
+          <span className="separatorToken">
+            {arg.isOptional ? '?' : ''}:&nbsp;
+          </span>
+          <span className="typeToken">{arg.type}</span>
         </label>
+        &nbsp;
         <Selector
           label={arg.name}
           options={arg.options}
@@ -68,7 +96,7 @@ const ArgControl = <TArg extends Arg>({
             ) => void
           }
         />
-      </React.Fragment>
+      </div>
     )
   }
 

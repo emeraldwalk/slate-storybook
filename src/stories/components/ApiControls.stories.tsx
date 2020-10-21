@@ -28,7 +28,16 @@ ApiControlsDefault.parameters = {
   initialSlateValue: mockParagraphsAndList,
 }
 ApiControlsDefault.args = {
+  name: 'nodes',
+  generics: '<T extends Node>',
+  isGenerator: true,
+  returnType: 'Generator<NodeEntry<T>, void, undefined>',
   args: [
+    {
+      argType: 'editor',
+      name: 'editor',
+      isOptional: false,
+    },
     {
       argType: 'object',
       name: 'options',

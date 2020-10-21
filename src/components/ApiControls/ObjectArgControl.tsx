@@ -2,10 +2,21 @@
 import { css, jsx } from '@emotion/core'
 
 import React from 'react'
+import { Theme } from '../../theme'
 import ArgControl from './ArgControl'
 import { Arg, ObjectArg } from './model'
 
-const componentCss = css``
+const componentCss = ({ code }: Theme) => css`
+  .argToken {
+    color: ${code.argColor};
+  }
+  .separatorToken {
+    color: ${code.separatorColor};
+  }
+  .braceToken {
+    color: ${code.separatorColor};
+  }
+`
 
 export interface ObjectArgControlProps {
   arg: ObjectArg
@@ -41,9 +52,19 @@ const ObjectArgControl: React.FC<ObjectArgControlProps> = ({
 
   return (
     <div css={componentCss}>
-      {obj.args.map((arg) => (
-        <ArgControl key={arg.name} arg={arg} onChange={onChangeInternal} />
-      ))}
+      <span className="argToken">{obj.name}</span>
+      <span className="separatorToken">{obj.isOptional ? '?' : ''}:</span>
+      <span className="braceToken">{' {'}</span>
+      <div
+        css={css`
+          padding-left: 20px;
+        `}
+      >
+        {obj.args.map((arg) => (
+          <ArgControl key={arg.name} arg={arg} onChange={onChangeInternal} />
+        ))}
+      </div>
+      <span className="braceToken">{'}'}</span>
     </div>
   )
 }
