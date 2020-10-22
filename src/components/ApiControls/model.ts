@@ -50,13 +50,16 @@ export type ObjectArg = {
 
 export type Arg = PathArg | StringArg | BooleanArg | FunctionArg
 
-export type ArgValue<TArg extends Arg> = {
+export type ArgValueT<TArg extends Arg> = {
   editor: Editor
   path: Path
   string: string
   boolean: boolean
   function: [string, Function]
 }[TArg['argType']]
+
+export type ArgValue = string | boolean | Function | Path | undefined
+export type ObjectArgValues = Record<string, ArgValue>
 
 export function isStringArg(arg: Arg): arg is StringArg {
   return arg.argType === 'string'

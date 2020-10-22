@@ -4,7 +4,7 @@ import { css, jsx } from '@emotion/core'
 import React from 'react'
 import { Theme } from '../../theme'
 import ArgControl from './ArgControl'
-import { Arg, ObjectArg } from './model'
+import { Arg, isFunctionArg, ObjectArg, ObjectArgValues } from './model'
 
 const componentCss = ({ code }: Theme) => css`
   .argToken {
@@ -20,7 +20,7 @@ const componentCss = ({ code }: Theme) => css`
 
 export interface ObjectArgControlProps {
   arg: ObjectArg
-  onChange: (values: Record<string, Arg['value']>) => void
+  onChange: (values: ObjectArgValues) => void
 }
 
 const ObjectArgControl: React.FC<ObjectArgControlProps> = ({
@@ -28,10 +28,11 @@ const ObjectArgControl: React.FC<ObjectArgControlProps> = ({
   onChange,
 }) => {
   const [values, setValues] = React.useState(() => {
-    const values: Record<string, Arg['value']> = {}
+    const values: ObjectArgValues = {}
 
     for (const arg of obj.args) {
-      values[arg.name] = arg.value
+      const value = isFunctionArg(arg) ? arg.value?.[1] : arg.value
+      values[arg.name] = value
     }
 
     return values
@@ -41,7 +42,7 @@ const ObjectArgControl: React.FC<ObjectArgControlProps> = ({
     (arg: Arg) => {
       const newValues = {
         ...values,
-        [arg.name]: arg.value,
+        [arg.name]: isFunctionArg(arg) ? arg.value?.[1] : arg.value,
       }
 
       setValues(newValues)

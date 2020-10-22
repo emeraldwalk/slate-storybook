@@ -8,7 +8,7 @@ import { Theme } from '../../theme'
 import NodeSelector from '../NodeSelector/NodeSelector'
 import {
   Arg,
-  ArgValue,
+  ArgValueT,
   isBooleanArg,
   isFunctionArg,
   isPathArg,
@@ -38,7 +38,7 @@ const ArgControl = <TArg extends Arg>({
   onChange,
 }: ArgControlProps<TArg>) => {
   const onChangeInternal = React.useCallback(
-    (value: ArgValue<TArg>) => {
+    (value: ArgValueT<TArg>) => {
       onChange({
         ...arg,
         value,
