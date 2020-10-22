@@ -9,6 +9,10 @@ import ObjectArgControl from './ObjectArgControl'
 
 const componentCss = ({ code }: Theme) => css`
   background-color: ${code.backgroundColor};
+  padding: 10px;
+  .commentBlock {
+    color: ${code.commentColor};
+  }
   .iteratorToken {
     color: ${code.separatorColor};
   }
@@ -34,6 +38,7 @@ const componentCss = ({ code }: Theme) => css`
 
 export interface ApiControlsProps {
   name: string
+  commentBlock: string
   generics?: React.ReactNode
   isGenerator?: boolean
   args: (EditorArg | Arg | ObjectArg)[]
@@ -42,6 +47,7 @@ export interface ApiControlsProps {
 
 const ApiControls: React.FC<ApiControlsProps> = ({
   name,
+  commentBlock,
   generics,
   isGenerator,
   args,
@@ -60,7 +66,8 @@ const ApiControls: React.FC<ApiControlsProps> = ({
   console.log(values)
 
   return (
-    <div css={componentCss}>
+    <pre css={componentCss}>
+      <div className="commentBlock">{commentBlock}</div>
       {isGenerator ? <span className="iteratorToken">*</span> : null}
       <span className="functionNameToken">{name}</span>
       {generics ? <span className="genericsToken">{generics}</span> : null}
@@ -95,7 +102,7 @@ const ApiControls: React.FC<ApiControlsProps> = ({
           )
         )}
       </div>
-    </div>
+    </pre>
   )
 }
 

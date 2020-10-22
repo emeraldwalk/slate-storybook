@@ -29,6 +29,17 @@ ApiControlsDefault.parameters = {
 }
 ApiControlsDefault.args = {
   name: 'nodes',
+  commentBlock: `/**
+ * Iterate through all of the nodes in the Editor.
+ *
+ * @param editor Editor containing the nodes to iterate
+ * @param options.at Location to constrain the list of nodes to. Defaults to editor.selection
+ * @param options.match Predicate function to filter the list of yielded nodes
+ * @param options.mode
+ * @param options.universal
+ * @param options.reverse
+ * @param options.voids
+ */`,
   generics: '<T extends Node>',
   isGenerator: true,
   returnType: 'Generator<NodeEntry<T>, void, undefined>',

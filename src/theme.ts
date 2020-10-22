@@ -6,6 +6,7 @@ const theme = {
   placeholderColor: '#757575',
   code: {
     commentColor: '#6A9955',
+    paramColor: '#569CD6',
     argColor: '#9CDCFE',
     backgroundColor: '#1E1E1E',
     separatorColor: '#D4D4D4',
