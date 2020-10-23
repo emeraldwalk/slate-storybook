@@ -8,7 +8,7 @@ import { Theme } from '../../theme'
 import NodeSelector from '../NodeSelector/NodeSelector'
 import {
   Arg,
-  ArgValueT,
+  ArgValue,
   isBooleanArg,
   isFunctionArg,
   isPathArg,
@@ -30,23 +30,15 @@ const componentCss = ({ code }: Theme) =>
 
 export interface ArgControlProps<TArg extends Arg> {
   arg: TArg
-  onChange: (arg: TArg) => void
+  value?: ArgValue<TArg>
+  onChange: (value?: ArgValue<TArg>) => void
 }
 
 const ArgControl = <TArg extends Arg>({
   arg,
+  value,
   onChange,
 }: ArgControlProps<TArg>) => {
-  const onChangeInternal = React.useCallback(
-    (value: ArgValueT<TArg>) => {
-      onChange({
-        ...arg,
-        value,
-      })
-    },
-    [arg, onChange]
-  )
-
   let children: React.ReactNode = 'N/A'
 
   if (isPathArg(arg)) {
@@ -66,8 +58,8 @@ const ArgControl = <TArg extends Arg>({
         &nbsp;
         <NodeSelector
           mode="path"
-          value={arg.value}
-          onChange={onChangeInternal as (value?: Path) => void}
+          value={value as Path}
+          onChange={onChange as (value?: Path) => void}
         />
       </div>
     )
@@ -89,11 +81,9 @@ const ArgControl = <TArg extends Arg>({
         <Selector
           label={arg.name}
           options={arg.options}
-          value={arg.value}
+          value={value as string | boolean | [string, Function]}
           onChange={
-            onChangeInternal as (
-              value?: string | boolean | [string, Function]
-            ) => void
+            onChange as (value?: string | boolean | [string, Function]) => void
           }
         />
       </div>

@@ -2,10 +2,20 @@
 import { css, jsx } from '@emotion/core'
 
 import React from 'react'
-import { Editable, RenderElementProps, RenderLeafProps } from 'slate-react'
+import {
+  Editable,
+  RenderElementProps,
+  RenderLeafProps,
+  useSlate,
+} from 'slate-react'
 import { NodeSpecContainer } from '..'
 import { ApiControls } from '..'
-import { ApiFunction, ArgValue, ObjectArgValues } from '../ApiControls/model'
+import {
+  ApiFunction,
+  Arg,
+  ArgValue,
+  ObjectArgValues,
+} from '../ApiControls/model'
 
 const componentCss = css``
 
@@ -20,22 +30,26 @@ const ApiView: React.FC<ApiViewProps> = ({
   renderLeaf,
   apiFunctions,
 }) => {
+  const editor = useSlate()
   const apiFunction = apiFunctions[0]
-  const [values, setValues] = React.useState<(ArgValue | ObjectArgValues)[]>()
 
-  // const onChangeInternal = React.useCallback(
-  //   (values: (ArgValue | ObjectArgValues)[]) => {
-  //     setValues(values)
+  const [values, setValues] = React.useState<
+    (ArgValue<Arg> | ObjectArgValues | undefined)[]
+  >(() => {
+    return apiFunction.args.map((arg) => {
+      if (arg.argType === 'editor') {
+        return editor
+      }
 
-  //     debugger
-  //     console.log('values:', values)
-  //     setApiFunction({
-  //       ...apiFunction,
-  //       args: apiFunction.args,
-  //     })
-  //   },
-  //   [apiFunction]
-  // )
+      if (arg.argType === 'object') {
+        return {}
+      }
+
+      return undefined
+    })
+  })
+
+  console.log(values)
 
   const onClick = React.useCallback(
     (event: React.MouseEvent) => {
@@ -57,7 +71,11 @@ const ApiView: React.FC<ApiViewProps> = ({
   return (
     <div css={componentCss}>
       <h2>API</h2>
-      <ApiControls apiFunction={apiFunction} onChange={setValues} />
+      <ApiControls
+        apiFunction={apiFunction}
+        values={values}
+        onChange={setValues}
+      />
       <button onClick={onClick}>Run</button>
       <div
         css={css`

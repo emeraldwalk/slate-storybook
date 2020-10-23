@@ -11,7 +11,7 @@ export interface PathArg {
   name: string
   type: string
   isOptional: boolean
-  value?: Path
+  // value?: Path
 }
 
 export interface StringArg {
@@ -20,7 +20,7 @@ export interface StringArg {
   type: string
   isOptional: boolean
   options: string[]
-  value?: string
+  // value?: string
 }
 
 export interface BooleanArg {
@@ -29,7 +29,7 @@ export interface BooleanArg {
   type: string
   isOptional: boolean
   options: boolean[]
-  value?: boolean
+  // value?: boolean
 }
 
 export interface FunctionArg {
@@ -38,7 +38,7 @@ export interface FunctionArg {
   type: string
   isOptional: boolean
   options: [string, Function][]
-  value?: [string, Function]
+  // value?: [string, Function]
 }
 
 export type ObjectArg = {
@@ -50,7 +50,7 @@ export type ObjectArg = {
 
 export type Arg = PathArg | StringArg | BooleanArg | FunctionArg
 
-export type ArgValueT<TArg extends Arg> = {
+export type ArgValue<TArg extends Arg> = {
   editor: Editor
   path: Path
   string: string
@@ -58,8 +58,8 @@ export type ArgValueT<TArg extends Arg> = {
   function: [string, Function]
 }[TArg['argType']]
 
-export type ArgValue = string | boolean | Function | Path | undefined
-export type ObjectArgValues = Record<string, ArgValue>
+// export type ArgValue = string | boolean | Function | Path | undefined
+export type ObjectArgValues = Record<string, ArgValue<Arg>>
 
 export interface ApiFunction {
   fn: Function

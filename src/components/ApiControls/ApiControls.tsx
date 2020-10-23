@@ -2,10 +2,15 @@
 import { css, jsx } from '@emotion/core'
 
 import React from 'react'
-import { useSlate } from 'slate-react'
 import { Theme } from '../../theme'
 import ArgControl from './ArgControl'
-import { ArgValue, ApiFunction, ObjectArgValues, isFunctionArg } from './model'
+import {
+  ApiFunction,
+  isFunctionArg,
+  ArgValue,
+  Arg,
+  ObjectArgValues,
+} from './model'
 import ObjectArgControl from './ObjectArgControl'
 
 const componentCss = ({ code }: Theme) => css`
@@ -39,10 +44,15 @@ const componentCss = ({ code }: Theme) => css`
 
 export interface ApiControlsProps {
   apiFunction: ApiFunction
-  onChange: (values: (ArgValue | ObjectArgValues)[]) => void
+  values: (ArgValue<Arg> | ObjectArgValues | undefined)[]
+  onChange: (values: (ArgValue<Arg> | ObjectArgValues | undefined)[]) => void
 }
 
-const ApiControls: React.FC<ApiControlsProps> = ({ apiFunction, onChange }) => {
+const ApiControls: React.FC<ApiControlsProps> = ({
+  apiFunction,
+  values,
+  onChange,
+}) => {
   const {
     name,
     commentBlock,
@@ -51,34 +61,6 @@ const ApiControls: React.FC<ApiControlsProps> = ({ apiFunction, onChange }) => {
     args,
     returnType,
   } = apiFunction
-  const editor = useSlate()
-  const [values, setValues] = React.useState<(ArgValue | ObjectArgValues)[]>(
-    () => {
-      return args.map((arg) => {
-        if (arg.argType === 'editor') {
-          return editor
-        }
-
-        if (arg.argType === 'object') {
-          return {}
-        }
-
-        return 'value' in arg ? arg.value : undefined
-      })
-    }
-  )
-
-  React.useEffect(() => {
-    onChange(values)
-  }, [values, onChange])
-
-  const onChangeInternal = React.useCallback(
-    (values: (ArgValue | ObjectArgValues)[]) => {
-      setValues(values)
-      onChange(values)
-    },
-    [onChange]
-  )
 
   return (
     <pre css={componentCss}>
@@ -97,10 +79,9 @@ const ApiControls: React.FC<ApiControlsProps> = ({ apiFunction, onChange }) => {
             <ObjectArgControl
               key={arg.name}
               arg={arg}
+              values={values[i] as ObjectArgValues}
               onChange={(val) =>
-                onChangeInternal(
-                  values.slice(0, i).concat(val, values.slice(i + 1))
-                )
+                onChange(values.slice(0, i).concat(val, values.slice(i + 1)))
               }
             />
           ) : arg.argType === 'editor' ? (
@@ -116,12 +97,13 @@ const ApiControls: React.FC<ApiControlsProps> = ({ apiFunction, onChange }) => {
             <ArgControl
               key={arg.name}
               arg={arg}
-              onChange={(arg) =>
-                onChangeInternal(
+              value={values[i] as ArgValue<Arg>}
+              onChange={(value) =>
+                onChange(
                   values
                     .slice(0, i)
                     .concat(
-                      isFunctionArg(arg) ? arg.value?.[1] : arg.value,
+                      isFunctionArg(arg) ? (value as any)?.[1] : value,
                       values.slice(i + 1)
                     )
                 )

@@ -4,7 +4,13 @@ import { css, jsx } from '@emotion/core'
 import React from 'react'
 import { Theme } from '../../theme'
 import ArgControl from './ArgControl'
-import { Arg, isFunctionArg, ObjectArg, ObjectArgValues } from './model'
+import {
+  Arg,
+  ArgValue,
+  isFunctionArg,
+  ObjectArg,
+  ObjectArgValues,
+} from './model'
 
 const componentCss = ({ code }: Theme) => css`
   .argToken {
@@ -20,36 +26,38 @@ const componentCss = ({ code }: Theme) => css`
 
 export interface ObjectArgControlProps {
   arg: ObjectArg
+  values: ObjectArgValues
   onChange: (values: ObjectArgValues) => void
 }
 
 const ObjectArgControl: React.FC<ObjectArgControlProps> = ({
   arg: obj,
+  values,
   onChange,
 }) => {
-  const [values, setValues] = React.useState(() => {
-    const values: ObjectArgValues = {}
+  // const [values, setValues] = React.useState(() => {
+  //   const values: ObjectArgValues = {}
 
-    for (const arg of obj.args) {
-      const value = isFunctionArg(arg) ? arg.value?.[1] : arg.value
-      values[arg.name] = value
-    }
+  //   for (const arg of obj.args) {
+  //     const value = isFunctionArg(arg) ? arg.value?.[1] : arg.value
+  //     values[arg.name] = value
+  //   }
 
-    return values
-  })
+  //   return values
+  // })
 
-  const onChangeInternal = React.useCallback(
-    (arg: Arg) => {
-      const newValues = {
-        ...values,
-        [arg.name]: isFunctionArg(arg) ? arg.value?.[1] : arg.value,
-      }
+  // const onChangeInternal = React.useCallback(
+  //   function (value: ArgValue<Arg>) {
+  //     const newValues = {
+  //       ...values,
+  //       [arg.name]: isFunctionArg(arg) ? arg.value?.[1] : arg.value,
+  //     }
 
-      setValues(newValues)
-      onChange(newValues)
-    },
-    [values, onChange]
-  )
+  //     // setValues(newValues)
+  //     onChange(newValues)
+  //   },
+  //   [values, onChange]
+  // )
 
   return (
     <div css={componentCss}>
@@ -62,7 +70,19 @@ const ObjectArgControl: React.FC<ObjectArgControlProps> = ({
         `}
       >
         {obj.args.map((arg) => (
-          <ArgControl key={arg.name} arg={arg} onChange={onChangeInternal} />
+          <ArgControl
+            key={arg.name}
+            arg={arg}
+            value={values[arg.name]}
+            onChange={<TArg extends Arg>(value?: ArgValue<TArg>) => {
+              const newValues = {
+                ...values,
+                [arg.name]: isFunctionArg(arg) ? (value as any)?.[1] : value,
+              }
+
+              onChange(newValues)
+            }}
+          />
         ))}
       </div>
       <span className="braceToken">{'}'}</span>
