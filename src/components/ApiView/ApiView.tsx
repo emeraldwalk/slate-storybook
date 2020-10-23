@@ -8,8 +8,9 @@ import {
   RenderLeafProps,
   useSlate,
 } from 'slate-react'
-import { NodeSpecContainer } from '..'
+import { NodeSpecContainer, useNodeSpecContext } from '..'
 import { ApiControls } from '..'
+import { filterToLocations } from '../../util/slateUtil'
 import {
   ApiFunction,
   Arg,
@@ -31,6 +32,7 @@ const ApiView: React.FC<ApiViewProps> = ({
   apiFunctions,
 }) => {
   const editor = useSlate()
+  const { setHighlightLocations } = useNodeSpecContext()
   const apiFunction = apiFunctions[0]
 
   const [values, setValues] = React.useState<
@@ -49,7 +51,7 @@ const ApiView: React.FC<ApiViewProps> = ({
     })
   })
 
-  console.log(values)
+  const intervalRef = React.useRef<number>()
 
   const onClick = React.useCallback(
     (event: React.MouseEvent) => {
@@ -63,9 +65,23 @@ const ApiView: React.FC<ApiViewProps> = ({
         result = [...result]
       }
 
-      console.log(result)
+      setHighlightLocations([])
+
+      if (Array.isArray(result)) {
+        const locations = filterToLocations(result)
+        window.clearInterval(intervalRef.current)
+
+        let i = 0
+        intervalRef.current = window.setInterval(() => {
+          if (++i <= locations.length) {
+            setHighlightLocations(locations.slice(0, i))
+          } else {
+            window.clearInterval(intervalRef.current)
+          }
+        }, 500)
+      }
     },
-    [apiFunction, values]
+    [apiFunction, values, setHighlightLocations]
   )
 
   return (
