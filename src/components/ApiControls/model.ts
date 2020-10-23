@@ -61,6 +61,16 @@ export type ArgValueT<TArg extends Arg> = {
 export type ArgValue = string | boolean | Function | Path | undefined
 export type ObjectArgValues = Record<string, ArgValue>
 
+export interface ApiFunction {
+  fn: Function
+  name: string
+  commentBlock: string
+  generics?: React.ReactNode
+  isGenerator?: boolean
+  args: (EditorArg | Arg | ObjectArg)[]
+  returnType: React.ReactNode
+}
+
 export function isStringArg(arg: Arg): arg is StringArg {
   return arg.argType === 'string'
 }

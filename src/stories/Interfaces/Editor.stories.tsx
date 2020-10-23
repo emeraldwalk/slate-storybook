@@ -3,6 +3,8 @@ import { Story, Meta } from '@storybook/react'
 import EditorNodes, { EditorNodesProps } from './EditorNodes'
 import { NodeSpecContextDecorator } from '../util'
 import { renderElement, renderLeaf } from './render'
+import { ApiView, ApiViewProps } from '../../components'
+import { editorApiFunctions } from '../util/api'
 
 export default {
   title: 'Interfaces/Editor',
@@ -18,20 +20,33 @@ export default {
   ],
 } as Meta
 
-/** Editor.above */
+const EditorInterfaceTemplate: Story<ApiViewProps> = (args) => (
+  <ApiView {...args} />
+)
 
-// const AboveTemplate: Story<AboveProps> = (args) => <Above {...args} />
-
-// export const above = AboveTemplate.bind({})
-// above.storyName = 'above()'
-// above.argTypes = {
-//   at: {
-//     control: {
-//       type: 'select',
-//       options: ['Range ([0, 0])', 'Path', 'Point'],
-//     },
-//   },
-// }
+export const editor = EditorInterfaceTemplate.bind({})
+editor.args = {
+  renderElement,
+  renderLeaf,
+  apiFunctions: editorApiFunctions,
+}
+editor.parameters = {
+  initialSlateValue: initialSlateValue(),
+  actions: {
+    disable: true,
+  },
+  controls: {
+    disable: true,
+  },
+  previewTabs: {
+    'storybook/docs/panel': {
+      hidden: true,
+    },
+    'sourceCodeAddon/panel': {
+      hidden: true,
+    },
+  },
+}
 
 /** Editor.nodes */
 
@@ -60,7 +75,11 @@ nodes.parameters = {
       hidden: true,
     },
   },
-  initialSlateValue: [
+  initialSlateValue: initialSlateValue(),
+}
+
+function initialSlateValue() {
+  return [
     {
       type: 'paragraph',
       children: [
@@ -114,5 +133,5 @@ nodes.parameters = {
         },
       ],
     },
-  ],
+  ]
 }

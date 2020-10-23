@@ -5,14 +5,7 @@ import React from 'react'
 import { useSlate } from 'slate-react'
 import { Theme } from '../../theme'
 import ArgControl from './ArgControl'
-import {
-  Arg,
-  EditorArg,
-  ObjectArg,
-  ArgValue,
-  ObjectArgValues,
-  isFunctionArg,
-} from './model'
+import { ArgValue, ApiFunction, ObjectArgValues, isFunctionArg } from './model'
 import ObjectArgControl from './ObjectArgControl'
 
 const componentCss = ({ code }: Theme) => css`
@@ -45,24 +38,19 @@ const componentCss = ({ code }: Theme) => css`
 `
 
 export interface ApiControlsProps {
-  name: string
-  commentBlock: string
-  generics?: React.ReactNode
-  isGenerator?: boolean
-  args: (EditorArg | Arg | ObjectArg)[]
-  returnType: React.ReactNode
+  apiFunction: ApiFunction
   onChange: (values: (ArgValue | ObjectArgValues)[]) => void
 }
 
-const ApiControls: React.FC<ApiControlsProps> = ({
-  name,
-  commentBlock,
-  generics,
-  isGenerator,
-  args,
-  returnType,
-  onChange,
-}) => {
+const ApiControls: React.FC<ApiControlsProps> = ({ apiFunction, onChange }) => {
+  const {
+    name,
+    commentBlock,
+    generics,
+    isGenerator,
+    args,
+    returnType,
+  } = apiFunction
   const editor = useSlate()
   const [values, setValues] = React.useState<(ArgValue | ObjectArgValues)[]>(
     () => {
@@ -80,6 +68,10 @@ const ApiControls: React.FC<ApiControlsProps> = ({
     }
   )
 
+  React.useEffect(() => {
+    onChange(values)
+  }, [values, onChange])
+
   const onChangeInternal = React.useCallback(
     (values: (ArgValue | ObjectArgValues)[]) => {
       setValues(values)
@@ -87,8 +79,6 @@ const ApiControls: React.FC<ApiControlsProps> = ({
     },
     [onChange]
   )
-
-  console.log(values)
 
   return (
     <pre css={componentCss}>
@@ -140,6 +130,8 @@ const ApiControls: React.FC<ApiControlsProps> = ({
           )
         )}
       </div>
+      <span className="separatorToken">): </span>
+      <span className="typeToken">{returnType}</span>
     </pre>
   )
 }
