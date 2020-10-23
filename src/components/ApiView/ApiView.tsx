@@ -2,21 +2,11 @@
 import { css, jsx } from '@emotion/core'
 
 import React from 'react'
-import {
-  Editable,
-  RenderElementProps,
-  RenderLeafProps,
-  useSlate,
-} from 'slate-react'
+import { Editable, RenderElementProps, RenderLeafProps } from 'slate-react'
 import { NodeSpecContainer, useNodeSpecContext } from '..'
 import { ApiControls } from '..'
 import { filterToLocations } from '../../util/slateUtil'
-import {
-  ApiFunction,
-  Arg,
-  ArgValue,
-  ObjectArgValues,
-} from '../ApiControls/model'
+import { ApiFunction, useArgValues } from '../ApiControls/model'
 
 const componentCss = css``
 
@@ -31,25 +21,10 @@ const ApiView: React.FC<ApiViewProps> = ({
   renderLeaf,
   apiFunctions,
 }) => {
-  const editor = useSlate()
   const { setHighlightLocations } = useNodeSpecContext()
   const apiFunction = apiFunctions[0]
 
-  const [values, setValues] = React.useState<
-    (ArgValue<Arg> | ObjectArgValues | undefined)[]
-  >(() => {
-    return apiFunction.args.map((arg) => {
-      if (arg.argType === 'editor') {
-        return editor
-      }
-
-      if (arg.argType === 'object') {
-        return {}
-      }
-
-      return undefined
-    })
-  })
+  const [values, setValues] = useArgValues(apiFunction.args)
 
   const intervalRef = React.useRef<number>()
 

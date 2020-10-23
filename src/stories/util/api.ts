@@ -24,7 +24,9 @@ export const editorApiFunctions: ApiFunction[] = [
       {
         argType: 'editor',
         name: 'editor',
+        type: 'Editor',
         isOptional: false,
+        comment: '',
       },
       {
         argType: 'object',
@@ -36,12 +38,14 @@ export const editorApiFunctions: ApiFunction[] = [
             name: 'at',
             type: 'Location | Span',
             isOptional: true,
+            comment: '',
           },
           {
             argType: 'function',
             name: 'match',
             type: 'NodeMatch<T>',
             isOptional: true,
+            comment: '',
             options: [
               ['Editor.isEditor', Editor.isEditor],
               ['Element.isElement', Element.isElement],
@@ -56,6 +60,7 @@ export const editorApiFunctions: ApiFunction[] = [
             name: 'mode',
             type: `'all' | 'highest' | 'lowest'`,
             isOptional: true,
+            comment: '',
             options: ['all', 'highest', 'lowest'],
           },
           {
@@ -63,6 +68,7 @@ export const editorApiFunctions: ApiFunction[] = [
             name: 'universal',
             type: 'boolean',
             isOptional: true,
+            comment: '',
             options: [true, false],
           },
           {
@@ -70,6 +76,7 @@ export const editorApiFunctions: ApiFunction[] = [
             name: 'reverse',
             type: 'boolean',
             isOptional: true,
+            comment: '',
             options: [true, false],
           },
           {
@@ -77,6 +84,7 @@ export const editorApiFunctions: ApiFunction[] = [
             name: 'voids',
             type: 'boolean',
             isOptional: true,
+            comment: '',
             options: [true, false],
           },
         ],

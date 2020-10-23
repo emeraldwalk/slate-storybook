@@ -1,44 +1,35 @@
+import React from 'react'
 import { Editor, Path } from 'slate'
+import { useSlate } from 'slate-react'
 
-export interface EditorArg {
-  argType: 'editor'
+export interface ArgBase {
   name: string
   isOptional?: boolean
+  type: string
+  comment: string
 }
 
-export interface PathArg {
+export interface EditorArg extends ArgBase {
+  argType: 'editor'
+}
+
+export interface PathArg extends ArgBase {
   argType: 'path'
-  name: string
-  type: string
-  isOptional: boolean
-  // value?: Path
 }
 
-export interface StringArg {
+export interface StringArg extends ArgBase {
   argType: 'string'
-  name: string
-  type: string
-  isOptional: boolean
   options: string[]
-  // value?: string
 }
 
-export interface BooleanArg {
+export interface BooleanArg extends ArgBase {
   argType: 'boolean'
-  name: string
-  type: string
-  isOptional: boolean
   options: boolean[]
-  // value?: boolean
 }
 
-export interface FunctionArg {
+export interface FunctionArg extends ArgBase {
   argType: 'function'
-  name: string
-  type: string
-  isOptional: boolean
   options: [string, Function][]
-  // value?: [string, Function]
 }
 
 export type ObjectArg = {
@@ -69,6 +60,28 @@ export interface ApiFunction {
   isGenerator?: boolean
   args: (EditorArg | Arg | ObjectArg)[]
   returnType: React.ReactNode
+}
+
+export function useArgValues(args: (EditorArg | Arg | ObjectArg)[]) {
+  const editor = useSlate()
+
+  const [values, setValues] = React.useState<
+    (ArgValue<Arg> | ObjectArgValues | undefined)[]
+  >(() => {
+    return args.map((arg) => {
+      if (arg.argType === 'editor') {
+        return editor
+      }
+
+      if (arg.argType === 'object') {
+        return {}
+      }
+
+      return undefined
+    })
+  })
+
+  return [values, setValues] as const
 }
 
 export function isStringArg(arg: Arg): arg is StringArg {
