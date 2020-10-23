@@ -1,10 +1,10 @@
 import React from 'react'
 import { Story, Meta } from '@storybook/react'
-import EditorNodes, { EditorNodesProps } from './EditorNodes'
 import { NodeSpecContextDecorator } from '../util'
 import { renderElement, renderLeaf } from './render'
 import { ApiView, ApiViewProps } from '../../components'
 import { editorApiFunctions } from '../util/api'
+import { ApiFunction } from '../../components/ApiControls/model'
 
 export default {
   title: 'Interfaces/Editor',
@@ -24,58 +24,60 @@ const EditorInterfaceTemplate: Story<ApiViewProps> = (args) => (
   <ApiView {...args} />
 )
 
-export const editor = EditorInterfaceTemplate.bind({})
-editor.args = {
-  renderElement,
-  renderLeaf,
-  apiFunctions: editorApiFunctions,
-}
-editor.parameters = {
-  initialSlateValue: initialSlateValue(),
-  actions: {
-    disable: true,
-  },
-  controls: {
-    disable: true,
-  },
-  previewTabs: {
-    'storybook/docs/panel': {
-      hidden: true,
-    },
-    'sourceCodeAddon/panel': {
-      hidden: true,
-    },
-  },
-}
+export const nodes = createStory(editorApiFunctions.nodes)
+export const above = createStory(editorApiFunctions.above)
 
-/** Editor.nodes */
+// export const editor = EditorInterfaceTemplate.bind({})
+// editor.args = {
+//   renderElement,
+//   renderLeaf,
+//   apiFunction: editorApiFunctions[0],
+// }
+// editor.parameters = {
+//   initialSlateValue: initialSlateValue(),
+//   actions: {
+//     disable: true,
+//   },
+//   controls: {
+//     disable: true,
+//   },
+//   previewTabs: {
+//     'storybook/docs/panel': {
+//       hidden: true,
+//     },
+//     'sourceCodeAddon/panel': {
+//       hidden: true,
+//     },
+//   },
+// }
 
-const NodesTemplate: Story<EditorNodesProps> = (args) => (
-  <EditorNodes {...args} />
-)
+function createStory(apiFunction: ApiFunction) {
+  const story = EditorInterfaceTemplate.bind({})
+  story.storyName = apiFunction.name
+  story.args = {
+    renderElement,
+    renderLeaf,
+    apiFunction,
+  }
+  story.parameters = {
+    initialSlateValue: initialSlateValue(),
+    actions: {
+      disable: true,
+    },
+    controls: {
+      disable: true,
+    },
+    previewTabs: {
+      'storybook/docs/panel': {
+        hidden: true,
+      },
+      'sourceCodeAddon/panel': {
+        hidden: true,
+      },
+    },
+  }
 
-export const nodes = NodesTemplate.bind({})
-nodes.storyName = 'nodes()'
-nodes.args = {
-  renderElement,
-  renderLeaf,
-}
-nodes.parameters = {
-  actions: {
-    disable: true,
-  },
-  controls: {
-    disable: true,
-  },
-  previewTabs: {
-    'storybook/docs/panel': {
-      hidden: true,
-    },
-    'sourceCodeAddon/panel': {
-      hidden: true,
-    },
-  },
-  initialSlateValue: initialSlateValue(),
+  return story
 }
 
 function initialSlateValue() {

@@ -2,8 +2,70 @@ import { Editor, Element, Text } from 'slate'
 import { ApiFunction } from '../../components/ApiControls/model'
 import { not } from '../../util/callbacks'
 
-export const editorApiFunctions: ApiFunction[] = [
-  {
+export const editorApiFunctions: Record<string, ApiFunction> = {
+  above: {
+    fn: Editor.above,
+    name: 'above',
+    commentBlock: '',
+    generics: '<T extends Ancestor>',
+    returnType: 'NodeEntry<T> | undefined',
+    args: [
+      {
+        argType: 'editor',
+        name: 'editor',
+        type: 'Editor',
+        isOptional: false,
+        comment: 'Editor instance to search',
+      },
+      {
+        argType: 'object',
+        name: 'options',
+        isOptional: true,
+        args: [
+          {
+            argType: 'path',
+            name: 'at',
+            type: 'Location',
+            isOptional: true,
+            comment: 'Location to start at. Defaults to editor.selection',
+          },
+          {
+            argType: 'function',
+            name: 'match',
+            type: 'NodeMatch<T>',
+            isOptional: true,
+            comment: 'Predicate for matching the ancestor to return',
+            options: [
+              ['Editor.isEditor', Editor.isEditor],
+              ['Element.isElement', Element.isElement],
+              ['Text.isText', Text.isText],
+              ['not(Editor.isEditor)', not(Editor.isEditor)],
+              ['not(Element.isElement)', not(Element.isElement)],
+              ['not(Text.isText)', not(Text.isText)],
+            ],
+          },
+          {
+            argType: 'string',
+            name: 'mode',
+            type: `'highest' | 'lowest'`,
+            isOptional: true,
+            comment:
+              'Whether to return highest or lowest ancestor in the node tree. Defaults to lowest',
+            options: ['highest', 'lowest'],
+          },
+          {
+            argType: 'boolean',
+            name: 'voids',
+            type: 'boolean',
+            isOptional: true,
+            comment: 'Whether or not to include void elements in the result',
+            options: [true, false],
+          },
+        ],
+      },
+    ],
+  },
+  nodes: {
     fn: Editor.nodes,
     name: 'nodes',
     commentBlock: `/**
@@ -91,4 +153,4 @@ export const editorApiFunctions: ApiFunction[] = [
       },
     ],
   },
-]
+}

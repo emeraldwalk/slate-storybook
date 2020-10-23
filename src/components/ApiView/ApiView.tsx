@@ -13,16 +13,15 @@ const componentCss = css``
 export interface ApiViewProps {
   renderElement: (props: RenderElementProps) => JSX.Element
   renderLeaf: (props: RenderLeafProps) => JSX.Element
-  apiFunctions: ApiFunction[]
+  apiFunction: ApiFunction
 }
 
 const ApiView: React.FC<ApiViewProps> = ({
   renderElement,
   renderLeaf,
-  apiFunctions,
+  apiFunction,
 }) => {
   const { setHighlightLocations } = useNodeSpecContext()
-  const apiFunction = apiFunctions[0]
 
   const [values, setValues] = useArgValues(apiFunction.args)
 
@@ -34,6 +33,7 @@ const ApiView: React.FC<ApiViewProps> = ({
 
       let result = apiFunction.fn(...values)
       if (
+        result &&
         !Array.isArray(result) &&
         typeof result[Symbol.iterator] === 'function'
       ) {
