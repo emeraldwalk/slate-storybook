@@ -55,6 +55,7 @@ function createStory(apiFunction: ApiFunction) {
   const story = EditorInterfaceTemplate.bind({})
   story.storyName = apiFunction.name
   story.args = {
+    title: `Editor.${apiFunction.name}`,
     renderElement,
     renderLeaf,
     apiFunction,

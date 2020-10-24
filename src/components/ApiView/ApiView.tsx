@@ -5,18 +5,21 @@ import React from 'react'
 import { Editable, RenderElementProps, RenderLeafProps } from 'slate-react'
 import { NodeSpecContainer, useNodeSpecContext } from '..'
 import { ApiControls } from '..'
+import { Theme } from '../../theme'
 import { filterToLocations } from '../../util/slateUtil'
 import { ApiFunction, useArgValues } from '../ApiControls/model'
 
 const componentCss = css``
 
 export interface ApiViewProps {
+  title: string
   renderElement: (props: RenderElementProps) => JSX.Element
   renderLeaf: (props: RenderLeafProps) => JSX.Element
   apiFunction: ApiFunction
 }
 
 const ApiView: React.FC<ApiViewProps> = ({
+  title,
   renderElement,
   renderLeaf,
   apiFunction,
@@ -24,6 +27,8 @@ const ApiView: React.FC<ApiViewProps> = ({
   const { setHighlightLocations } = useNodeSpecContext()
 
   const [values, setValues] = useArgValues(apiFunction.args)
+  const [result, setResult] = React.useState<unknown>()
+  const [showResult, setShowResult] = React.useState(false)
 
   const intervalRef = React.useRef<number>()
 
@@ -40,6 +45,8 @@ const ApiView: React.FC<ApiViewProps> = ({
         result = [...result]
       }
 
+      setResult(result)
+      setShowResult(true)
       setHighlightLocations([])
 
       if (Array.isArray(result)) {
@@ -61,13 +68,28 @@ const ApiView: React.FC<ApiViewProps> = ({
 
   return (
     <div css={componentCss}>
-      <h2>API</h2>
+      <h2>{title}</h2>
       <ApiControls
         apiFunction={apiFunction}
         values={values}
         onChange={setValues}
       />
       <button onClick={onClick}>Run</button>
+      {showResult && (
+        <div>
+          <h2>Result</h2>
+          <pre
+            css={({ code, textInverseColor }: Theme) => css`
+              background-color: ${code.backgroundColor};
+              color: ${textInverseColor};
+              max-height: 200px;
+              overflow-y: auto;
+            `}
+          >
+            {JSON.stringify(result, undefined, 2) ?? 'undefined'}
+          </pre>
+        </div>
+      )}
       <div
         css={css`
           display: flex;
