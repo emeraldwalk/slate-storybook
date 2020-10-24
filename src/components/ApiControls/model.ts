@@ -39,7 +39,7 @@ export type ObjectArg = {
   args: Arg[]
 }
 
-export type Arg = PathArg | StringArg | BooleanArg | FunctionArg
+export type Arg = PathArg | StringArg | BooleanArg | FunctionArg | EditorArg
 
 export type ArgValue<TArg extends Arg> = {
   editor: Editor
@@ -55,11 +55,14 @@ export type ObjectArgValues = Record<string, ArgValue<Arg>>
 export interface ApiFunction {
   fn: Function
   name: string
-  commentBlock: string
+  description: string | string[]
   generics?: React.ReactNode
   isGenerator?: boolean
   args: (EditorArg | Arg | ObjectArg)[]
-  returnType: React.ReactNode
+  returnValue: {
+    type: React.ReactNode
+    comment: string
+  }
 }
 
 export function useArgValues(args: (EditorArg | Arg | ObjectArg)[]) {

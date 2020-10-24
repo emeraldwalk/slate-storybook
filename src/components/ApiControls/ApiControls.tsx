@@ -10,14 +10,21 @@ import {
   ArgValue,
   Arg,
   ObjectArgValues,
+  EditorArg,
+  ObjectArg,
+  isObjectArg,
 } from './model'
 import ObjectArgControl from './ObjectArgControl'
 
 const componentCss = ({ code }: Theme) => css`
   background-color: ${code.backgroundColor};
   padding: 10px;
+  overflow-x: auto;
   .commentBlock {
     color: ${code.commentColor};
+  }
+  .paramToken {
+    color: ${code.paramColor};
   }
   .iteratorToken {
     color: ${code.separatorColor};
@@ -55,16 +62,35 @@ const ApiControls: React.FC<ApiControlsProps> = ({
 }) => {
   const {
     name,
-    commentBlock,
+    description,
     generics,
     isGenerator,
     args,
-    returnType,
+    returnValue,
   } = apiFunction
 
   return (
     <pre css={componentCss}>
-      <div className="commentBlock">{commentBlock}</div>
+      <div className="commentBlock">
+        {[
+          '/**',
+          (Array.isArray(description) ? description : [description]).map(
+            (d) => `\n * ${d}`
+          ),
+          '\n * ',
+          ...args.map((a) => paramComment(a)),
+          returnValue.comment ? (
+            <React.Fragment key="returnComment">
+              {'\n *\n *'}
+              <span className="paramToken"> @returns</span>
+              <span> {returnValue.comment}</span>
+            </React.Fragment>
+          ) : (
+            ''
+          ),
+          '\n */',
+        ]}
+      </div>
       {isGenerator ? <span className="iteratorToken">*</span> : null}
       <span className="functionNameToken">{name}</span>
       {generics ? <span className="genericsToken">{generics}</span> : null}
@@ -97,7 +123,7 @@ const ApiControls: React.FC<ApiControlsProps> = ({
             <ArgControl
               key={arg.name}
               arg={arg}
-              value={values[i] as ArgValue<Arg>}
+              value={values[i] as ArgValue<Exclude<Arg, EditorArg>>}
               onChange={(value) =>
                 onChange(
                   values
@@ -113,9 +139,28 @@ const ApiControls: React.FC<ApiControlsProps> = ({
         )}
       </div>
       <span className="separatorToken">): </span>
-      <span className="typeToken">{returnType}</span>
+      <span className="typeToken">{returnValue.type}</span>
     </pre>
   )
 }
 
 export default ApiControls
+
+function paramComment(
+  arg: EditorArg | Arg | ObjectArg,
+  prefix?: string
+): React.ReactNode {
+  const name = prefix ? `${prefix}.${arg.name}` : arg.name
+
+  return isObjectArg(arg) ? (
+    arg.args.map((a) => paramComment(a, name))
+  ) : (
+    <React.Fragment key={name}>
+      {'\n'}
+      <span> * </span>
+      <span className="paramToken">@param</span>
+      <span className="argToken"> {name}</span>
+      <span> {arg.comment}</span>
+    </React.Fragment>
+  )
+}

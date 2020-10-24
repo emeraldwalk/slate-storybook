@@ -6,9 +6,17 @@ export const editorApiFunctions: Record<string, ApiFunction> = {
   above: {
     fn: Editor.above,
     name: 'above',
-    commentBlock: '',
+    description: [
+      'Get the ancestor above a location in the document.',
+      '',
+      'If the location is a range, it will look for a common ancestor to both',
+      'the anchor and focus points.',
+    ],
     generics: '<T extends Ancestor>',
-    returnType: 'NodeEntry<T> | undefined',
+    returnValue: {
+      type: 'NodeEntry<T> | undefined',
+      comment: 'A [Node, Path] tuple for the first matching ancestor',
+    },
     args: [
       {
         argType: 'editor',
@@ -68,27 +76,20 @@ export const editorApiFunctions: Record<string, ApiFunction> = {
   nodes: {
     fn: Editor.nodes,
     name: 'nodes',
-    commentBlock: `/**
-   * Iterate through all of the nodes in the Editor.
-   *
-   * @param editor Editor containing the nodes to iterate
-   * @param options.at Location to constrain the list of nodes to. Defaults to editor.selection
-   * @param options.match Predicate function to filter the list of yielded nodes
-   * @param options.mode
-   * @param options.universal
-   * @param options.reverse
-   * @param options.voids
-   */`,
+    description: 'Iterate through all of the nodes in the Editor.',
     generics: '<T extends Node>',
     isGenerator: true,
-    returnType: 'Generator<NodeEntry<T>, void, undefined>',
+    returnValue: {
+      type: 'Generator<NodeEntry<T>, void, undefined>',
+      comment: 'Generator that yields [Node, Path] tuples',
+    },
     args: [
       {
         argType: 'editor',
         name: 'editor',
         type: 'Editor',
         isOptional: false,
-        comment: '',
+        comment: 'Editor containing the nodes to iterate',
       },
       {
         argType: 'object',
@@ -100,14 +101,15 @@ export const editorApiFunctions: Record<string, ApiFunction> = {
             name: 'at',
             type: 'Location | Span',
             isOptional: true,
-            comment: '',
+            comment:
+              'Location to constrain the list of nodes to. Defaults to editor.selection',
           },
           {
             argType: 'function',
             name: 'match',
             type: 'NodeMatch<T>',
             isOptional: true,
-            comment: '',
+            comment: 'Predicate function to filter the list of yielded nodes',
             options: [
               ['Editor.isEditor', Editor.isEditor],
               ['Element.isElement', Element.isElement],
