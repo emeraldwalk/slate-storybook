@@ -5,9 +5,10 @@ import React from 'react'
 import { Editable, RenderElementProps, RenderLeafProps } from 'slate-react'
 import { NodeSpecContainer, useNodeSpecContext } from '..'
 import { ApiControls } from '..'
-import { Theme } from '../../theme'
+import { asArray } from '../../util/data'
 import { filterToLocations } from '../../util/slateUtil'
 import { ApiFunction, useArgValues } from '../ApiControls/model'
+import ApiResult from '../ApiResult/ApiResult'
 
 const componentCss = css``
 
@@ -27,7 +28,7 @@ const ApiView: React.FC<ApiViewProps> = ({
   const { setHighlightLocations } = useNodeSpecContext()
 
   const [values, setValues] = useArgValues(apiFunction.args)
-  const [result, setResult] = React.useState<unknown>()
+  const [result, setResult] = React.useState<unknown[]>([])
   const [showResult, setShowResult] = React.useState(false)
 
   const intervalRef = React.useRef<number>()
@@ -36,14 +37,7 @@ const ApiView: React.FC<ApiViewProps> = ({
     (event: React.MouseEvent) => {
       event.preventDefault()
 
-      let result = apiFunction.fn(...values)
-      if (
-        result &&
-        !Array.isArray(result) &&
-        typeof result[Symbol.iterator] === 'function'
-      ) {
-        result = [...result]
-      }
+      let result = asArray(apiFunction.fn(...values))
 
       setResult(result)
       setShowResult(true)
@@ -78,16 +72,7 @@ const ApiView: React.FC<ApiViewProps> = ({
       {showResult && (
         <div>
           <h2>Result</h2>
-          <pre
-            css={({ code, textInverseColor }: Theme) => css`
-              background-color: ${code.backgroundColor};
-              color: ${textInverseColor};
-              max-height: 200px;
-              overflow-y: auto;
-            `}
-          >
-            {JSON.stringify(result, undefined, 2) ?? 'undefined'}
-          </pre>
+          <ApiResult data={result} />
         </div>
       )}
       <div

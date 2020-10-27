@@ -1,8 +1,18 @@
 import { css } from '@emotion/core'
 import { create, themes } from '@storybook/theming'
 
+const color = {
+  node: {
+    backgroundColor: '#1E1E1E',
+    element: '#569CD6',
+    text: '#4EC9B0',
+    stringColor: '#CE9178',
+  },
+} as const
+
 const theme = {
   ...create(themes.normal),
+  color,
   placeholderColor: '#757575',
   code: {
     commentColor: '#6A9955',
@@ -13,7 +23,7 @@ const theme = {
     typeColor: '#4EC9B0',
     functionNameColor: '#DCDCAA',
   },
-}
+} as const
 
 export default theme
 

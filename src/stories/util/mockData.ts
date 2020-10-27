@@ -11,11 +11,35 @@ export const emptySlateValue = (): Node[] => {
 export const mockParagraphsAndList = (): Node[] => [
   {
     type: 'paragraph',
-    children: [{ text: 'Aaa aaa aaa.' }],
+    children: [
+      {
+        text:
+          'This is generic content showcasing various Slate data model features. Text formatting such as ',
+      },
+      {
+        bold: true,
+        text: 'bold',
+      },
+      {
+        text: ' and ',
+      },
+      {
+        italic: true,
+        text: 'italics',
+      },
+      {
+        text: 'are implemented as "marks" on Text nodes.',
+      },
+    ],
   },
   {
     type: 'paragraph',
-    children: [{ text: 'Bbb bbb bbb.' }],
+    children: [
+      {
+        text:
+          'Differing block types such as lists and paragraphs are defined by attributes on Element nodes.',
+      },
+    ],
   },
   {
     type: 'paragraph',
