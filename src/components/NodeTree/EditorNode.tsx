@@ -7,6 +7,9 @@ import { PathView } from '..'
 
 const componentCss = css`
   display: flex;
+  > * {
+    margin-right: 0.3em;
+  }
 `
 
 export interface EditorNodeProps {

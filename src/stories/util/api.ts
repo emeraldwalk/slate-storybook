@@ -124,7 +124,8 @@ export const editorApiFunctions: Record<string, ApiFunction> = {
             name: 'mode',
             type: `'all' | 'highest' | 'lowest'`,
             isOptional: true,
-            comment: '',
+            comment:
+              'Further constrains the yielded node set to a single level of the tree',
             options: ['all', 'highest', 'lowest'],
           },
           {
@@ -132,7 +133,8 @@ export const editorApiFunctions: Record<string, ApiFunction> = {
             name: 'universal',
             type: 'boolean',
             isOptional: true,
-            comment: '',
+            comment:
+              'Setting this to true means that all Text nodes that are included in the at + mode constraints must also satisfy the match constraint',
             options: [true, false],
           },
           {
@@ -140,7 +142,8 @@ export const editorApiFunctions: Record<string, ApiFunction> = {
             name: 'reverse',
             type: 'boolean',
             isOptional: true,
-            comment: '',
+            comment:
+              'everse the order of nodes yielded across the current level',
             options: [true, false],
           },
           {
@@ -148,7 +151,7 @@ export const editorApiFunctions: Record<string, ApiFunction> = {
             name: 'voids',
             type: 'boolean',
             isOptional: true,
-            comment: '',
+            comment: 'Whether or not to include void elements in the result',
             options: [true, false],
           },
         ],

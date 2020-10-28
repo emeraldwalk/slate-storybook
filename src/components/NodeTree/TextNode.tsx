@@ -11,6 +11,9 @@ const componentCss = ({ color: { node } }: Theme) => css`
   i {
     color: ${node.text};
   }
+  > * {
+    margin-right: 0.3em;
+  }
 `
 
 const propsCss = ({ textInverseColor }: Theme) => css`

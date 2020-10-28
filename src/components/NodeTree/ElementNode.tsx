@@ -9,6 +9,9 @@ import { Theme } from '../../theme'
 const componentCss = ({ color: { node } }: Theme) => css`
   color: ${node.element};
   display: flex;
+  > * {
+    margin-right: 0.3em;
+  }
 `
 
 const propsCss = ({ textInverseColor }: Theme) => css`

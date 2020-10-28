@@ -136,5 +136,13 @@ function initialSlateValue() {
         },
       ],
     },
+    {
+      type: 'paragraph',
+      children: [
+        {
+          text: 'Click "run" to see the results of the API call.',
+        },
+      ],
+    },
   ]
 }

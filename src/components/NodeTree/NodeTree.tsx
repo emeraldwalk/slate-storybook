@@ -10,6 +10,7 @@ const componentCss = ({ textInverseColor, color: { node } }: Theme) =>
   css`
     background-color: ${node.backgroundColor};
     color: ${textInverseColor};
+    font-size: 0.9em;
   `
 
 export interface NodeTreeProps {

@@ -29,7 +29,7 @@ const ApiView: React.FC<ApiViewProps> = ({
 
   const [values, setValues] = useArgValues(apiFunction.args)
   const [result, setResult] = React.useState<unknown[]>([])
-  const [showResult, setShowResult] = React.useState(false)
+  const [runId, setRunId] = React.useState(0)
 
   const intervalRef = React.useRef<number>()
 
@@ -40,7 +40,7 @@ const ApiView: React.FC<ApiViewProps> = ({
       let result = asArray(apiFunction.fn(...values))
 
       setResult(result)
-      setShowResult(true)
+      setRunId((id) => id + 1)
       setHighlightLocations([])
 
       if (Array.isArray(result)) {
@@ -69,12 +69,12 @@ const ApiView: React.FC<ApiViewProps> = ({
         onChange={setValues}
       />
       <button onClick={onClick}>Run</button>
-      {showResult && (
+      <h2>Result</h2>
+      {runId ? (
         <div>
-          <h2>Result</h2>
-          <ApiResult data={result} />
+          <ApiResult runId={String(runId)} data={result} />
         </div>
-      )}
+      ) : null}
       <div
         css={css`
           display: flex;
