@@ -62,24 +62,26 @@ const ApiView: React.FC<ApiViewProps> = ({
 
   return (
     <div css={componentCss}>
-      <h2>{title}</h2>
+      <h2>Editor</h2>
+      <Editable
+        css={componentCss}
+        renderElement={renderElement}
+        renderLeaf={renderLeaf}
+      />
+
+      <h2>API: {title}</h2>
       <ApiControls
         apiFunction={apiFunction}
         values={values}
         onChange={setValues}
       />
       <button onClick={onClick}>Run</button>
-      <h2>Result</h2>
-      {runId ? (
-        <div>
-          <ApiResult runId={String(runId)} data={result} />
-        </div>
-      ) : null}
+
       <div
         css={css`
           display: flex;
           > * {
-            flex-grow: 1;
+            flex: 1 1 50%;
           }
           @media (max-width: 768px) {
             flex-direction: column;
@@ -90,12 +92,12 @@ const ApiView: React.FC<ApiViewProps> = ({
         `}
       >
         <div>
-          <h2>Editor</h2>
-          <Editable
-            css={componentCss}
-            renderElement={renderElement}
-            renderLeaf={renderLeaf}
-          />
+          <h2>Results</h2>
+          {runId ? (
+            <div>
+              <ApiResult runId={String(runId)} data={result} />
+            </div>
+          ) : null}
         </div>
         <div>
           <h2>Data Model</h2>

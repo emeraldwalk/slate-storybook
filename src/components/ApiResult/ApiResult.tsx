@@ -25,7 +25,7 @@ const ApiResult: React.FC<ApiResultProps> = ({ data, runId }) => {
         css={({ code, textInverseColor }: Theme) => css`
           background-color: ${code.backgroundColor};
           color: ${textInverseColor};
-          max-height: 200px;
+          max-height: 400px;
           overflow-y: auto;
         `}
       >
