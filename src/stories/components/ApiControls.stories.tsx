@@ -22,7 +22,7 @@ export default {
 } as Meta
 
 const Template: Story<ApiControlsProps> = ({ apiFunction, onChange }) => {
-  const [values, setValues] = useArgValues(apiFunction.args)
+  const { values, setValues } = useArgValues(apiFunction.args)
   const onChangeInternal = React.useCallback(
     (values) => {
       setValues(values)
