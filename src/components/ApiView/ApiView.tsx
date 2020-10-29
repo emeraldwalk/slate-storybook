@@ -22,20 +22,27 @@ export interface ApiViewProps {
   title: string
   renderElement: (props: RenderElementProps) => JSX.Element
   renderLeaf: (props: RenderLeafProps) => JSX.Element
-  apiFunction: ApiFunction
+  initialApiFunction: ApiFunction
+  apiFunctions: Record<string, ApiFunction>
 }
 
 const ApiView: React.FC<ApiViewProps> = ({
   title,
   renderElement,
   renderLeaf,
-  apiFunction,
+  initialApiFunction,
+  apiFunctions,
 }) => {
   const editor = useSlate()
   const { selection } = editor
   const { setHighlightLocations } = useNodeSpecContext()
 
-  const [values, setValues] = useArgValues(apiFunction.args)
+  const apiFunctionList = React.useMemo(
+    () => Object.keys(apiFunctions).map((name) => apiFunctions[name]),
+    [apiFunctions]
+  )
+  const [apiFunction, setApiFunction] = React.useState(initialApiFunction)
+  const { values, setValues, resetValues } = useArgValues(apiFunction.args)
   const [result, setResult] = React.useState<unknown[]>([])
   const [runId, setRunId] = React.useState(0)
 
@@ -78,10 +85,17 @@ const ApiView: React.FC<ApiViewProps> = ({
     [apiFunction, values, selection, setHighlightLocations]
   )
 
+  const onApiFunctionChange = React.useCallback(
+    ({ currentTarget }: React.ChangeEvent<HTMLSelectElement>) => {
+      const apiFunction = apiFunctions[currentTarget.value]
+      setApiFunction(apiFunction)
+      resetValues(apiFunction.args)
+    },
+    [apiFunctions, resetValues]
+  )
+
   return (
     <div css={componentCss}>
-      <h1>{title}</h1>
-
       <h2>Editor</h2>
       <Editable
         css={componentCss}
@@ -89,7 +103,14 @@ const ApiView: React.FC<ApiViewProps> = ({
         renderLeaf={renderLeaf}
       />
 
-      <h2>API: {title}</h2>
+      <h2>API</h2>
+      <select value={apiFunction.name} onChange={onApiFunctionChange}>
+        {apiFunctionList.map((fn) => (
+          <option key={fn.name} value={fn.name}>
+            Editor.{fn.name}
+          </option>
+        ))}
+      </select>
       <ApiControls
         css={css`
           font-size: 0.8em;

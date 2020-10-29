@@ -68,23 +68,37 @@ export interface ApiFunction {
 export function useArgValues(args: (EditorArg | Arg | ObjectArg)[]) {
   const editor = useSlate()
 
+  const initValues = React.useCallback(
+    (args: (EditorArg | Arg | ObjectArg)[]) => {
+      return args.map((arg) => {
+        if (arg.argType === 'editor') {
+          return editor
+        }
+
+        if (arg.argType === 'object') {
+          return {}
+        }
+
+        return undefined
+      })
+    },
+    [editor]
+  )
+
   const [values, setValues] = React.useState<
     (ArgValue<Arg> | ObjectArgValues | undefined)[]
   >(() => {
-    return args.map((arg) => {
-      if (arg.argType === 'editor') {
-        return editor
-      }
-
-      if (arg.argType === 'object') {
-        return {}
-      }
-
-      return undefined
-    })
+    return initValues(args)
   })
 
-  return [values, setValues] as const
+  const resetValues = React.useCallback(
+    (args: (EditorArg | Arg | ObjectArg)[]) => {
+      setValues(initValues(args))
+    },
+    [initValues]
+  )
+
+  return { values, setValues, resetValues } as const
 }
 
 export function isStringArg(arg: Arg): arg is StringArg {

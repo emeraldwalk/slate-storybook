@@ -24,19 +24,29 @@ const EditorInterfaceTemplate: Story<ApiViewProps> = (args) => (
   <ApiView {...args} />
 )
 
-export const above = createStory(editorApiFunctions.above)
-export const addMark = createStory(editorApiFunctions.addMark)
-export const nodes = createStory(editorApiFunctions.nodes)
-export const removeMark = createStory(editorApiFunctions.removeMark)
+export const above = createStory(editorApiFunctions.above, editorApiFunctions)
+export const addMark = createStory(
+  editorApiFunctions.addMark,
+  editorApiFunctions
+)
+export const nodes = createStory(editorApiFunctions.nodes, editorApiFunctions)
+export const removeMark = createStory(
+  editorApiFunctions.removeMark,
+  editorApiFunctions
+)
 
-function createStory(apiFunction: ApiFunction) {
+function createStory(
+  initialApiFunction: ApiFunction,
+  apiFunctions: Record<string, ApiFunction>
+) {
   const story = EditorInterfaceTemplate.bind({})
-  story.storyName = apiFunction.name
+  story.storyName = initialApiFunction.name
   story.args = {
-    title: `Editor.${apiFunction.name}`,
+    title: `Editor.${initialApiFunction.name}`,
     renderElement,
     renderLeaf,
-    apiFunction,
+    initialApiFunction,
+    apiFunctions,
   }
   story.parameters = {
     initialSlateValue: initialSlateValue(),

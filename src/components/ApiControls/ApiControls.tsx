@@ -70,7 +70,6 @@ const ApiControls: React.FC<ApiControlsProps> = ({
     args,
     returnValue,
   } = apiFunction
-
   return (
     <pre css={componentCss} className={className}>
       <div className="commentBlock">
