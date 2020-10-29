@@ -13,13 +13,14 @@ const componentCss = css`
 `
 
 export interface EditorNodeProps {
+  className?: string
   node: Editor
   path: Path
 }
 
-const EditorNode: React.FC<EditorNodeProps> = ({ path }) => {
+const EditorNode: React.FC<EditorNodeProps> = ({ className, path }) => {
   return (
-    <div title="Editor Node" css={componentCss}>
+    <div title="Editor Node" css={componentCss} className={className}>
       <i className="mdi mdi-alpha-e-circle-outline"></i>
       <PathView path={path} />
     </div>

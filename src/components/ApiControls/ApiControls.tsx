@@ -50,12 +50,14 @@ const componentCss = ({ code }: Theme) => css`
 `
 
 export interface ApiControlsProps {
+  className?: string
   apiFunction: ApiFunction
   values: (ArgValue<Arg> | ObjectArgValues | undefined)[]
   onChange: (values: (ArgValue<Arg> | ObjectArgValues | undefined)[]) => void
 }
 
 const ApiControls: React.FC<ApiControlsProps> = ({
+  className,
   apiFunction,
   values,
   onChange,
@@ -70,7 +72,7 @@ const ApiControls: React.FC<ApiControlsProps> = ({
   } = apiFunction
 
   return (
-    <pre css={componentCss}>
+    <pre css={componentCss} className={className}>
       <div className="commentBlock">
         {[
           '/**',

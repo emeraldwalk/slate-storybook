@@ -2,13 +2,19 @@
 import { css, jsx } from '@emotion/core'
 
 import React from 'react'
-import { Editable, RenderElementProps, RenderLeafProps } from 'slate-react'
-import { NodeSpecContainer, useNodeSpecContext } from '..'
+import {
+  Editable,
+  RenderElementProps,
+  RenderLeafProps,
+  useSlate,
+} from 'slate-react'
+import { useNodeSpecContext } from '..'
 import { ApiControls } from '..'
 import { asArray } from '../../util/data'
 import { filterToLocations } from '../../util/slateUtil'
 import { ApiFunction, useArgValues } from '../ApiControls/model'
 import ApiResult from '../ApiResult/ApiResult'
+import NodeTree from '../NodeTree/NodeTree'
 
 const componentCss = css``
 
@@ -25,6 +31,8 @@ const ApiView: React.FC<ApiViewProps> = ({
   renderLeaf,
   apiFunction,
 }) => {
+  const editor = useSlate()
+  const { selection } = editor
   const { setHighlightLocations } = useNodeSpecContext()
 
   const [values, setValues] = useArgValues(apiFunction.args)
@@ -32,6 +40,12 @@ const ApiView: React.FC<ApiViewProps> = ({
   const [runId, setRunId] = React.useState(0)
 
   const intervalRef = React.useRef<number>()
+
+  React.useEffect(() => {
+    if (selection) {
+      setHighlightLocations([selection])
+    }
+  }, [selection, setHighlightLocations])
 
   const onClick = React.useCallback(
     (event: React.MouseEvent) => {
@@ -41,10 +55,14 @@ const ApiView: React.FC<ApiViewProps> = ({
 
       setResult(result)
       setRunId((id) => id + 1)
-      setHighlightLocations([])
+      setHighlightLocations(selection ? [selection] : [])
 
       if (Array.isArray(result)) {
         const locations = filterToLocations(result)
+        if (selection) {
+          locations.unshift(selection)
+        }
+
         window.clearInterval(intervalRef.current)
 
         let i = 0
@@ -57,11 +75,13 @@ const ApiView: React.FC<ApiViewProps> = ({
         }, 500)
       }
     },
-    [apiFunction, values, setHighlightLocations]
+    [apiFunction, values, selection, setHighlightLocations]
   )
 
   return (
     <div css={componentCss}>
+      <h1>{title}</h1>
+
       <h2>Editor</h2>
       <Editable
         css={componentCss}
@@ -71,6 +91,9 @@ const ApiView: React.FC<ApiViewProps> = ({
 
       <h2>API: {title}</h2>
       <ApiControls
+        css={css`
+          font-size: 0.8em;
+        `}
         apiFunction={apiFunction}
         values={values}
         onChange={setValues}
@@ -101,7 +124,7 @@ const ApiView: React.FC<ApiViewProps> = ({
         </div>
         <div>
           <h2>Data Model</h2>
-          <NodeSpecContainer />
+          <NodeTree node={editor} showHighlightedLocations={true} />
         </div>
       </div>
     </div>

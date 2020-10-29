@@ -5,6 +5,8 @@ import React from 'react'
 import { Editor, Node, Element, Text, Path } from 'slate'
 import { EditorNode, ElementNode, TextNode } from '..'
 import { Theme } from '../../theme'
+import { useNodeSpecContext } from '../NodeSpec'
+import TextNodeContent from './TextNodeContent'
 
 const componentCss = ({ textInverseColor, color: { node } }: Theme) =>
   css`
@@ -13,11 +15,17 @@ const componentCss = ({ textInverseColor, color: { node } }: Theme) =>
     font-size: 0.9em;
   `
 
+const selectedNodeCss = (theme: Theme) => css`
+  background-color: ${theme.barSelectedColor};
+  color: ${theme.textInverseColor};
+`
+
 export interface NodeTreeProps {
   className?: string
   node: Node
   path?: Path
   initialIsExpanded?: boolean
+  showHighlightedLocations?: boolean
 }
 
 const NodeTree: React.FC<NodeTreeProps> = ({
@@ -25,20 +33,29 @@ const NodeTree: React.FC<NodeTreeProps> = ({
   node,
   path = [],
   initialIsExpanded = true,
+  showHighlightedLocations,
 }) => {
   const [isExpanded, setIsExpanded] = React.useState(initialIsExpanded)
   const chevronIconClass = isExpanded
     ? 'mdi mdi-chevron-down'
     : 'mdi mdi-chevron-right'
 
+  const { highlightPaths } = useNodeSpecContext()
+  const isSelected =
+    showHighlightedLocations && highlightPaths.find((p) => Path.equals(p, path))
+
+  const nodeCss = (theme: Theme) => css`
+    ${isSelected ? selectedNodeCss(theme) : undefined}
+  `
+
   let nodeView: React.ReactNode = null
 
   if (Editor.isEditor(node)) {
-    nodeView = <EditorNode node={node} path={path} />
+    nodeView = <EditorNode css={nodeCss} node={node} path={path} />
   } else if (Element.isElement(node)) {
-    nodeView = <ElementNode node={node} path={path} />
+    nodeView = <ElementNode css={nodeCss} node={node} path={path} />
   } else if (Text.isText(node)) {
-    nodeView = <TextNode node={node} path={path} />
+    nodeView = <TextNode css={nodeCss} node={node} path={path} />
   }
 
   return (
@@ -61,12 +78,15 @@ const NodeTree: React.FC<NodeTreeProps> = ({
         >
           {Text.isText(node) ? (
             <div
-              css={({ color: { node } }: Theme) => css`
-                color: ${node.stringColor};
+              css={(theme: Theme) => css`
+                color: ${theme.color.node.stringColor};
                 padding-left: 20px;
+                ${isSelected ? selectedNodeCss(theme) : undefined}
               `}
             >
-              &quot;{node.text}&quot;
+              &quot;
+              <TextNodeContent node={node} path={path} />
+              &quot;
             </div>
           ) : (
             node.children.map((child, i) => {
@@ -77,6 +97,7 @@ const NodeTree: React.FC<NodeTreeProps> = ({
                   node={child}
                   path={childPath}
                   initialIsExpanded={initialIsExpanded}
+                  showHighlightedLocations={showHighlightedLocations}
                 />
               )
             })

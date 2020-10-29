@@ -15,6 +15,7 @@ import {
 } from 'slate'
 import { useSlate } from 'slate-react'
 import { Theme } from '../../theme'
+import { siftLocations } from '../../util/slateUtil'
 
 const componentCss = css`
   display: flex;
@@ -181,30 +182,6 @@ const NodeSpec: React.FC<NodeSpecProps> = ({
 }
 
 export default NodeSpec
-
-function siftLocations(
-  locations: Location[]
-): { paths: Path[]; points: Point[]; ranges: Range[] } {
-  const paths: Path[] = []
-  const points: Point[] = []
-  const ranges: Range[] = []
-
-  for (const location of locations) {
-    if (Path.isPath(location)) {
-      paths.push(location)
-    } else if (Point.isPoint(location)) {
-      points.push(location)
-    } else if (Range.isRange(location)) {
-      ranges.push(location)
-    }
-  }
-
-  return {
-    paths,
-    points,
-    ranges,
-  }
-}
 
 function nodeTokens(
   [node, path]: NodeEntry<Node>,

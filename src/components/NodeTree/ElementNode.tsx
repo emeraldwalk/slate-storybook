@@ -19,13 +19,14 @@ const propsCss = ({ textInverseColor }: Theme) => css`
 `
 
 export interface ElementNodeProps {
+  className?: string
   node: Element
   path: Path
 }
 
-const ElementNode: React.FC<ElementNodeProps> = ({ node, path }) => {
+const ElementNode: React.FC<ElementNodeProps> = ({ className, node, path }) => {
   return (
-    <div title="Element Node" css={componentCss}>
+    <div title="Element Node" css={componentCss} className={className}>
       <i className="mdi mdi-alpha-e-circle-outline"></i>
       <PathView path={path} />
       <NodeProps css={propsCss} node={node} />

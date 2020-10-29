@@ -24,32 +24,10 @@ const EditorInterfaceTemplate: Story<ApiViewProps> = (args) => (
   <ApiView {...args} />
 )
 
-export const nodes = createStory(editorApiFunctions.nodes)
 export const above = createStory(editorApiFunctions.above)
-
-// export const editor = EditorInterfaceTemplate.bind({})
-// editor.args = {
-//   renderElement,
-//   renderLeaf,
-//   apiFunction: editorApiFunctions[0],
-// }
-// editor.parameters = {
-//   initialSlateValue: initialSlateValue(),
-//   actions: {
-//     disable: true,
-//   },
-//   controls: {
-//     disable: true,
-//   },
-//   previewTabs: {
-//     'storybook/docs/panel': {
-//       hidden: true,
-//     },
-//     'sourceCodeAddon/panel': {
-//       hidden: true,
-//     },
-//   },
-// }
+export const addMark = createStory(editorApiFunctions.addMark)
+export const nodes = createStory(editorApiFunctions.nodes)
+export const removeMark = createStory(editorApiFunctions.removeMark)
 
 function createStory(apiFunction: ApiFunction) {
   const story = EditorInterfaceTemplate.bind({})

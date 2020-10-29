@@ -73,6 +73,42 @@ export const editorApiFunctions: Record<string, ApiFunction> = {
       },
     ],
   },
+  addMark: {
+    fn: Editor.addMark,
+    name: 'addMark',
+    description: [
+      'Add a custom property to the leaf text nodes in the current selection.',
+      '',
+      'If the selection is currently collapsed, the marks will be added to the',
+      '`editor.marks` property instead, and applied when text is inserted next.',
+    ],
+    returnValue: {
+      type: 'void',
+      comment: '',
+    },
+    args: [
+      {
+        argType: 'editor',
+        name: 'editor',
+        type: 'Editor',
+        comment: 'Editor instance that will receive the mark',
+      },
+      {
+        argType: 'string',
+        name: 'key',
+        type: 'string',
+        comment: 'Property key that will be added to the matching leaf nodes',
+        options: ['bold', 'italic'],
+      },
+      {
+        argType: 'boolean',
+        name: 'value',
+        type: 'any',
+        comment: '',
+        options: [true, false],
+      },
+    ],
+  },
   nodes: {
     fn: Editor.nodes,
     name: 'nodes',
@@ -155,6 +191,36 @@ export const editorApiFunctions: Record<string, ApiFunction> = {
             options: [true, false],
           },
         ],
+      },
+    ],
+  },
+  removeMark: {
+    fn: Editor.removeMark,
+    name: 'removeMark',
+    description: [
+      'Remove a custom property from all of the leaf text nodes in the current',
+      'selection.',
+      '',
+      'If the selection is currently collapsed, the removal will be stored on',
+      '`editor.marks` and applied to the text inserted next.',
+    ],
+    returnValue: {
+      type: 'void',
+      comment: '',
+    },
+    args: [
+      {
+        argType: 'editor',
+        name: 'editor',
+        type: 'Editor',
+        comment: 'Editor instance that will have the mark removed',
+      },
+      {
+        argType: 'string',
+        name: 'key',
+        type: 'string',
+        comment: 'Property key that will be removed',
+        options: ['bold', 'italic'],
       },
     ],
   },

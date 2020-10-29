@@ -21,13 +21,14 @@ const propsCss = ({ textInverseColor }: Theme) => css`
 `
 
 export interface TextNodeProps {
+  className?: string
   node: Text
   path: Path
 }
 
-const TextNode: React.FC<TextNodeProps> = ({ node, path }) => {
+const TextNode: React.FC<TextNodeProps> = ({ className, node, path }) => {
   return (
-    <div title="Text Node" css={componentCss}>
+    <div title="Text Node" css={componentCss} className={className}>
       <i className="mdi mdi-alpha-t-circle-outline"></i>
       <PathView
         css={({ color: { node } }: Theme) =>

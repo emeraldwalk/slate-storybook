@@ -30,6 +30,9 @@ export type { ElementNodeProps } from './NodeTree/ElementNode'
 export { default as TextNode } from './NodeTree/TextNode'
 export type { TextNodeProps } from './NodeTree/TextNode'
 
+export { default as TextNodeContent } from './NodeTree/TextNodeContent'
+export type { TextNodeContentProps } from './NodeTree/TextNodeContent'
+
 export { default as NodeProps } from './NodeTree/NodeProps'
 export type { NodePropsProps } from './NodeTree/NodeProps'
 

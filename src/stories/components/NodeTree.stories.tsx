@@ -2,7 +2,7 @@ import React from 'react'
 import { Story, Meta } from '@storybook/react'
 import { NodeTree, NodeTreeProps } from '../../components'
 import { mockParagraphsAndList } from '../util/mockData'
-import { SlateContextDecorator } from '../util'
+import { NodeSpecContextDecorator } from '../util'
 import { useSlate } from 'slate-react'
 
 export default {
@@ -11,9 +11,23 @@ export default {
   decorators: [
     (Story, context) => {
       return (
-        <SlateContextDecorator
+        <NodeSpecContextDecorator
           story={Story}
           initialSlateValue={context.parameters.initialSlateValue}
+          initialHighlightLocations={[
+            {
+              anchor: {
+                path: [0, 0],
+                offset: 5,
+              },
+              focus: {
+                path: [3, 2, 0],
+                offset: 2,
+              },
+            },
+            [1, 0],
+            [5],
+          ]}
         />
       )
     },

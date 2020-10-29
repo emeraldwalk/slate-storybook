@@ -32,8 +32,13 @@ export type Theme = typeof theme
 export const globalStyles = css`
   body {
     font-family: 'Open Sans';
+    font-size: 16px;
   }
   * {
     box-sizing: border-box;
+  }
+  input,
+  select {
+    font-size: 1em; // stop zoom on IOS
   }
 `

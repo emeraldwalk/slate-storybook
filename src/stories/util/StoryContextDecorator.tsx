@@ -21,13 +21,12 @@ export const SlateContextDecorator: React.FC<StoryDecoratorProps> = ({
   )
 }
 
-export const NodeSpecContextDecorator: React.FC<StoryDecoratorProps> = ({
-  story: Story,
-  initialSlateValue,
-}) => {
+export const NodeSpecContextDecorator: React.FC<
+  StoryDecoratorProps & { initialHighlightLocations?: Location[] }
+> = ({ story: Story, initialSlateValue, initialHighlightLocations = [] }) => {
   const [highlightLocations, setHighlightLocations] = React.useState<
     Location[]
-  >([])
+  >(initialHighlightLocations)
 
   return (
     <SlateContext initialValue={initialSlateValue ?? emptySlateValue}>
