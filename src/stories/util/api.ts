@@ -232,7 +232,10 @@ export const editorApiFunctions: Record<string, ApiFunction> = {
             name: 'edge',
             type: 'string',
             isOptional: true,
-            comment: '',
+            comment: [
+              'Return the Path to the start or end leaf node for the',
+              'tree determined by the `at` and `options.depth` args',
+            ],
             options: ['start', 'end'],
           },
         ],

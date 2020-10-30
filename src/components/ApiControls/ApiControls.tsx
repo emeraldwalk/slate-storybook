@@ -158,7 +158,7 @@ function paramComment(
     <React.Fragment key={name}>
       {(typeof arg.comment === 'string' ? [arg.comment] : arg.comment).map(
         (comment, i) => (
-          <React.Fragment>
+          <React.Fragment key={`${comment}-${i}`}>
             {'\n'}
             <span> * </span>
             {i === 0 ? <span className="paramToken">@param</span> : null}
