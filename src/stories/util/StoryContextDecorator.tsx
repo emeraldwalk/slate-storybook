@@ -7,15 +7,20 @@ import { emptySlateValue } from './mockData'
 
 export interface StoryDecoratorProps {
   story: Story
-  initialSlateValue?: () => Node[]
+  initialSlateValue?: Node[] | (() => Node[])
+  onChange?: (value: Node[]) => void
 }
 
 export const SlateContextDecorator: React.FC<StoryDecoratorProps> = ({
   story: Story,
   initialSlateValue,
+  onChange,
 }) => {
   return (
-    <SlateContext initialValue={initialSlateValue ?? emptySlateValue}>
+    <SlateContext
+      initialValue={initialSlateValue ?? emptySlateValue}
+      onChange={onChange}
+    >
       <Story />
     </SlateContext>
   )
@@ -23,13 +28,21 @@ export const SlateContextDecorator: React.FC<StoryDecoratorProps> = ({
 
 export const NodeSpecContextDecorator: React.FC<
   StoryDecoratorProps & { initialHighlightLocations?: Location[] }
-> = ({ story: Story, initialSlateValue, initialHighlightLocations = [] }) => {
+> = ({
+  story: Story,
+  initialSlateValue,
+  onChange,
+  initialHighlightLocations = [],
+}) => {
   const [highlightLocations, setHighlightLocations] = React.useState<
     Location[]
   >(initialHighlightLocations)
 
   return (
-    <SlateContext initialValue={initialSlateValue ?? emptySlateValue}>
+    <SlateContext
+      initialValue={initialSlateValue ?? emptySlateValue}
+      onChange={onChange}
+    >
       <NodeSpecContextProvider
         value={{ highlightLocations, setHighlightLocations }}
       >

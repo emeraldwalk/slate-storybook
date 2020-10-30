@@ -14,18 +14,28 @@ const componentCss = css`
 
 export interface SlateContextProps {
   initialValue: Node[] | (() => Node[])
+  onChange?: (value: Node[]) => void
 }
 
 const SlateContext: React.FC<SlateContextProps> = ({
   initialValue,
   children,
+  onChange,
 }) => {
   const editor = React.useMemo(() => withReact(createEditor()), [])
   const [value, setValue] = React.useState<Node[]>(initialValue)
 
+  const onChangeInternal = React.useCallback(
+    (value: Node[]) => {
+      setValue(value)
+      onChange?.(value)
+    },
+    [onChange]
+  )
+
   return (
     <div css={componentCss}>
-      <Slate editor={editor} value={value} onChange={setValue}>
+      <Slate editor={editor} value={value} onChange={onChangeInternal}>
         {children}
       </Slate>
     </div>

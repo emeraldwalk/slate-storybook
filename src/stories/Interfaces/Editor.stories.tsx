@@ -1,10 +1,13 @@
 import React from 'react'
 import { Story, Meta } from '@storybook/react'
+import { Node } from 'slate'
 import { NodeSpecContextDecorator } from '../util'
 import { renderElement, renderLeaf } from './render'
 import { ApiView, ApiViewProps } from '../../components'
 import { editorApiFunctions } from '../util/api'
 import { ApiFunction } from '../../components/ApiControls/model'
+
+let persistentValue: Node[] | undefined = undefined
 
 export default {
   title: 'Interfaces/Editor',
@@ -13,7 +16,12 @@ export default {
       return (
         <NodeSpecContextDecorator
           story={Story}
-          initialSlateValue={context.parameters.initialSlateValue}
+          initialSlateValue={
+            persistentValue ?? context.parameters.initialSlateValue
+          }
+          onChange={(value) => {
+            persistentValue = value
+          }}
         />
       )
     },
@@ -49,7 +57,7 @@ function createStory(
     apiFunctions,
   }
   story.parameters = {
-    initialSlateValue: initialSlateValue(),
+    initialSlateValue,
     actions: {
       disable: true,
     },
