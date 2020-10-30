@@ -2,8 +2,14 @@
 import { css, jsx } from '@emotion/core'
 
 import React from 'react'
-import { createEditor, Node, NodeEntry, Range } from 'slate'
-import { Editable, Slate, withReact } from 'slate-react'
+import { createEditor, Node, NodeEntry, Range, Text } from 'slate'
+import {
+  DefaultLeaf,
+  Editable,
+  RenderLeafProps,
+  Slate,
+  withReact,
+} from 'slate-react'
 import SourceLink from '../SourceLink'
 import { useConsoleRef } from './useConsoleRef.hook'
 
@@ -38,7 +44,7 @@ const EditorWithDecorations: React.FC<EditorWithDecorationsProps> = ({
 }) => {
   /** Setup logging */
   const { logToConsole, clearConsole, Console } = useConsoleRef()
-  logToConsole('render')
+  logToConsole('render component')
 
   /** If we change the initialValue in Storybook controls, reset things */
   React.useEffect(() => {
@@ -53,9 +59,33 @@ const EditorWithDecorations: React.FC<EditorWithDecorationsProps> = ({
     ([node, path]: NodeEntry<Node>) => {
       const ranges: Range[] = []
 
-      logToConsole(`${JSON.stringify(path)} "${Node.string(node)}"`)
+      if (Text.isText(node)) {
+        logToConsole(`decorate: ${JSON.stringify(path)} "${Node.string(node)}"`)
+
+        // testing 2 arbitrary decorations on different ranges
+        ranges.push({
+          anchor: { path, offset: 0 },
+          focus: { path, offset: node.text.length },
+          isAny: true,
+        })
+        ranges.push({
+          anchor: { path, offset: 0 },
+          focus: { path, offset: 1 },
+          isFirst: 'Y',
+        })
+      } else {
+        logToConsole(`decorate: ${JSON.stringify(path)}`)
+      }
 
       return ranges
+    },
+    [logToConsole]
+  )
+
+  const renderLeaf = React.useCallback(
+    (props: RenderLeafProps) => {
+      logToConsole(`renderLeaf: ${JSON.stringify(props.leaf)}`)
+      return <DefaultLeaf {...props} />
     },
     [logToConsole]
   )
@@ -76,6 +106,7 @@ const EditorWithDecorations: React.FC<EditorWithDecorationsProps> = ({
           decorate={decorate}
           spellCheck={false}
           placeholder="Type to see when decorate function is called..."
+          renderLeaf={renderLeaf}
         />
       </Slate>
 
