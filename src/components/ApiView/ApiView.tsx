@@ -58,7 +58,12 @@ const ApiView: React.FC<ApiViewProps> = ({
     (event: React.MouseEvent) => {
       event.preventDefault()
 
-      let result = asArray(apiFunction.fn(...values))
+      let result = apiFunction.fn(...values)
+      result = asArray(result)
+
+      if (apiFunction.returnValue.type === 'Path') {
+        result = [result]
+      }
 
       setResult(result)
       setRunId((id) => id + 1)
@@ -96,6 +101,15 @@ const ApiView: React.FC<ApiViewProps> = ({
 
   return (
     <div css={componentCss}>
+      <h1>Editor Interface</h1>
+      <select value={apiFunction.name} onChange={onApiFunctionChange}>
+        {apiFunctionList.map((fn) => (
+          <option key={fn.name} value={fn.name}>
+            Editor.{fn.name}
+          </option>
+        ))}
+      </select>
+
       <h2>Editor</h2>
       <Editable
         css={componentCss}
@@ -104,13 +118,6 @@ const ApiView: React.FC<ApiViewProps> = ({
       />
 
       <h2>API</h2>
-      <select value={apiFunction.name} onChange={onApiFunctionChange}>
-        {apiFunctionList.map((fn) => (
-          <option key={fn.name} value={fn.name}>
-            Editor.{fn.name}
-          </option>
-        ))}
-      </select>
       <ApiControls
         css={css`
           font-size: 0.8em;

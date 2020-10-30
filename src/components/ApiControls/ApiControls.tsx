@@ -125,16 +125,15 @@ const ApiControls: React.FC<ApiControlsProps> = ({
               key={arg.name}
               arg={arg}
               value={values[i] as ArgValue<Exclude<Arg, EditorArg>>}
-              onChange={(value) =>
-                onChange(
-                  values
-                    .slice(0, i)
-                    .concat(
-                      isFunctionArg(arg) ? (value as any)?.[1] : value,
-                      values.slice(i + 1)
-                    )
+              onChange={(value) => {
+                const newValues = values.slice(0)
+                newValues.splice(
+                  i,
+                  1,
+                  isFunctionArg(arg) ? (value as any)?.[1] : value
                 )
-              }
+                onChange(newValues)
+              }}
             />
           )
         )}

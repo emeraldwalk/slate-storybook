@@ -3,7 +3,7 @@ import { css, jsx } from '@emotion/core'
 
 import React from 'react'
 import { Path } from 'slate'
-import { Selector } from '..'
+import { ArgLabel, Selector } from '..'
 import { Theme } from '../../theme'
 import NodeSelector from '../NodeSelector/NodeSelector'
 import {
@@ -11,6 +11,7 @@ import {
   ArgValue,
   isBooleanArg,
   isFunctionArg,
+  isNumberArg,
   isPathArg,
   isStringArg,
 } from './model'
@@ -48,13 +49,7 @@ const ArgControl = <TArg extends Arg>({
           display: flex;
         `}
       >
-        <label>
-          <span className="argToken">{arg.name}</span>
-          <span className="separatorToken">
-            {arg.isOptional ? '?' : ''}:&nbsp;
-          </span>
-          <span className="typeToken">{arg.type}</span>
-        </label>
+        <ArgLabel arg={arg} />
         &nbsp;
         <NodeSelector
           mode="path"
@@ -70,13 +65,7 @@ const ArgControl = <TArg extends Arg>({
           display: flex;
         `}
       >
-        <label>
-          <span className="argToken">{arg.name}</span>
-          <span className="separatorToken">
-            {arg.isOptional ? '?' : ''}:&nbsp;
-          </span>
-          <span className="typeToken">{arg.type}</span>
-        </label>
+        <ArgLabel arg={arg} />
         &nbsp;
         <Selector
           label={arg.name}
@@ -84,6 +73,20 @@ const ArgControl = <TArg extends Arg>({
           value={value as string | boolean | [string, Function]}
           onChange={
             onChange as (value?: string | boolean | [string, Function]) => void
+          }
+        />
+      </div>
+    )
+  } else if (isNumberArg(arg)) {
+    children = (
+      <div>
+        <ArgLabel arg={arg} />
+        &nbsp;
+        <input
+          type="text"
+          value={String(value ?? '')}
+          onChange={({ currentTarget }) =>
+            (onChange as (value?: number) => void)(Number(currentTarget.value))
           }
         />
       </div>

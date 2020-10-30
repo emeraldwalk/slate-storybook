@@ -17,6 +17,10 @@ export interface PathArg extends ArgBase {
   argType: 'path'
 }
 
+export interface NumberArg extends ArgBase {
+  argType: 'number'
+}
+
 export interface StringArg extends ArgBase {
   argType: 'string'
   options: string[]
@@ -39,10 +43,17 @@ export type ObjectArg = {
   args: Arg[]
 }
 
-export type Arg = PathArg | StringArg | BooleanArg | FunctionArg | EditorArg
+export type Arg =
+  | NumberArg
+  | PathArg
+  | StringArg
+  | BooleanArg
+  | FunctionArg
+  | EditorArg
 
 export type ArgValue<TArg extends Arg> = {
   editor: Editor
+  number: number
   path: Path
   string: string
   boolean: boolean
@@ -99,6 +110,10 @@ export function useArgValues(args: (EditorArg | Arg | ObjectArg)[]) {
   )
 
   return { values, setValues, resetValues } as const
+}
+
+export function isNumberArg(arg: Arg): arg is NumberArg {
+  return arg.argType === 'number'
 }
 
 export function isStringArg(arg: Arg): arg is StringArg {

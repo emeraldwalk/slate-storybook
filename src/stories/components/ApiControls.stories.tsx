@@ -44,6 +44,6 @@ ApiControlsDefault.parameters = {
   initialSlateValue: mockParagraphsAndList,
 }
 ApiControlsDefault.args = {
-  apiFunction: editorApiFunctions[0],
+  apiFunction: editorApiFunctions.path,
   values: [],
 }

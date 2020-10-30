@@ -6,6 +6,9 @@ export * from './NodeSpec'
 export { default as ApiControls } from './ApiControls/ApiControls'
 export type { ApiControlsProps } from './ApiControls/ApiControls'
 
+export { default as ArgLabel } from './ApiControls/ArgLabel'
+export type { ArgLabelProps } from './ApiControls/ArgLabel'
+
 export { default as ApiResult } from './ApiResult/ApiResult'
 export type { ApiResultProps } from './ApiResult/ApiResult'
 

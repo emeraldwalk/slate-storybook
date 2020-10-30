@@ -194,6 +194,51 @@ export const editorApiFunctions: Record<string, ApiFunction> = {
       },
     ],
   },
+  path: {
+    fn: Editor.path,
+    name: 'path',
+    description: 'Get the path of a location.',
+    returnValue: {
+      type: 'Path',
+      comment: 'The path matching the given criteria',
+    },
+    args: [
+      {
+        argType: 'editor',
+        name: 'editor',
+        type: 'Editor',
+        comment: 'Editor containing the location to check',
+      },
+      {
+        argType: 'path',
+        name: 'at',
+        type: 'Location',
+        comment: 'Location to check',
+      },
+      {
+        argType: 'object',
+        name: 'options',
+        isOptional: false,
+        args: [
+          {
+            argType: 'number',
+            name: 'depth',
+            type: 'number',
+            isOptional: true,
+            comment: 'Max path depth to search',
+          },
+          {
+            argType: 'string',
+            name: 'edge',
+            type: 'string',
+            isOptional: true,
+            comment: '',
+            options: ['start', 'end'],
+          },
+        ],
+      },
+    ],
+  },
   removeMark: {
     fn: Editor.removeMark,
     name: 'removeMark',
