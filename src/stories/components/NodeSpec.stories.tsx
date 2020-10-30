@@ -5,7 +5,7 @@ import { SlateContextDecorator } from '../util'
 import { mockParagraphsAndList } from '../util/mockData'
 
 export default {
-  title: 'Components/NodeSpec',
+  title: 'Storybook/Components/NodeSpec',
   component: NodeSpec,
   decorators: [
     (Story, context) => {

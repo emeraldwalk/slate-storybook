@@ -6,7 +6,7 @@ import { NodeSpecContextDecorator } from '../util'
 import { useSlate } from 'slate-react'
 
 export default {
-  title: 'Components/NodeTree',
+  title: 'Storybook/Components/NodeTree',
   component: NodeTree,
   decorators: [
     (Story, context) => {

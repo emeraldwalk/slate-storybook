@@ -6,7 +6,7 @@ import { mockParagraphsAndList } from '../util/mockData'
 import { Path, Point } from 'slate'
 
 export default {
-  title: 'Components/NodeSelector',
+  title: 'Storybook/Components/NodeSelector',
   component: NodeSelector,
   decorators: [
     (Story, context) => {

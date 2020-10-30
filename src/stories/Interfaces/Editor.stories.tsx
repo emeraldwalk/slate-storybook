@@ -10,7 +10,7 @@ import { ApiFunction } from '../../components/ApiControls/model'
 let persistentValue: Node[] | undefined = undefined
 
 export default {
-  title: 'Interfaces/Editor',
+  title: 'Slate/Interfaces/Editor',
   decorators: [
     (Story, context) => {
       return (

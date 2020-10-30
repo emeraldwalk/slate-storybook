@@ -7,7 +7,7 @@ import { editorApiFunctions } from '../util/api'
 import { useArgValues } from '../../components/ApiControls/model'
 
 export default {
-  title: 'Components/ApiControls',
+  title: 'Storybook/Components/ApiControls',
   component: ApiControls,
   decorators: [
     (Story, context) => {
@@ -19,6 +19,11 @@ export default {
       )
     },
   ],
+  parameters: {
+    options: {
+      showPanel: true,
+    },
+  },
 } as Meta
 
 const Template: Story<ApiControlsProps> = ({ apiFunction, onChange }) => {

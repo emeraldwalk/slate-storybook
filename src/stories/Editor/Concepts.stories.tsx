@@ -1,14 +1,14 @@
 import React from 'react'
 import { Story, Meta } from '@storybook/react'
-import EditorWithSpellcheck, {
-  EditorWithSpellcheckProps,
-} from './EditorWithSpellcheck'
+// import EditorWithSpellcheck, {
+//   EditorWithSpellcheckProps,
+// } from './EditorWithSpellcheck'
 import EditorWithDecorations, {
   EditorWithDecorationsProps,
 } from './EditorWithDecorations'
 
 const meta: Meta = {
-  title: 'Editor',
+  title: 'Slate/Concepts',
   component: EditorWithDecorations,
   argTypes: {
     initialValue: { control: 'object' },
@@ -19,9 +19,9 @@ export default meta
 
 /** Templates */
 
-const SpellcheckTemplate: Story<EditorWithSpellcheckProps> = (args) => (
-  <EditorWithSpellcheck {...args} />
-)
+// const SpellcheckTemplate: Story<EditorWithSpellcheckProps> = (args) => (
+//   <EditorWithSpellcheck {...args} />
+// )
 const DecorationsTemplate: Story<EditorWithDecorationsProps> = (args) => (
   <EditorWithDecorations {...args} />
 )
@@ -53,7 +53,7 @@ Decorations.parameters = {
   },
 }
 
-export const CustomSpellcheck = SpellcheckTemplate.bind({})
-CustomSpellcheck.args = {
-  initialValue: emptyValue(),
-}
+// export const CustomSpellcheck = SpellcheckTemplate.bind({})
+// CustomSpellcheck.args = {
+//   initialValue: emptyValue(),
+// }

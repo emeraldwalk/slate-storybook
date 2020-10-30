@@ -112,7 +112,9 @@ const ApiView: React.FC<ApiViewProps> = ({
 
       <h2>Editor</h2>
       <Editable
-        css={componentCss}
+        css={css`
+          font-size: 0.9em;
+        `}
         renderElement={renderElement}
         renderLeaf={renderLeaf}
       />
