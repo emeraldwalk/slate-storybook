@@ -6,7 +6,7 @@ export interface ArgBase {
   name: string
   isOptional?: boolean
   type: string
-  comment: string
+  comment: string | string[]
 }
 
 export interface EditorArg extends ArgBase {

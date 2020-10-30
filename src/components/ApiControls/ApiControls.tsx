@@ -156,11 +156,17 @@ function paramComment(
     arg.args.map((a) => paramComment(a, name))
   ) : (
     <React.Fragment key={name}>
-      {'\n'}
-      <span> * </span>
-      <span className="paramToken">@param</span>
-      <span className="argToken"> {name}</span>
-      <span> {arg.comment}</span>
+      {(typeof arg.comment === 'string' ? [arg.comment] : arg.comment).map(
+        (comment, i) => (
+          <React.Fragment>
+            {'\n'}
+            <span> * </span>
+            {i === 0 ? <span className="paramToken">@param</span> : null}
+            {i === 0 ? <span className="argToken"> {name}</span> : null}
+            <span> {comment}</span>
+          </React.Fragment>
+        )
+      )}
     </React.Fragment>
   )
 }

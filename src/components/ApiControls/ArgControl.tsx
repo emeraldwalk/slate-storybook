@@ -79,7 +79,11 @@ const ArgControl = <TArg extends Arg>({
     )
   } else if (isNumberArg(arg)) {
     children = (
-      <div>
+      <div
+        css={css`
+          display: flex;
+        `}
+      >
         <ArgLabel arg={arg} />
         &nbsp;
         <input
