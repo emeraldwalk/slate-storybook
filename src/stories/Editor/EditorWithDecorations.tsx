@@ -111,7 +111,7 @@ const EditorWithDecorations: React.FC<EditorWithDecorationsProps> = ({
       </Slate>
 
       <Console />
-      <SourceLink path={'src/stories/Editor/EditorWithDecorations.tsx#L36'} />
+      <SourceLink path={'src/stories/Editor/EditorWithDecorations.tsx#L42'} />
     </div>
   )
 }
