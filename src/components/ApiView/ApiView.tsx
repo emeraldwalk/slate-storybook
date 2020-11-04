@@ -58,11 +58,16 @@ const ApiView: React.FC<ApiViewProps> = ({
     (event: React.MouseEvent) => {
       event.preventDefault()
 
-      let result = apiFunction.fn(...values)
-      result = asArray(result)
+      let result
+      try {
+        result = apiFunction.fn(...values)
+        result = asArray(result)
 
-      if (apiFunction.returnValue.type === 'Path') {
-        result = [result]
+        if (apiFunction.returnValue.type === 'Path') {
+          result = [result]
+        }
+      } catch (err) {
+        result = [String(err)]
       }
 
       setResult(result)

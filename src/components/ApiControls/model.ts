@@ -1,5 +1,5 @@
 import React from 'react'
-import { Editor, Path } from 'slate'
+import { Editor, Node, Path, Point } from 'slate'
 import { useSlate } from 'slate-react'
 
 export interface ArgBase {
@@ -17,12 +17,24 @@ export interface PathArg extends ArgBase {
   argType: 'path'
 }
 
+export interface PointArg extends ArgBase {
+  argType: 'point'
+}
+
+export interface NodeArg extends ArgBase {
+  argType: 'node'
+}
+
 export interface NumberArg extends ArgBase {
   argType: 'number'
 }
 
 export interface StringArg extends ArgBase {
   argType: 'string'
+}
+
+export interface StringLiteralArg extends ArgBase {
+  argType: 'stringLiteral'
   options: string[]
 }
 
@@ -46,7 +58,10 @@ export type ObjectArg = {
 export type Arg =
   | NumberArg
   | PathArg
+  | PointArg
+  | NodeArg
   | StringArg
+  | StringLiteralArg
   | BooleanArg
   | FunctionArg
   | EditorArg
@@ -54,8 +69,11 @@ export type Arg =
 export type ArgValue<TArg extends Arg> = {
   editor: Editor
   number: number
-  path: Path
   string: string
+  path: Path
+  point: Point
+  node: Node
+  stringLiteral: string
   boolean: boolean
   function: [string, Function]
 }[TArg['argType']]
@@ -120,6 +138,10 @@ export function isStringArg(arg: Arg): arg is StringArg {
   return arg.argType === 'string'
 }
 
+export function isStringLiteralArg(arg: Arg): arg is StringLiteralArg {
+  return arg.argType === 'stringLiteral'
+}
+
 export function isBooleanArg(arg: Arg): arg is BooleanArg {
   return arg.argType === 'boolean'
 }
@@ -130,6 +152,14 @@ export function isFunctionArg(arg: Arg): arg is FunctionArg {
 
 export function isPathArg(arg: Arg): arg is PathArg {
   return arg.argType === 'path'
+}
+
+export function isPointArg(arg: Arg): arg is PointArg {
+  return arg.argType === 'point'
+}
+
+export function isNodeArg(arg: Arg): arg is NodeArg {
+  return arg.argType === 'node'
 }
 
 export function isObjectArg(arg: Arg | ObjectArg): arg is ObjectArg {

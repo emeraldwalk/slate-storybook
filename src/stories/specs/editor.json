@@ -1,0 +1,1571 @@
+{
+  "name": "Editor",
+  "methods": [
+    {
+      "name": "above",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor",
+          "comment": "Editor instance to search"
+        },
+        {
+          "name": "options",
+          "isOptional": true,
+          "args": [
+            {
+              "name": "at",
+              "isOptional": false,
+              "type": "Range | Path | Point",
+              "comment": "Location to start at. Defaults to editor.selection"
+            },
+            {
+              "name": "match",
+              "isOptional": false,
+              "type": "((node: Node) => boolean) | ((node: Node) => node is T)",
+              "comment": "Predicate for matching the ancestor to return"
+            },
+            {
+              "name": "mode",
+              "isOptional": false,
+              "type": "\"highest\" | \"lowest\"",
+              "comment": "Whether to return highest or lowest ancestor in the node tree. Defaults to lowest"
+            },
+            {
+              "name": "voids",
+              "isOptional": false,
+              "type": "boolean",
+              "comment": "Whether or not to include void elements in the result"
+            }
+          ]
+        }
+      ],
+      "documentation": [
+        "Get the ancestor above a location in the document.",
+        "",
+        "If the location is a range, it will look for a common ancestor to both",
+        "the anchor and focus points."
+      ],
+      "returnValue": {
+        "type": "NodeEntry<T>",
+        "comment": "[Node, Path] tuple for the first matching ancestor"
+      },
+      "typeParameters": [
+        "T"
+      ]
+    },
+    {
+      "name": "addMark",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor",
+          "comment": "Editor instance that will receive the mark"
+        },
+        {
+          "name": "key",
+          "isOptional": false,
+          "type": "string",
+          "comment": "Property key that will be added to the matching leaf nodes"
+        },
+        {
+          "name": "value",
+          "isOptional": false,
+          "type": "any",
+          "comment": "Property value that will be added to the matching leaf nodes"
+        }
+      ],
+      "documentation": [
+        "Add a custom property to the leaf text nodes in the current selection.",
+        "",
+        "If the selection is currently collapsed, the marks will be added to the",
+        "`editor.marks` property instead, and applied when text is inserted next."
+      ],
+      "returnValue": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "after",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor",
+          "comment": "Editor instance to search"
+        },
+        {
+          "name": "at",
+          "isOptional": false,
+          "type": "Range | Path | Point",
+          "comment": "Location to start at"
+        },
+        {
+          "name": "options",
+          "isOptional": true,
+          "args": [
+            {
+              "name": "distance",
+              "isOptional": false,
+              "type": "number",
+              "comment": "Number of units after the location. Defaults to 1"
+            },
+            {
+              "name": "unit",
+              "isOptional": false,
+              "type": "\"character\" | \"word\" | \"line\" | \"block\" | \"offset\"",
+              "comment": "Distance unit. Defaults to 'offset'"
+            }
+          ]
+        }
+      ],
+      "documentation": [
+        "Get the point after a location."
+      ],
+      "returnValue": {
+        "type": "Point",
+        "comment": "point"
+      }
+    },
+    {
+      "name": "before",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor",
+          "comment": "Editor instance to search"
+        },
+        {
+          "name": "at",
+          "isOptional": false,
+          "type": "Range | Path | Point",
+          "comment": "Location to start at"
+        },
+        {
+          "name": "options",
+          "isOptional": true,
+          "args": [
+            {
+              "name": "distance",
+              "isOptional": false,
+              "type": "number",
+              "comment": "Number of units before the location. Defaults to 1"
+            },
+            {
+              "name": "unit",
+              "isOptional": false,
+              "type": "\"character\" | \"word\" | \"line\" | \"block\" | \"offset\"",
+              "comment": "Distance unit. Defaults to 'offset'"
+            }
+          ]
+        }
+      ],
+      "documentation": [
+        "Get the point before a location."
+      ],
+      "returnValue": {
+        "type": "Point",
+        "comment": "point"
+      }
+    },
+    {
+      "name": "deleteBackward",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor",
+          "comment": "Editor instance"
+        },
+        {
+          "name": "options",
+          "isOptional": true,
+          "args": [
+            {
+              "name": "unit",
+              "isOptional": false,
+              "type": "\"character\" | \"word\" | \"line\" | \"block\"",
+              "comment": "Unit to delete. Defaults to 'character'"
+            }
+          ]
+        }
+      ],
+      "documentation": [
+        "Delete content in the editor backward from the current selection."
+      ],
+      "returnValue": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "deleteForward",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor",
+          "comment": "Editor instance"
+        },
+        {
+          "name": "options",
+          "isOptional": true,
+          "args": [
+            {
+              "name": "unit",
+              "isOptional": false,
+              "type": "\"character\" | \"word\" | \"line\" | \"block\"",
+              "comment": "Unit to delete. Defaults to 'character'"
+            }
+          ]
+        }
+      ],
+      "documentation": [
+        "Delete content in the editor forward from the current selection."
+      ],
+      "returnValue": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "deleteFragment",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor",
+          "comment": "Editor instance"
+        }
+      ],
+      "documentation": [
+        "Delete the content in the current selection."
+      ],
+      "returnValue": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "edges",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor",
+          "comment": "Editor instance containing the location"
+        },
+        {
+          "name": "at",
+          "isOptional": false,
+          "type": "Range | Path | Point",
+          "comment": "Location to target"
+        }
+      ],
+      "documentation": [
+        "Get the start and end points of a location."
+      ],
+      "returnValue": {
+        "type": "[Point, Point]",
+        "comment": "tuple containing the start and end points"
+      }
+    },
+    {
+      "name": "end",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor",
+          "comment": "Editor instance containing the location"
+        },
+        {
+          "name": "at",
+          "isOptional": false,
+          "type": "Range | Path | Point",
+          "comment": "Location to target"
+        }
+      ],
+      "documentation": [
+        "Get the end point of a location."
+      ],
+      "returnValue": {
+        "type": "Point",
+        "comment": "end point"
+      }
+    },
+    {
+      "name": "first",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor",
+          "comment": "Editor instance containing the location"
+        },
+        {
+          "name": "at",
+          "isOptional": false,
+          "type": "Range | Path | Point",
+          "comment": "Location to target"
+        }
+      ],
+      "documentation": [
+        "Get the first node at a location."
+      ],
+      "returnValue": {
+        "type": "NodeEntry<Node>",
+        "comment": "[Node, Path] tuple for the first node"
+      }
+    },
+    {
+      "name": "fragment",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor",
+          "comment": "Editor instance containing the location"
+        },
+        {
+          "name": "at",
+          "isOptional": false,
+          "type": "Range | Path | Point",
+          "comment": "Location to target"
+        }
+      ],
+      "documentation": [
+        "Get the fragment at a location."
+      ],
+      "returnValue": {
+        "type": "Descendant[]",
+        "comment": "of descendant nodes"
+      }
+    },
+    {
+      "name": "hasBlocks",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor",
+          "comment": "Editor instance containing the node"
+        },
+        {
+          "name": "element",
+          "isOptional": false,
+          "type": "Element",
+          "comment": "Element node to check"
+        }
+      ],
+      "documentation": [
+        "Check if a node has block children."
+      ],
+      "returnValue": {
+        "type": "boolean",
+        "comment": "or not the node has block children."
+      }
+    },
+    {
+      "name": "hasInlines",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor",
+          "comment": "Editor instance containing the node"
+        },
+        {
+          "name": "element",
+          "isOptional": false,
+          "type": "Element",
+          "comment": "Element node to check"
+        }
+      ],
+      "documentation": [
+        "Check if a node has inline and text children."
+      ],
+      "returnValue": {
+        "type": "boolean",
+        "comment": "or not the node has inline or text children"
+      }
+    },
+    {
+      "name": "hasTexts",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor",
+          "comment": "Editor instance containing the node"
+        },
+        {
+          "name": "element",
+          "isOptional": false,
+          "type": "Element",
+          "comment": "Element node to check"
+        }
+      ],
+      "documentation": [
+        "Check if a node has text children."
+      ],
+      "returnValue": {
+        "type": "boolean",
+        "comment": "or not all children are text nodes"
+      }
+    },
+    {
+      "name": "insertBreak",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor",
+          "comment": "Editor instance to insert the break into"
+        }
+      ],
+      "documentation": [
+        "Insert a block break at the current selection.",
+        "",
+        "If the selection is currently expanded, it will be deleted first."
+      ],
+      "returnValue": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "insertFragment",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor",
+          "comment": "Editor instance to insert the fragment into"
+        },
+        {
+          "name": "fragment",
+          "isOptional": false,
+          "type": "Node[]",
+          "comment": "Fragment nodes to insert"
+        }
+      ],
+      "documentation": [
+        "Insert a fragment at the current selection.",
+        "",
+        "If the selection is currently expanded, it will be deleted first."
+      ],
+      "returnValue": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "insertNode",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor",
+          "comment": "Editor instance to insert the node into"
+        },
+        {
+          "name": "node",
+          "isOptional": false,
+          "type": "Node",
+          "comment": "Node to insert"
+        }
+      ],
+      "documentation": [
+        "Insert a node at the current selection.",
+        "",
+        "If the selection is currently expanded, it will be deleted first."
+      ],
+      "returnValue": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "insertText",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor",
+          "comment": "Editor instance to insert text into"
+        },
+        {
+          "name": "text",
+          "isOptional": false,
+          "type": "string",
+          "comment": "Text to insert"
+        }
+      ],
+      "documentation": [
+        "Insert text at the current selection.",
+        "",
+        "If the selection is currently expanded, it will be deleted first."
+      ],
+      "returnValue": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "isBlock",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor",
+          "comment": "Editor instance to check the value against"
+        },
+        {
+          "name": "value",
+          "isOptional": false,
+          "type": "any",
+          "comment": "Value to check"
+        }
+      ],
+      "documentation": [
+        "Check if a value is a block `Element` object."
+      ],
+      "returnValue": {
+        "type": "boolean",
+        "comment": "or not the value is a block `Element` object."
+      }
+    },
+    {
+      "name": "isEditor",
+      "args": [
+        {
+          "name": "value",
+          "isOptional": false,
+          "type": "any",
+          "comment": "Value to check"
+        }
+      ],
+      "documentation": [
+        "Check if a value is an `Editor` object."
+      ],
+      "returnValue": {
+        "type": "boolean",
+        "comment": "or not the value is an `Editor` object"
+      }
+    },
+    {
+      "name": "isEnd",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor",
+          "comment": "Editor containing the point to check"
+        },
+        {
+          "name": "point",
+          "isOptional": false,
+          "type": "Point"
+        },
+        {
+          "name": "at",
+          "isOptional": false,
+          "type": "Range | Path | Point",
+          "comment": "Location to check"
+        }
+      ],
+      "documentation": [
+        "Check if a point is the end point of a location."
+      ],
+      "returnValue": {
+        "type": "boolean"
+      }
+    },
+    {
+      "name": "isEdge",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor",
+          "comment": "Editor containing the point and location"
+        },
+        {
+          "name": "point",
+          "isOptional": false,
+          "type": "Point",
+          "comment": "Point to check"
+        },
+        {
+          "name": "at",
+          "isOptional": false,
+          "type": "Range | Path | Point",
+          "comment": "Location to check"
+        }
+      ],
+      "documentation": [
+        "Check if a point is an edge of a location."
+      ],
+      "returnValue": {
+        "type": "boolean",
+        "comment": "or not the point is an edge of the given location"
+      }
+    },
+    {
+      "name": "isEmpty",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor",
+          "comment": "Editor containing the element"
+        },
+        {
+          "name": "element",
+          "isOptional": false,
+          "type": "Element",
+          "comment": "Element node to check"
+        }
+      ],
+      "documentation": [
+        "Check if an element is empty, accounting for void nodes."
+      ],
+      "returnValue": {
+        "type": "boolean",
+        "comment": "or not the element is empty"
+      }
+    },
+    {
+      "name": "isInline",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor",
+          "comment": "Editor to check the value against"
+        },
+        {
+          "name": "value",
+          "isOptional": false,
+          "type": "any",
+          "comment": "Value to check"
+        }
+      ],
+      "documentation": [
+        "Check if a value is an inline `Element` object."
+      ],
+      "returnValue": {
+        "type": "boolean",
+        "comment": "or not the value is an inline `Element` object"
+      }
+    },
+    {
+      "name": "isNormalizing",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor",
+          "comment": "Editor instance to check"
+        }
+      ],
+      "documentation": [
+        "Check if the editor is currently normalizing after each operation."
+      ],
+      "returnValue": {
+        "type": "boolean",
+        "comment": "or not the editor is currently normalizing"
+      }
+    },
+    {
+      "name": "isStart",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor",
+          "comment": "Editor containing the point and location"
+        },
+        {
+          "name": "point",
+          "isOptional": false,
+          "type": "Point",
+          "comment": "Point to check"
+        },
+        {
+          "name": "at",
+          "isOptional": false,
+          "type": "Range | Path | Point",
+          "comment": "Location to check"
+        }
+      ],
+      "documentation": [
+        "Check if a point is the start point of a location."
+      ],
+      "returnValue": {
+        "type": "boolean",
+        "comment": "or not the point is the start of the given location"
+      }
+    },
+    {
+      "name": "isVoid",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor",
+          "comment": "Editor to check the value against"
+        },
+        {
+          "name": "value",
+          "isOptional": false,
+          "type": "any",
+          "comment": "Value to check"
+        }
+      ],
+      "documentation": [
+        "Check if a value is a void `Element` object."
+      ],
+      "returnValue": {
+        "type": "boolean",
+        "comment": "or not the value is a void `Element` object"
+      }
+    },
+    {
+      "name": "last",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor",
+          "comment": "Editor containing the location"
+        },
+        {
+          "name": "at",
+          "isOptional": false,
+          "type": "Range | Path | Point",
+          "comment": "Location to check"
+        }
+      ],
+      "documentation": [
+        "Get the last node at a location."
+      ],
+      "returnValue": {
+        "type": "NodeEntry<Node>",
+        "comment": "[Node, Path] tuple for the last node at the given location"
+      }
+    },
+    {
+      "name": "leaf",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor",
+          "comment": "Editor containing the location"
+        },
+        {
+          "name": "at",
+          "isOptional": false,
+          "type": "Range | Path | Point",
+          "comment": "Location to check"
+        },
+        {
+          "name": "options",
+          "isOptional": true,
+          "args": [
+            {
+              "name": "depth",
+              "isOptional": false,
+              "type": "number",
+              "comment": "Max path depth to search"
+            },
+            {
+              "name": "edge",
+              "isOptional": false,
+              "type": "\"start\" | \"end\"",
+              "comment": "xxxxx TODO:"
+            }
+          ]
+        }
+      ],
+      "documentation": [
+        "Get the leaf text node at a location."
+      ],
+      "returnValue": {
+        "type": "NodeEntry<Text>",
+        "comment": "[Node, Path] tuple for the leaf text node at the given location.\r\nIf the path matching the given options is not a Text node, an error will be thrown."
+      }
+    },
+    {
+      "name": "levels",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor"
+        },
+        {
+          "name": "options",
+          "isOptional": true,
+          "args": [
+            {
+              "name": "at",
+              "isOptional": false,
+              "type": "Range | Path | Point"
+            },
+            {
+              "name": "match",
+              "isOptional": false,
+              "type": "((node: Node) => boolean) | ((node: Node) => node is T_1)"
+            },
+            {
+              "name": "reverse",
+              "isOptional": false,
+              "type": "boolean"
+            },
+            {
+              "name": "voids",
+              "isOptional": false,
+              "type": "boolean"
+            }
+          ]
+        }
+      ],
+      "documentation": [
+        "Iterate through all of the levels at a location."
+      ],
+      "returnValue": {
+        "type": "Generator<NodeEntry<T_1>, void, undefined>"
+      },
+      "typeParameters": [
+        "T_1"
+      ]
+    },
+    {
+      "name": "marks",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor"
+        }
+      ],
+      "documentation": [
+        "Get the marks that would be added to text at the current selection."
+      ],
+      "returnValue": {
+        "type": "Record<string, any>"
+      }
+    },
+    {
+      "name": "next",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor"
+        },
+        {
+          "name": "options",
+          "isOptional": true,
+          "args": [
+            {
+              "name": "at",
+              "isOptional": false,
+              "type": "Range | Path | Point"
+            },
+            {
+              "name": "match",
+              "isOptional": false,
+              "type": "((node: Node) => boolean) | ((node: Node) => node is T_2)"
+            },
+            {
+              "name": "mode",
+              "isOptional": false,
+              "type": "\"highest\" | \"lowest\" | \"all\""
+            },
+            {
+              "name": "voids",
+              "isOptional": false,
+              "type": "boolean"
+            }
+          ]
+        }
+      ],
+      "documentation": [
+        "Get the matching node in the branch of the document after a location."
+      ],
+      "returnValue": {
+        "type": "NodeEntry<T_2>"
+      },
+      "typeParameters": [
+        "T_2"
+      ]
+    },
+    {
+      "name": "node",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor"
+        },
+        {
+          "name": "at",
+          "isOptional": false,
+          "type": "Range | Path | Point"
+        },
+        {
+          "name": "options",
+          "isOptional": true,
+          "args": [
+            {
+              "name": "depth",
+              "isOptional": false,
+              "type": "number"
+            },
+            {
+              "name": "edge",
+              "isOptional": false,
+              "type": "\"start\" | \"end\""
+            }
+          ]
+        }
+      ],
+      "documentation": [
+        "Get the node at a location."
+      ],
+      "returnValue": {
+        "type": "NodeEntry<Node>"
+      }
+    },
+    {
+      "name": "nodes",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor",
+          "comment": "Editor containing the nodes to iterate"
+        },
+        {
+          "name": "options",
+          "isOptional": true,
+          "args": [
+            {
+              "name": "at",
+              "isOptional": false,
+              "type": "Range | Path | Point | Span",
+              "comment": "Location to constrain the list of nodes to. Defaults to editor.selection"
+            },
+            {
+              "name": "match",
+              "isOptional": false,
+              "type": "((node: Node) => boolean) | ((node: Node) => node is T_3)",
+              "comment": "Predicate function to filter the list of yielded nodes"
+            },
+            {
+              "name": "mode",
+              "isOptional": false,
+              "type": "\"highest\" | \"lowest\" | \"all\"",
+              "comment": "Further constrains the yielded node set to a single level of the tree"
+            },
+            {
+              "name": "universal",
+              "isOptional": false,
+              "type": "boolean",
+              "comment": "Setting this to true means that all Text nodes that\r\nare included in the at + mode constraints must also satisfy the match constraint"
+            },
+            {
+              "name": "reverse",
+              "isOptional": false,
+              "type": "boolean",
+              "comment": "Reverse the order of nodes yielded across the current level"
+            },
+            {
+              "name": "voids",
+              "isOptional": false,
+              "type": "boolean",
+              "comment": "Whether or not to include void elements in the result"
+            }
+          ]
+        }
+      ],
+      "documentation": [
+        "Iterate through all of the nodes in the Editor.",
+        "",
+        "The at + match options determine an initial node set to yield.",
+        "The mode, universal, and voids options can be used to apply additional",
+        "constraints to determine which nodes are yielded. The reverse option determines",
+        "the order in which child nodes are returned."
+      ],
+      "returnValue": {
+        "type": "Generator<NodeEntry<T_3>, void, undefined>"
+      },
+      "typeParameters": [
+        "T_3"
+      ]
+    },
+    {
+      "name": "normalize",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor"
+        },
+        {
+          "name": "options",
+          "isOptional": true,
+          "args": [
+            {
+              "name": "force",
+              "isOptional": false,
+              "type": "boolean"
+            }
+          ]
+        }
+      ],
+      "documentation": [
+        "Normalize any dirty objects in the editor."
+      ],
+      "returnValue": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "parent",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor"
+        },
+        {
+          "name": "at",
+          "isOptional": false,
+          "type": "Range | Path | Point"
+        },
+        {
+          "name": "options",
+          "isOptional": true,
+          "args": [
+            {
+              "name": "depth",
+              "isOptional": false,
+              "type": "number"
+            },
+            {
+              "name": "edge",
+              "isOptional": false,
+              "type": "\"start\" | \"end\""
+            }
+          ]
+        }
+      ],
+      "documentation": [
+        "Get the parent node of a location."
+      ],
+      "returnValue": {
+        "type": "NodeEntry<Ancestor>"
+      }
+    },
+    {
+      "name": "path",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor",
+          "comment": "Editor containing the location to check"
+        },
+        {
+          "name": "at",
+          "isOptional": false,
+          "type": "Range | Path | Point",
+          "comment": "Location to check"
+        },
+        {
+          "name": "options",
+          "isOptional": true,
+          "args": [
+            {
+              "name": "depth",
+              "isOptional": false,
+              "type": "number",
+              "comment": "Max path depth to search"
+            },
+            {
+              "name": "edge",
+              "isOptional": false,
+              "type": "\"start\" | \"end\"",
+              "comment": "Return the Path to the start or end leaf node for the\r\ntree determined by the `at` and `options.depth` args"
+            }
+          ]
+        }
+      ],
+      "documentation": [
+        "Get the path of a location."
+      ],
+      "returnValue": {
+        "type": "Path",
+        "comment": "path matching the given criteria"
+      }
+    },
+    {
+      "name": "pathRef",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor"
+        },
+        {
+          "name": "path",
+          "isOptional": false,
+          "type": "Path"
+        },
+        {
+          "name": "options",
+          "isOptional": true,
+          "args": [
+            {
+              "name": "affinity",
+              "isOptional": false,
+              "type": "\"backward\" | \"forward\""
+            }
+          ]
+        }
+      ],
+      "documentation": [
+        "Create a mutable ref for a `Path` object, which will stay in sync as new",
+        "operations are applied to the editor."
+      ],
+      "returnValue": {
+        "type": "PathRef"
+      }
+    },
+    {
+      "name": "pathRefs",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor"
+        }
+      ],
+      "documentation": [
+        "Get the set of currently tracked path refs of the editor."
+      ],
+      "returnValue": {
+        "type": "Set<PathRef>"
+      }
+    },
+    {
+      "name": "point",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor"
+        },
+        {
+          "name": "at",
+          "isOptional": false,
+          "type": "Range | Path | Point"
+        },
+        {
+          "name": "options",
+          "isOptional": true,
+          "args": [
+            {
+              "name": "edge",
+              "isOptional": false,
+              "type": "\"start\" | \"end\""
+            }
+          ]
+        }
+      ],
+      "documentation": [
+        "Get the start or end point of a location."
+      ],
+      "returnValue": {
+        "type": "Point"
+      }
+    },
+    {
+      "name": "pointRef",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor"
+        },
+        {
+          "name": "point",
+          "isOptional": false,
+          "type": "Point"
+        },
+        {
+          "name": "options",
+          "isOptional": true,
+          "args": [
+            {
+              "name": "affinity",
+              "isOptional": false,
+              "type": "\"backward\" | \"forward\""
+            }
+          ]
+        }
+      ],
+      "documentation": [
+        "Create a mutable ref for a `Point` object, which will stay in sync as new",
+        "operations are applied to the editor."
+      ],
+      "returnValue": {
+        "type": "PointRef"
+      }
+    },
+    {
+      "name": "pointRefs",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor"
+        }
+      ],
+      "documentation": [
+        "Get the set of currently tracked point refs of the editor."
+      ],
+      "returnValue": {
+        "type": "Set<PointRef>"
+      }
+    },
+    {
+      "name": "positions",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor"
+        },
+        {
+          "name": "options",
+          "isOptional": true,
+          "args": [
+            {
+              "name": "at",
+              "isOptional": false,
+              "type": "Range | Path | Point"
+            },
+            {
+              "name": "unit",
+              "isOptional": false,
+              "type": "\"character\" | \"word\" | \"line\" | \"block\" | \"offset\""
+            },
+            {
+              "name": "reverse",
+              "isOptional": false,
+              "type": "boolean"
+            }
+          ]
+        }
+      ],
+      "documentation": [
+        "Iterate through all of the positions in the document where a `Point` can be",
+        "placed.",
+        "",
+        "By default it will move forward by individual offsets at a time,  but you",
+        "can pass the `unit: 'character'` option to moved forward one character, word,",
+        "or line at at time.",
+        "",
+        "Note: void nodes are treated as a single point, and iteration will not",
+        "happen inside their content."
+      ],
+      "returnValue": {
+        "type": "Generator<Point, void, undefined>"
+      }
+    },
+    {
+      "name": "previous",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor"
+        },
+        {
+          "name": "options",
+          "isOptional": true,
+          "args": [
+            {
+              "name": "at",
+              "isOptional": false,
+              "type": "Range | Path | Point"
+            },
+            {
+              "name": "match",
+              "isOptional": false,
+              "type": "((node: Node) => boolean) | ((node: Node) => node is T_4)"
+            },
+            {
+              "name": "mode",
+              "isOptional": false,
+              "type": "\"highest\" | \"lowest\" | \"all\""
+            },
+            {
+              "name": "voids",
+              "isOptional": false,
+              "type": "boolean"
+            }
+          ]
+        }
+      ],
+      "documentation": [
+        "Get the matching node in the branch of the document before a location."
+      ],
+      "returnValue": {
+        "type": "NodeEntry<T_4>"
+      },
+      "typeParameters": [
+        "T_4"
+      ]
+    },
+    {
+      "name": "range",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor"
+        },
+        {
+          "name": "at",
+          "isOptional": false,
+          "type": "Range | Path | Point"
+        },
+        {
+          "name": "to",
+          "isOptional": true,
+          "type": "Range | Path | Point"
+        }
+      ],
+      "documentation": [
+        "Get a range of a location."
+      ],
+      "returnValue": {
+        "type": "Range"
+      }
+    },
+    {
+      "name": "rangeRef",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor"
+        },
+        {
+          "name": "range",
+          "isOptional": false,
+          "type": "Range"
+        },
+        {
+          "name": "options",
+          "isOptional": true,
+          "args": [
+            {
+              "name": "affinity",
+              "isOptional": false,
+              "type": "\"backward\" | \"forward\" | \"outward\" | \"inward\""
+            }
+          ]
+        }
+      ],
+      "documentation": [
+        "Create a mutable ref for a `Range` object, which will stay in sync as new",
+        "operations are applied to the editor."
+      ],
+      "returnValue": {
+        "type": "RangeRef"
+      }
+    },
+    {
+      "name": "rangeRefs",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor"
+        }
+      ],
+      "documentation": [
+        "Get the set of currently tracked range refs of the editor."
+      ],
+      "returnValue": {
+        "type": "Set<RangeRef>"
+      }
+    },
+    {
+      "name": "removeMark",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor",
+          "comment": "Editor instance that will have the mark removed"
+        },
+        {
+          "name": "key",
+          "isOptional": false,
+          "type": "string",
+          "comment": "Property key that will be removed"
+        }
+      ],
+      "documentation": [
+        "Remove a custom property from all of the leaf text nodes in the current",
+        "selection.",
+        "",
+        "If the selection is currently collapsed, the removal will be stored on",
+        "`editor.marks` and applied to the text inserted next."
+      ],
+      "returnValue": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "start",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor"
+        },
+        {
+          "name": "at",
+          "isOptional": false,
+          "type": "Range | Path | Point"
+        }
+      ],
+      "documentation": [
+        "Get the start point of a location."
+      ],
+      "returnValue": {
+        "type": "Point"
+      }
+    },
+    {
+      "name": "string",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor"
+        },
+        {
+          "name": "at",
+          "isOptional": false,
+          "type": "Range | Path | Point"
+        }
+      ],
+      "documentation": [
+        "Get the text string content of a location.",
+        "",
+        "Note: the text of void nodes is presumed to be an empty string, regardless",
+        "of what their actual content is."
+      ],
+      "returnValue": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "unhangRange",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor"
+        },
+        {
+          "name": "range",
+          "isOptional": false,
+          "type": "Range"
+        },
+        {
+          "name": "options",
+          "isOptional": true,
+          "args": [
+            {
+              "name": "voids",
+              "isOptional": false,
+              "type": "boolean"
+            }
+          ]
+        }
+      ],
+      "documentation": [
+        "Convert a range into a non-hanging one."
+      ],
+      "returnValue": {
+        "type": "Range"
+      }
+    },
+    {
+      "name": "void",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor"
+        },
+        {
+          "name": "options",
+          "isOptional": true,
+          "args": [
+            {
+              "name": "at",
+              "isOptional": false,
+              "type": "Range | Path | Point"
+            },
+            {
+              "name": "mode",
+              "isOptional": false,
+              "type": "\"highest\" | \"lowest\""
+            },
+            {
+              "name": "voids",
+              "isOptional": false,
+              "type": "boolean"
+            }
+          ]
+        }
+      ],
+      "documentation": [
+        "Match a void node in the current branch of the editor."
+      ],
+      "returnValue": {
+        "type": "NodeEntry<Element>"
+      }
+    },
+    {
+      "name": "withoutNormalizing",
+      "args": [
+        {
+          "name": "editor",
+          "isOptional": false,
+          "type": "Editor"
+        },
+        {
+          "name": "fn",
+          "isOptional": false,
+          "type": "() => void"
+        }
+      ],
+      "documentation": [
+        "Call a function, deferring normalization until after it completes."
+      ],
+      "returnValue": {
+        "type": "void"
+      }
+    }
+  ]
+}
