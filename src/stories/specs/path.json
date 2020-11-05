@@ -15,7 +15,7 @@
           "args": [
             {
               "name": "reverse",
-              "isOptional": false,
+              "isOptional": true,
               "type": "boolean"
             }
           ]
@@ -360,7 +360,7 @@
           "args": [
             {
               "name": "reverse",
-              "isOptional": false,
+              "isOptional": true,
               "type": "boolean"
             }
           ]
@@ -465,7 +465,7 @@
           "args": [
             {
               "name": "affinity",
-              "isOptional": false,
+              "isOptional": true,
               "type": "\"forward\" | \"backward\""
             }
           ]

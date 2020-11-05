@@ -16,25 +16,25 @@
           "args": [
             {
               "name": "at",
-              "isOptional": false,
+              "isOptional": true,
               "type": "Range | Path | Point",
               "comment": "Location to start at. Defaults to editor.selection"
             },
             {
               "name": "match",
-              "isOptional": false,
+              "isOptional": true,
               "type": "((node: Node) => boolean) | ((node: Node) => node is T)",
               "comment": "Predicate for matching the ancestor to return"
             },
             {
               "name": "mode",
-              "isOptional": false,
+              "isOptional": true,
               "type": "\"highest\" | \"lowest\"",
               "comment": "Whether to return highest or lowest ancestor in the node tree. Defaults to lowest"
             },
             {
               "name": "voids",
-              "isOptional": false,
+              "isOptional": true,
               "type": "boolean",
               "comment": "Whether or not to include void elements in the result"
             }
@@ -108,13 +108,13 @@
           "args": [
             {
               "name": "distance",
-              "isOptional": false,
+              "isOptional": true,
               "type": "number",
               "comment": "Number of units after the location. Defaults to 1"
             },
             {
               "name": "unit",
-              "isOptional": false,
+              "isOptional": true,
               "type": "\"character\" | \"word\" | \"line\" | \"block\" | \"offset\"",
               "comment": "Distance unit. Defaults to 'offset'"
             }
@@ -150,13 +150,13 @@
           "args": [
             {
               "name": "distance",
-              "isOptional": false,
+              "isOptional": true,
               "type": "number",
               "comment": "Number of units before the location. Defaults to 1"
             },
             {
               "name": "unit",
-              "isOptional": false,
+              "isOptional": true,
               "type": "\"character\" | \"word\" | \"line\" | \"block\" | \"offset\"",
               "comment": "Distance unit. Defaults to 'offset'"
             }
@@ -186,7 +186,7 @@
           "args": [
             {
               "name": "unit",
-              "isOptional": false,
+              "isOptional": true,
               "type": "\"character\" | \"word\" | \"line\" | \"block\"",
               "comment": "Unit to delete. Defaults to 'character'"
             }
@@ -215,7 +215,7 @@
           "args": [
             {
               "name": "unit",
-              "isOptional": false,
+              "isOptional": true,
               "type": "\"character\" | \"word\" | \"line\" | \"block\"",
               "comment": "Unit to delete. Defaults to 'character'"
             }
@@ -773,13 +773,13 @@
           "args": [
             {
               "name": "depth",
-              "isOptional": false,
+              "isOptional": true,
               "type": "number",
               "comment": "Max path depth to search"
             },
             {
               "name": "edge",
-              "isOptional": false,
+              "isOptional": true,
               "type": "\"start\" | \"end\"",
               "comment": "xxxxx TODO:"
             }
@@ -808,22 +808,22 @@
           "args": [
             {
               "name": "at",
-              "isOptional": false,
+              "isOptional": true,
               "type": "Range | Path | Point"
             },
             {
               "name": "match",
-              "isOptional": false,
+              "isOptional": true,
               "type": "((node: Node) => boolean) | ((node: Node) => node is T_1)"
             },
             {
               "name": "reverse",
-              "isOptional": false,
+              "isOptional": true,
               "type": "boolean"
             },
             {
               "name": "voids",
-              "isOptional": false,
+              "isOptional": true,
               "type": "boolean"
             }
           ]
@@ -869,22 +869,22 @@
           "args": [
             {
               "name": "at",
-              "isOptional": false,
+              "isOptional": true,
               "type": "Range | Path | Point"
             },
             {
               "name": "match",
-              "isOptional": false,
+              "isOptional": true,
               "type": "((node: Node) => boolean) | ((node: Node) => node is T_2)"
             },
             {
               "name": "mode",
-              "isOptional": false,
+              "isOptional": true,
               "type": "\"highest\" | \"lowest\" | \"all\""
             },
             {
               "name": "voids",
-              "isOptional": false,
+              "isOptional": true,
               "type": "boolean"
             }
           ]
@@ -919,12 +919,12 @@
           "args": [
             {
               "name": "depth",
-              "isOptional": false,
+              "isOptional": true,
               "type": "number"
             },
             {
               "name": "edge",
-              "isOptional": false,
+              "isOptional": true,
               "type": "\"start\" | \"end\""
             }
           ]
@@ -952,37 +952,37 @@
           "args": [
             {
               "name": "at",
-              "isOptional": false,
+              "isOptional": true,
               "type": "Range | Path | Point | Span",
               "comment": "Location to constrain the list of nodes to. Defaults to editor.selection"
             },
             {
               "name": "match",
-              "isOptional": false,
+              "isOptional": true,
               "type": "((node: Node) => boolean) | ((node: Node) => node is T_3)",
               "comment": "Predicate function to filter the list of yielded nodes"
             },
             {
               "name": "mode",
-              "isOptional": false,
+              "isOptional": true,
               "type": "\"highest\" | \"lowest\" | \"all\"",
               "comment": "Further constrains the yielded node set to a single level of the tree"
             },
             {
               "name": "universal",
-              "isOptional": false,
+              "isOptional": true,
               "type": "boolean",
               "comment": "Setting this to true means that all Text nodes that\r\nare included in the at + mode constraints must also satisfy the match constraint"
             },
             {
               "name": "reverse",
-              "isOptional": false,
+              "isOptional": true,
               "type": "boolean",
               "comment": "Reverse the order of nodes yielded across the current level"
             },
             {
               "name": "voids",
-              "isOptional": false,
+              "isOptional": true,
               "type": "boolean",
               "comment": "Whether or not to include void elements in the result"
             }
@@ -1018,7 +1018,7 @@
           "args": [
             {
               "name": "force",
-              "isOptional": false,
+              "isOptional": true,
               "type": "boolean"
             }
           ]
@@ -1050,12 +1050,12 @@
           "args": [
             {
               "name": "depth",
-              "isOptional": false,
+              "isOptional": true,
               "type": "number"
             },
             {
               "name": "edge",
-              "isOptional": false,
+              "isOptional": true,
               "type": "\"start\" | \"end\""
             }
           ]
@@ -1089,13 +1089,13 @@
           "args": [
             {
               "name": "depth",
-              "isOptional": false,
+              "isOptional": true,
               "type": "number",
               "comment": "Max path depth to search"
             },
             {
               "name": "edge",
-              "isOptional": false,
+              "isOptional": true,
               "type": "\"start\" | \"end\"",
               "comment": "Return the Path to the start or end leaf node for the\r\ntree determined by the `at` and `options.depth` args"
             }
@@ -1129,7 +1129,7 @@
           "args": [
             {
               "name": "affinity",
-              "isOptional": false,
+              "isOptional": true,
               "type": "\"backward\" | \"forward\""
             }
           ]
@@ -1178,7 +1178,7 @@
           "args": [
             {
               "name": "edge",
-              "isOptional": false,
+              "isOptional": true,
               "type": "\"start\" | \"end\""
             }
           ]
@@ -1210,7 +1210,7 @@
           "args": [
             {
               "name": "affinity",
-              "isOptional": false,
+              "isOptional": true,
               "type": "\"backward\" | \"forward\""
             }
           ]
@@ -1254,17 +1254,17 @@
           "args": [
             {
               "name": "at",
-              "isOptional": false,
+              "isOptional": true,
               "type": "Range | Path | Point"
             },
             {
               "name": "unit",
-              "isOptional": false,
+              "isOptional": true,
               "type": "\"character\" | \"word\" | \"line\" | \"block\" | \"offset\""
             },
             {
               "name": "reverse",
-              "isOptional": false,
+              "isOptional": true,
               "type": "boolean"
             }
           ]
@@ -1299,22 +1299,22 @@
           "args": [
             {
               "name": "at",
-              "isOptional": false,
+              "isOptional": true,
               "type": "Range | Path | Point"
             },
             {
               "name": "match",
-              "isOptional": false,
+              "isOptional": true,
               "type": "((node: Node) => boolean) | ((node: Node) => node is T_4)"
             },
             {
               "name": "mode",
-              "isOptional": false,
+              "isOptional": true,
               "type": "\"highest\" | \"lowest\" | \"all\""
             },
             {
               "name": "voids",
-              "isOptional": false,
+              "isOptional": true,
               "type": "boolean"
             }
           ]
@@ -1375,7 +1375,7 @@
           "args": [
             {
               "name": "affinity",
-              "isOptional": false,
+              "isOptional": true,
               "type": "\"backward\" | \"forward\" | \"outward\" | \"inward\""
             }
           ]
@@ -1496,7 +1496,7 @@
           "args": [
             {
               "name": "voids",
-              "isOptional": false,
+              "isOptional": true,
               "type": "boolean"
             }
           ]
@@ -1523,17 +1523,17 @@
           "args": [
             {
               "name": "at",
-              "isOptional": false,
+              "isOptional": true,
               "type": "Range | Path | Point"
             },
             {
               "name": "mode",
-              "isOptional": false,
+              "isOptional": true,
               "type": "\"highest\" | \"lowest\""
             },
             {
               "name": "voids",
-              "isOptional": false,
+              "isOptional": true,
               "type": "boolean"
             }
           ]

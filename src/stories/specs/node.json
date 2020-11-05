@@ -41,7 +41,7 @@
           "args": [
             {
               "name": "reverse",
-              "isOptional": false,
+              "isOptional": true,
               "type": "boolean"
             }
           ]
@@ -97,7 +97,7 @@
           "args": [
             {
               "name": "reverse",
-              "isOptional": false,
+              "isOptional": true,
               "type": "boolean"
             }
           ]
@@ -171,22 +171,22 @@
           "args": [
             {
               "name": "from",
-              "isOptional": false,
+              "isOptional": true,
               "type": "Path"
             },
             {
               "name": "to",
-              "isOptional": false,
+              "isOptional": true,
               "type": "Path"
             },
             {
               "name": "reverse",
-              "isOptional": false,
+              "isOptional": true,
               "type": "boolean"
             },
             {
               "name": "pass",
-              "isOptional": false,
+              "isOptional": true,
               "type": "(node: NodeEntry<Node>) => boolean"
             }
           ]
@@ -213,22 +213,22 @@
           "args": [
             {
               "name": "from",
-              "isOptional": false,
+              "isOptional": true,
               "type": "Path"
             },
             {
               "name": "to",
-              "isOptional": false,
+              "isOptional": true,
               "type": "Path"
             },
             {
               "name": "reverse",
-              "isOptional": false,
+              "isOptional": true,
               "type": "boolean"
             },
             {
               "name": "pass",
-              "isOptional": false,
+              "isOptional": true,
               "type": "(node: NodeEntry<Node>) => boolean"
             }
           ]
@@ -421,7 +421,7 @@
           "args": [
             {
               "name": "reverse",
-              "isOptional": false,
+              "isOptional": true,
               "type": "boolean"
             }
           ]
@@ -473,25 +473,25 @@
           "args": [
             {
               "name": "from",
-              "isOptional": false,
+              "isOptional": true,
               "type": "Path",
               "comment": "Node path to start from. Defaults to the root node"
             },
             {
               "name": "to",
-              "isOptional": false,
+              "isOptional": true,
               "type": "Path",
               "comment": "Node path to end with"
             },
             {
               "name": "reverse",
-              "isOptional": false,
+              "isOptional": true,
               "type": "boolean",
               "comment": "If true, iterate nodes in reverse"
             },
             {
               "name": "pass",
-              "isOptional": false,
+              "isOptional": true,
               "type": "(entry: NodeEntry<Node>) => boolean",
               "comment": "Skip any `[Node, Path]` tuples that match the given predicate function"
             }
@@ -563,22 +563,22 @@
           "args": [
             {
               "name": "from",
-              "isOptional": false,
+              "isOptional": true,
               "type": "Path"
             },
             {
               "name": "to",
-              "isOptional": false,
+              "isOptional": true,
               "type": "Path"
             },
             {
               "name": "reverse",
-              "isOptional": false,
+              "isOptional": true,
               "type": "boolean"
             },
             {
               "name": "pass",
-              "isOptional": false,
+              "isOptional": true,
               "type": "(node: NodeEntry<Node>) => boolean"
             }
           ]
