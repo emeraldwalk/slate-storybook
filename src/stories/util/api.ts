@@ -1,4 +1,4 @@
-import { Editor, Element, Path, Text } from 'slate'
+import { Editor, Element, Node, Path, Text } from 'slate'
 import {
   ApiFunction,
   Arg,
@@ -8,6 +8,7 @@ import {
 import { not } from '../../util/callbacks'
 
 import editorJson from '../specs/editor.json'
+import nodeJson from '../specs/node.json'
 import pathJson from '../specs/path.json'
 
 interface ApiRaw {
@@ -119,6 +120,10 @@ export function loadEditorApi(): Record<keyof typeof Editor, ApiFunction> {
   return loadApi(Editor, editorJson as ApiRaw)
 }
 
+export function loadNodeApi(): Record<keyof typeof Node, ApiFunction> {
+  return loadApi(Node, nodeJson as ApiRaw)
+}
+
 export function loadPathApi(): Record<keyof typeof Path, ApiFunction> {
   return loadApi(Path, pathJson as ApiRaw)
 }
@@ -154,4 +159,5 @@ function loadApi<TApi>(api: TApi, json: ApiRaw): Record<string, ApiFunction> {
 }
 
 export const editorApiFunctions = loadEditorApi()
+export const nodeApiFunctions = loadNodeApi()
 export const pathApiFunctions = loadPathApi()
