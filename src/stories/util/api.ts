@@ -72,6 +72,52 @@ const nodePredicateOptions = [
   ['not(Text.isText)', not(Text.isText)],
 ] as [string, Function][]
 
+export function loadEditorApi(): Record<keyof typeof Editor, ApiFunction> {
+  return parseApi(Editor, editorJson as ApiRaw)
+}
+
+export function loadNodeApi(): Record<keyof typeof Node, ApiFunction> {
+  return parseApi(Node, nodeJson as ApiRaw)
+}
+
+export function loadPathApi(): Record<keyof typeof Path, ApiFunction> {
+  return parseApi(Path, pathJson as ApiRaw)
+}
+
+function parseApi<TApi>(api: TApi, json: ApiRaw): Record<string, ApiFunction> {
+  const result: Record<string, ApiFunction> = {}
+
+  for (const method of json.methods) {
+    try {
+      const args: (EditorArg | Arg | ObjectArg)[] = []
+
+      for (const argRaw of method.args) {
+        args.push(parseArg(argRaw))
+      }
+
+      result[method.name] = {
+        fn: (api[method.name as keyof TApi] as unknown) as Function,
+        name: method.name,
+        description: method.documentation,
+        generics: method.typeParameters
+          ? `<${method.typeParameters.join(', ')}>`
+          : undefined,
+        isGenerator: method.returnValue.type.startsWith('Generator<'),
+        returnValue: {
+          type: method.returnValue.type,
+          comment: method.returnValue.comment ?? '',
+          yieldsComment: method.returnValue.yieldsComment ?? '',
+        },
+        args,
+      }
+    } catch (err) {
+      console.log(method.name, ':', String(err).replace('Error: ', ''))
+    }
+  }
+
+  return result
+}
+
 /**
  * Parse raw arg to an arg
  */
@@ -115,51 +161,6 @@ function parseArg(argRaw: ArgRaw): EditorArg | Arg | ObjectArg {
   }
 
   return arg
-}
-
-export function loadEditorApi(): Record<keyof typeof Editor, ApiFunction> {
-  return loadApi(Editor, editorJson as ApiRaw)
-}
-
-export function loadNodeApi(): Record<keyof typeof Node, ApiFunction> {
-  return loadApi(Node, nodeJson as ApiRaw)
-}
-
-export function loadPathApi(): Record<keyof typeof Path, ApiFunction> {
-  return loadApi(Path, pathJson as ApiRaw)
-}
-
-function loadApi<TApi>(api: TApi, json: ApiRaw): Record<string, ApiFunction> {
-  const result: Record<string, ApiFunction> = {}
-
-  for (const method of json.methods) {
-    try {
-      const args: (EditorArg | Arg | ObjectArg)[] = []
-
-      for (const argRaw of method.args) {
-        args.push(parseArg(argRaw))
-      }
-
-      result[method.name] = {
-        fn: (api[method.name as keyof TApi] as unknown) as Function,
-        name: method.name,
-        description: method.documentation,
-        generics: method.typeParameters
-          ? `<${method.typeParameters.join(', ')}>`
-          : undefined,
-        returnValue: {
-          type: method.returnValue.type,
-          comment: method.returnValue.comment ?? '',
-          yieldsComment: method.returnValue.yieldsComment ?? '',
-        },
-        args,
-      }
-    } catch (err) {
-      console.log(method.name, ':', String(err).replace('Error: ', ''))
-    }
-  }
-
-  return result
 }
 
 export const editorApiFunctions = loadEditorApi()
