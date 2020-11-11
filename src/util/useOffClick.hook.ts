@@ -6,7 +6,10 @@ export function useOffClickCallback(
 ): void {
   React.useEffect(() => {
     function offClick(event: MouseEvent) {
-      if (ignoreElement?.contains(event.target as Node)) {
+      if (
+        ignoreElement?.contains(event.target as Node) ||
+        (event.target as Element).classList.contains('ignore-off-click')
+      ) {
         return
       }
       callback()
