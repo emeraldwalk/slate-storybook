@@ -49,7 +49,7 @@
       ],
       "returnValue": {
         "type": "NodeEntry<T>",
-        "comment": "[Node, Path] tuple for the first matching ancestor"
+        "comment": "A [Node, Path] tuple for the first matching ancestor"
       },
       "typeParameters": [
         "T"
@@ -126,7 +126,7 @@
       ],
       "returnValue": {
         "type": "Point",
-        "comment": "point"
+        "comment": "Matching point"
       }
     },
     {
@@ -168,7 +168,7 @@
       ],
       "returnValue": {
         "type": "Point",
-        "comment": "point"
+        "comment": "Matching point"
       }
     },
     {
@@ -267,7 +267,7 @@
       ],
       "returnValue": {
         "type": "[Point, Point]",
-        "comment": "tuple containing the start and end points"
+        "comment": "A tuple containing the start and end points"
       }
     },
     {
@@ -291,7 +291,7 @@
       ],
       "returnValue": {
         "type": "Point",
-        "comment": "end point"
+        "comment": "The end point"
       }
     },
     {
@@ -315,7 +315,7 @@
       ],
       "returnValue": {
         "type": "NodeEntry<Node>",
-        "comment": "[Node, Path] tuple for the first node"
+        "comment": "A [Node, Path] tuple for the first node"
       }
     },
     {
@@ -339,7 +339,7 @@
       ],
       "returnValue": {
         "type": "Descendant[]",
-        "comment": "of descendant nodes"
+        "comment": "List of descendant nodes"
       }
     },
     {
@@ -363,7 +363,7 @@
       ],
       "returnValue": {
         "type": "boolean",
-        "comment": "or not the node has block children."
+        "comment": "Whether or not the node has block children."
       }
     },
     {
@@ -387,7 +387,7 @@
       ],
       "returnValue": {
         "type": "boolean",
-        "comment": "or not the node has inline or text children"
+        "comment": "Whether or not the node has inline or text children"
       }
     },
     {
@@ -411,7 +411,7 @@
       ],
       "returnValue": {
         "type": "boolean",
-        "comment": "or not all children are text nodes"
+        "comment": "Whether or not all children are text nodes"
       }
     },
     {
@@ -529,7 +529,7 @@
       ],
       "returnValue": {
         "type": "boolean",
-        "comment": "or not the value is a block `Element` object."
+        "comment": "Whether or not the value is a block `Element` object."
       }
     },
     {
@@ -547,7 +547,7 @@
       ],
       "returnValue": {
         "type": "boolean",
-        "comment": "or not the value is an `Editor` object"
+        "comment": "Whether or not the value is an `Editor` object"
       }
     },
     {
@@ -605,7 +605,7 @@
       ],
       "returnValue": {
         "type": "boolean",
-        "comment": "or not the point is an edge of the given location"
+        "comment": "Whether or not the point is an edge of the given location"
       }
     },
     {
@@ -629,7 +629,7 @@
       ],
       "returnValue": {
         "type": "boolean",
-        "comment": "or not the element is empty"
+        "comment": "Whether or not the element is empty"
       }
     },
     {
@@ -653,7 +653,7 @@
       ],
       "returnValue": {
         "type": "boolean",
-        "comment": "or not the value is an inline `Element` object"
+        "comment": "Whether or not the value is an inline `Element` object"
       }
     },
     {
@@ -671,7 +671,7 @@
       ],
       "returnValue": {
         "type": "boolean",
-        "comment": "or not the editor is currently normalizing"
+        "comment": "Whether or not the editor is currently normalizing"
       }
     },
     {
@@ -701,7 +701,7 @@
       ],
       "returnValue": {
         "type": "boolean",
-        "comment": "or not the point is the start of the given location"
+        "comment": "Whether or not the point is the start of the given location"
       }
     },
     {
@@ -725,7 +725,7 @@
       ],
       "returnValue": {
         "type": "boolean",
-        "comment": "or not the value is a void `Element` object"
+        "comment": "Whether or not the value is a void `Element` object"
       }
     },
     {
@@ -749,7 +749,7 @@
       ],
       "returnValue": {
         "type": "NodeEntry<Node>",
-        "comment": "[Node, Path] tuple for the last node at the given location"
+        "comment": "A [Node, Path] tuple for the last node at the given location"
       }
     },
     {
@@ -791,7 +791,7 @@
       ],
       "returnValue": {
         "type": "NodeEntry<Text>",
-        "comment": "[Node, Path] tuple for the leaf text node at the given location.\r\nIf the path matching the given options is not a Text node, an error will be thrown."
+        "comment": "A [Node, Path] tuple for the leaf text node at the given location.\r\nIf the path matching the given options is not a Text node, an error will be thrown."
       }
     },
     {
@@ -998,7 +998,8 @@
         "the order in which child nodes are returned."
       ],
       "returnValue": {
-        "type": "Generator<NodeEntry<T_3>, void, undefined>"
+        "type": "Generator<NodeEntry<T_3>, void, undefined>",
+        "yieldsComment": "[Node, Path] tuples matching the given constraints"
       },
       "typeParameters": [
         "T_3"
@@ -1107,7 +1108,7 @@
       ],
       "returnValue": {
         "type": "Path",
-        "comment": "path matching the given criteria"
+        "comment": "The path matching the given criteria"
       }
     },
     {

@@ -505,7 +505,7 @@
       ],
       "returnValue": {
         "type": "Generator<NodeEntry<Node>, void, undefined>",
-        "comment": "generator that yields `[Node, Path]` tuples"
+        "comment": "A generator that yields `[Node, Path]` tuples"
       }
     },
     {
