@@ -143,7 +143,9 @@ function loadApi<TApi>(api: TApi, json: ApiRaw): Record<string, ApiFunction> {
         fn: (api[method.name as keyof TApi] as unknown) as Function,
         name: method.name,
         description: method.documentation,
-        generics: `<${method.typeParameters?.join(', ')}>`,
+        generics: method.typeParameters
+          ? `<${method.typeParameters.join(', ')}>`
+          : undefined,
         returnValue: {
           type: method.returnValue.type,
           comment: method.returnValue.comment ?? '',
