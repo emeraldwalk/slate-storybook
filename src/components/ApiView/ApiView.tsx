@@ -106,11 +106,11 @@ const ApiView: React.FC<ApiViewProps> = ({
 
   return (
     <div css={componentCss}>
-      <h1>Editor Interface</h1>
+      <h1>{title} Interface</h1>
       <select value={apiFunction.name} onChange={onApiFunctionChange}>
         {apiFunctionList.map((fn) => (
           <option key={fn.name} value={fn.name}>
-            Editor.{fn.name}
+            {title}.{fn.name}
           </option>
         ))}
       </select>

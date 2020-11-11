@@ -7,22 +7,21 @@ import { ApiViewProps } from '../../components'
 import { NodeSpecContextDecorator } from '../util'
 
 export function createStoryMeta(interfaceName?: string) {
-  let persistentValue: Node[] | undefined = undefined
-
   return {
     title: interfaceName
       ? `Slate/Interfaces/${interfaceName}`
       : 'Slate/Interfaces',
     decorators: [
       (Story, context) => {
+        const [value, setValue] = React.useState<Node[]>(
+          context.parameters.initialSlateValue
+        )
         return (
           <NodeSpecContextDecorator
             story={Story}
-            initialSlateValue={
-              persistentValue ?? context.parameters.initialSlateValue
-            }
+            initialSlateValue={value}
             onChange={(value) => {
-              persistentValue = value
+              setValue(value)
             }}
           />
         )
@@ -38,12 +37,13 @@ export function createStoryFactory<
   return function createStory(fnName?: K) {
     const story = storyFn()
     story.storyName = (fnName as string) ?? label
+    const title = fnName ? `${label}.${fnName}` : label
     if (!fnName) {
       fnName = Object.keys(apiFunctions)[0] as K
     }
     const initialApiFunction = apiFunctions[fnName]!
     story.args = {
-      title: `${label}.${fnName}`,
+      title,
       renderElement,
       renderLeaf,
       initialApiFunction,

@@ -27,8 +27,8 @@ export const decorators = [
 ]
 
 const sortPriority = {
-  'Slate/Interfaces/Editor': 1,
-  'Slate/Concepts/Decorations': 2,
+  'Slate/Interfaces': 1,
+  'Slate/Concepts': 2,
 }
 
 /** Sort stories in sidebar */
