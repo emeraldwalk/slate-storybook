@@ -6,11 +6,13 @@ import { ApiFunction } from '../../components/ApiControls/model'
 import { ApiViewProps } from '../../components'
 import { NodeSpecContextDecorator } from '../util'
 
-export function createStoryMeta(interfaceName: string) {
+export function createStoryMeta(interfaceName?: string) {
   let persistentValue: Node[] | undefined = undefined
 
   return {
-    title: `Slate/Interfaces/${interfaceName}`,
+    title: interfaceName
+      ? `Slate/Interfaces/${interfaceName}`
+      : 'Slate/Interfaces',
     decorators: [
       (Story, context) => {
         return (
@@ -33,10 +35,13 @@ export function createStoryFactory<
   TApi extends Record<string, ApiFunction>,
   K extends keyof TApi
 >(storyFn: () => Story<ApiViewProps>, label: string, apiFunctions: TApi) {
-  return function createStory(fnName: K) {
-    const initialApiFunction = apiFunctions[fnName]!
+  return function createStory(fnName?: K) {
     const story = storyFn()
-    story.storyName = fnName as string
+    story.storyName = (fnName as string) ?? label
+    if (!fnName) {
+      fnName = Object.keys(apiFunctions)[0] as K
+    }
+    const initialApiFunction = apiFunctions[fnName]!
     story.args = {
       title: `${label}.${fnName}`,
       renderElement,
