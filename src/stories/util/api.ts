@@ -22,7 +22,8 @@ interface MethodRaw {
   documentation: string[]
   returnValue: {
     type: string
-    comment: string
+    comment?: string
+    yieldsComment?: string
   }
   typeParameters: string[]
 }
@@ -105,7 +106,7 @@ function parseArg(argRaw: ArgRaw): EditorArg | Arg | ObjectArg {
 
     arg = {
       name: argRaw.name,
-      comment: argRaw.comment ?? '',
+      comment: argRaw.comment?.split('\r\n') ?? '',
       type: argRaw.type,
       argType,
       isOptional: argRaw.isOptional,
@@ -149,6 +150,7 @@ function loadApi<TApi>(api: TApi, json: ApiRaw): Record<string, ApiFunction> {
         returnValue: {
           type: method.returnValue.type,
           comment: method.returnValue.comment ?? '',
+          yieldsComment: method.returnValue.yieldsComment ?? '',
         },
         args,
       }

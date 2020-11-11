@@ -80,11 +80,14 @@ const ApiControls: React.FC<ApiControlsProps> = ({
           ),
           '\n * ',
           ...args.map((a) => paramComment(a)),
-          returnValue.comment ? (
+          returnValue.yieldsComment || returnValue.comment ? (
             <React.Fragment key="returnComment">
-              {'\n *\n *'}
-              <span className="paramToken"> @returns</span>
-              <span> {returnValue.comment}</span>
+              {'\n *'}
+              {(returnValue.yieldsComment || returnValue.comment)
+                .split('\r\n')
+                .map(
+                  commentLine(returnValue.yieldsComment ? 'yields' : 'returns')
+                )}
             </React.Fragment>
           ) : (
             ''
@@ -157,16 +160,27 @@ function paramComment(
   ) : (
     <React.Fragment key={name}>
       {(typeof arg.comment === 'string' ? [arg.comment] : arg.comment).map(
-        (comment, i) => (
-          <React.Fragment key={`${comment}-${i}`}>
-            {'\n'}
-            <span> * </span>
-            {i === 0 ? <span className="paramToken">@param</span> : null}
-            {i === 0 ? <span className="argToken"> {name}</span> : null}
-            <span> {comment}</span>
-          </React.Fragment>
-        )
+        commentLine('param', name)
       )}
     </React.Fragment>
   )
+}
+
+function commentLine(
+  paramType: 'returns' | 'yields' | 'param',
+  paramName?: string
+) {
+  return (comment: string, i: number) => {
+    return (
+      <React.Fragment key={`${comment}-${i}`}>
+        {'\n'}
+        <span> * </span>
+        {i === 0 ? <span className="paramToken">@{paramType}</span> : null}
+        {i === 0 && paramName ? (
+          <span className="argToken"> {paramName}</span>
+        ) : null}
+        <span> {comment}</span>
+      </React.Fragment>
+    )
+  }
 }

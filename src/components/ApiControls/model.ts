@@ -91,6 +91,7 @@ export interface ApiFunction {
   returnValue: {
     type: React.ReactNode
     comment: string
+    yieldsComment: string
   }
 }
 
