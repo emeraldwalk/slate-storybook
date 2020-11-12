@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.js": "./main.0b5637749afbe3ac903c.bundle.js",
+    "main.js.map": "./main.0b5637749afbe3ac903c.bundle.js.map",
+    "runtime~main.js": "./runtime~main.0b5637749afbe3ac903c.bundle.js",
+    "runtime~main.js.map": "./runtime~main.0b5637749afbe3ac903c.bundle.js.map",
+    "vendors~main.css": "./static/css/vendors~main.162a6ac1.chunk.css",
+    "vendors~main.js": "./vendors~main.0b5637749afbe3ac903c.bundle.js",
+    "vendors~main.css.map": "./static/css/vendors~main.162a6ac1.chunk.css.map",
+    "vendors~main.js.map": "./vendors~main.0b5637749afbe3ac903c.bundle.js.map",
+    "iframe.html": "./iframe.html",
+    "precache-manifest.e4397d1cebc29a21d70f9fe82e985758.js": "./precache-manifest.e4397d1cebc29a21d70f9fe82e985758.js",
+    "service-worker.js": "./service-worker.js",
+    "sourceCode.json": "./sourceCode.json",
+    "static/media/materialdesignicons.min.css": "./static/media/materialdesignicons-webfont.5d6f62d2.eot",
+    "static/media/index.css": "./static/media/open-sans-latin-800italic.c62c3eea.woff2",
+    "vendors~main.0b5637749afbe3ac903c.bundle.js.LICENSE.txt": "./vendors~main.0b5637749afbe3ac903c.bundle.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "runtime~main.0b5637749afbe3ac903c.bundle.js",
+    "static/css/vendors~main.162a6ac1.chunk.css",
+    "vendors~main.0b5637749afbe3ac903c.bundle.js",
+    "main.0b5637749afbe3ac903c.bundle.js"
+  ]
+}
