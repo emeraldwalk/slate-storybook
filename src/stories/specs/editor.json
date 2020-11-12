@@ -781,7 +781,7 @@
               "name": "edge",
               "isOptional": true,
               "type": "\"start\" | \"end\"",
-              "comment": "xxxxx TODO:"
+              "comment": "If `at` is a `Range`, return the 'start' or 'end' leaf\r\nnode"
             }
           ]
         }
@@ -791,7 +791,7 @@
       ],
       "returnValue": {
         "type": "NodeEntry<Text>",
-        "comment": "A [Node, Path] tuple for the leaf text node at the given location.\r\nIf the path matching the given options is not a Text node, an error will be thrown."
+        "comment": "A [Node, Path] tuple for the leaf text node at the given location.\r\nIf the path matching the given options is not a Text node, an error will be\r\nthrown."
       }
     },
     {
@@ -800,7 +800,8 @@
         {
           "name": "editor",
           "isOptional": false,
-          "type": "Editor"
+          "type": "Editor",
+          "comment": "Editor instance to traverse"
         },
         {
           "name": "options",
@@ -809,31 +810,43 @@
             {
               "name": "at",
               "isOptional": true,
-              "type": "Range | Path | Point"
+              "type": "Range | Path | Point",
+              "comment": "Target location. Will determine the last yielded\r\nentry or in the case where `reverse ` is true, it will determine\r\nthe first. If `at` is a range, the closest common root will be targetted."
             },
             {
               "name": "match",
               "isOptional": true,
-              "type": "((node: Node) => boolean) | ((node: Node) => node is T_1)"
+              "type": "((node: Node) => boolean) | ((node: Node) => node is T_1)",
+              "comment": "Predicate function to filter yielded results"
             },
             {
               "name": "reverse",
               "isOptional": true,
-              "type": "boolean"
+              "type": "boolean",
+              "comment": "If set to true, reverses the order of yielded nodes"
             },
             {
               "name": "voids",
               "isOptional": true,
-              "type": "boolean"
+              "type": "boolean",
+              "comment": "Whether or not to include void nodes. Defaults to false"
             }
           ]
         }
       ],
       "documentation": [
-        "Iterate through all of the levels at a location."
+        "Iterate through all of the levels at a location.",
+        "",
+        "The iteration starts at the editor root downward to the",
+        "node corresponding to the `at` option unless `reverse` is",
+        "true in which case the interation will go from bottom to top.",
+        "If no `at` value is provided, the current editor selection",
+        "will be used. If `at` is a range, the closest common root will",
+        "be targetted."
       ],
       "returnValue": {
-        "type": "Generator<NodeEntry<T_1>, void, undefined>"
+        "type": "Generator<NodeEntry<T_1>, void, undefined>",
+        "yieldsComment": "[Node, Path] entries"
       },
       "typeParameters": [
         "T_1"
@@ -845,14 +858,16 @@
         {
           "name": "editor",
           "isOptional": false,
-          "type": "Editor"
+          "type": "Editor",
+          "comment": "Editor instance containing the marks"
         }
       ],
       "documentation": [
         "Get the marks that would be added to text at the current selection."
       ],
       "returnValue": {
-        "type": "Record<string, any>"
+        "type": "Record<string, any>",
+        "comment": "a marks object containing key / value pairs"
       }
     },
     {
@@ -861,7 +876,8 @@
         {
           "name": "editor",
           "isOptional": false,
-          "type": "Editor"
+          "type": "Editor",
+          "comment": "Editor containing the node"
         },
         {
           "name": "options",
@@ -870,22 +886,26 @@
             {
               "name": "at",
               "isOptional": true,
-              "type": "Range | Path | Point"
+              "type": "Range | Path | Point",
+              "comment": "Starting location. Defaults to editor selection"
             },
             {
               "name": "match",
               "isOptional": true,
-              "type": "((node: Node) => boolean) | ((node: Node) => node is T_2)"
+              "type": "((node: Node) => boolean) | ((node: Node) => node is T_2)",
+              "comment": ""
             },
             {
               "name": "mode",
               "isOptional": true,
-              "type": "\"highest\" | \"lowest\" | \"all\""
+              "type": "\"highest\" | \"lowest\" | \"all\"",
+              "comment": ""
             },
             {
               "name": "voids",
               "isOptional": true,
-              "type": "boolean"
+              "type": "boolean",
+              "comment": ""
             }
           ]
         }
