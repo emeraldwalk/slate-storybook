@@ -1,4 +1,4 @@
-import { Editor, Element, Node, Path, Text } from 'slate'
+import { Editor, Element, Node, NodeEntry, Path, Text } from 'slate'
 import {
   ApiFunction,
   Arg,
@@ -55,6 +55,8 @@ const typeMap: Record<string, Arg['argType']> = {
   '((node: Node) => boolean) | ((node: Node) => node is T_2)': 'function',
   '((node: Node) => boolean) | ((node: Node) => node is T_3)': 'function',
   '((node: Node) => boolean) | ((node: Node) => node is T_4)': 'function',
+  '(entry: NodeEntry<Node>) => boolean': 'function',
+  '(node: NodeEntry<Node>) => boolean': 'function',
   Element: 'node',
   Node: 'node',
   boolean: 'boolean',
@@ -71,6 +73,40 @@ const nodePredicateOptions = [
   ['not(Element.isElement)', not(Element.isElement)],
   ['not(Text.isText)', not(Text.isText)],
 ] as [string, Function][]
+
+const entryPredicateOptions = [
+  [
+    '([node]) => Editor.isEditor(node)',
+    ([node]: NodeEntry<Node>) => Editor.isEditor(node),
+  ],
+  [
+    '([node]) => Element.isElement(node)',
+    ([node]: NodeEntry<Node>) => Element.isElement(node),
+  ],
+  [
+    '([node]) => Text.isText(node)',
+    ([node]: NodeEntry<Node>) => Text.isText(node),
+  ],
+  [
+    '([node]) => not(Editor.isEditor)(node)',
+    ([node]: NodeEntry<Node>) => not(Editor.isEditor)(node),
+  ],
+  [
+    '([node]) => not(Element.isElement)(node)',
+    ([node]: NodeEntry<Node>) => not(Element.isElement)(node),
+  ],
+  [
+    '([node]) => not(Text.isText)(node)',
+    ([node]: NodeEntry<Node>) => not(Text.isText)(node),
+  ],
+] as [string, Function][]
+
+function isEntryPredicateType(type: string) {
+  return [
+    '(entry: NodeEntry<Node>) => boolean',
+    '(node: NodeEntry<Node>) => boolean',
+  ].includes(type)
+}
 
 export function loadEditorApi(): Record<keyof typeof Editor, ApiFunction> {
   return parseApi(Editor, editorJson as ApiRaw)
@@ -143,7 +179,9 @@ function parseArg(argRaw: ArgRaw): EditorArg | Arg | ObjectArg {
     }
 
     const options = (argType === 'function'
-      ? nodePredicateOptions
+      ? isEntryPredicateType(argRaw.type)
+        ? entryPredicateOptions
+        : nodePredicateOptions
       : argType === 'boolean'
       ? [true, false]
       : argType === 'stringLiteral'

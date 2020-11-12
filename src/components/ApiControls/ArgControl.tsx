@@ -101,16 +101,21 @@ const ArgControl = <TArg extends Arg>({
       />
     )
   } else if (isNumberArg(arg) || isStringArg(arg)) {
-    const cast = isNumberArg(arg) ? Number : String
+    const cast = isNumberArg(arg)
+      ? function (value: string) {
+          const result = value === '' ? NaN : Number(value)
+          return isNaN(result) ? undefined : result
+        }
+      : String
     children = (
       <input
         type="text"
         value={String(value ?? '')}
-        onChange={({ currentTarget }) =>
-          (onChange as (value?: number | string) => void)(
+        onChange={({ currentTarget }) => {
+          ;(onChange as (value?: number | string) => void)(
             cast(currentTarget.value)
           )
-        }
+        }}
       />
     )
   }

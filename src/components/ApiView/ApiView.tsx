@@ -67,6 +67,7 @@ const ApiView: React.FC<ApiViewProps> = ({
           result = [result]
         }
       } catch (err) {
+        console.error(err)
         result = [String(err)]
       }
 
